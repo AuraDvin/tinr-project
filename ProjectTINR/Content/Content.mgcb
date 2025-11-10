@@ -13,6 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin blobi_animations.json
+/copy:blobi_animations.json
+
 #begin chracters.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -60,4 +63,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:images/Icon.ico
+
+#begin Spritesheet_edited.json
+/copy:Spritesheet_edited.json
 
