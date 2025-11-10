@@ -1,0 +1,62 @@
+[
+  {
+    "filename": "idle",
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "w": 194,
+      "h": 194
+    },
+    "duration": 83
+  },
+  {
+    "filename": "idle",
+    "frame": {
+      "x": 194,
+      "y": 0,
+      "w": 194,
+      "h": 194
+    },
+    "duration": 166
+  },
+  {
+    "filename": "idle",
+    "frame": {
+      "x": 388,
+      "y": 0,
+      "w": 194,
+      "h": 194
+    },
+    "duration": 166
+  },
+  {
+    "filename": "idle",
+    "frame": {
+      "x": 582,
+      "y": 0,
+      "w": 194,
+      "h": 194
+    },
+    "duration": 166
+  },
+  {
+    "filename": "idle",
+    "frame": {
+      "x": 776,
+      "y": 0,
+      "w": 194,
+      "h": 194
+    },
+    "duration": 83
+  },
+  {
+    "filename": "idle",
+    "frame": {
+      "x": 970,
+      "y": 0,
+      "w": 194,
+      "h": 194
+    },
+    "duration": 83
+  }
+]
