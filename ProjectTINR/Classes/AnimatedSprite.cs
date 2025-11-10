@@ -80,7 +80,7 @@ public class AnimatedSprite : Sprite {
 
     public override void Update(GameTime gameTime) {
         _lastFrameTime += gameTime.ElapsedGameTime.Milliseconds;
-        if (_lastFrameTime >= _currentAnimation.Frames[_currentFrameIdx].Duration) {
+        while (_lastFrameTime >= _currentAnimation.Frames[_currentFrameIdx].Duration) {
             _lastFrameTime -= _currentAnimation.Frames[_currentFrameIdx].Duration;
             _currentFrameIdx = (_currentFrameIdx + 1) % _currentAnimation.Frames.Count;
             if (_currentFrameIdx == 0 && !_currentAnimation.Looping) {
