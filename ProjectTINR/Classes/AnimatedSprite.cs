@@ -58,7 +58,7 @@ public class AnimatedSprite : Sprite {
             var durval = (double?)frame["duration"];
             double tmp_duration;
             if (durval == null) {
-                tmp_duration = 1000 / 12;
+                tmp_duration = 1000 / 12; // 12 FPS
             }
             else {
                 tmp_duration = (double)durval;
