@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "C#: App2 Debug",
+        "name": "C#: ProjectTINR Debug",
         "type": "dotnet",
         "request": "launch",
-        "projectPath": "${workspaceFolder}/App2.csproj"
+        "projectPath": "${workspaceFolder}/ProjectTINR.csproj"
       }
     ],
   }
