@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text.Json.Nodes;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectTINR.Classes;
+using ProjectTINR.Classes.ObjectsComponents;
 
 namespace TINR.Classes;
 
@@ -25,28 +24,31 @@ struct Animation {
     public List<AnimationFrame> Frames;
 }
 
-// TODO read json to map and play animation
-public class AnimatedSprite : Sprite {
-    private readonly Dictionary<string, Animation> _spritesheet;
-    private Animation _currentAnimation;
-    private AnimationFrame _currentFrame;
+public class AnimatedSprite : Sprite, IUpdatableGameComponent {
+    private readonly Dictionary<string, Animation> _animations;
+    // private Animation _currentAnimation;
+    private string _currentAnimationName;   
+    // private AnimationFrame _currentFrame;
     private int _currentFrameIdx;
     private double _lastFrameTime;
 
-    public AnimatedSprite(Game game, Vector2 position, Texture2D texture, string jsonPath) : base(game, new Rectangle(0,0,0,0), position, texture) {
-        _spritesheet = new Dictionary<string, Animation>();
+    public AnimatedSprite(Vector2 position, Texture2D texture) : base(new Rectangle(0, 0, 0, 0), position, texture) {
+        _animations = [];
+    }
+
+    public void AddAnimationFromJson(string jsonPath) {
         string jsonString = File.ReadAllText(jsonPath);
         JsonNode animationFramesNode = JsonNode.Parse(jsonString);
 
         foreach (var frame in animationFramesNode.AsArray()) {
             string animationName = (string)frame["filename"];
-            if (!_spritesheet.ContainsKey(animationName)) {
+            if (!_animations.ContainsKey(animationName)) {
                 Animation animation = new Animation();
-                animation.Frames = new List<AnimationFrame>();
+                animation.Frames = [];
                 animation.Looping = true;
                 animation.NextAnim = "TODO";
-                _spritesheet.Add(animationName, animation);
-                playAnimation(animationName);
+                _animations.Add(animationName, animation);
+                PlayAnimation(animationName);
             }
 
             Rectangle tmp_rect = new Rectangle(
@@ -66,33 +68,34 @@ public class AnimatedSprite : Sprite {
             AnimationFrame animationFrame = new AnimationFrame();
             animationFrame.Duration = tmp_duration;
             animationFrame.Rect = tmp_rect;
-            _spritesheet[animationName].Frames.Add(animationFrame);
+            _animations[animationName].Frames.Add(animationFrame);
         }
-        playAnimation("idle");
+        PlayAnimation("idle");
     }
 
-    public void playAnimation(string animationName) {
-        Animation animation = _spritesheet[animationName];
-        _currentAnimation = animation;
+    public void PlayAnimation(string animationName) {
+        if (animationName == _currentAnimationName) {
+            return;
+        }
+        if (!_animations.ContainsKey(animationName)) {
+            throw new KeyNotFoundException($"Animation '{animationName}' not found.");
+        }
+        _currentAnimationName = animationName;
         _lastFrameTime = 0;
         _currentFrameIdx = 0;
     }
 
-    public override void Update(GameTime gameTime) {
+    public void Update(GameTime gameTime) {
+        Animation _currentAnimation = _animations[_currentAnimationName];
         _lastFrameTime += gameTime.ElapsedGameTime.Milliseconds;
         while (_lastFrameTime >= _currentAnimation.Frames[_currentFrameIdx].Duration) {
             _lastFrameTime -= _currentAnimation.Frames[_currentFrameIdx].Duration;
             _currentFrameIdx = (_currentFrameIdx + 1) % _currentAnimation.Frames.Count;
             if (_currentFrameIdx == 0 && !_currentAnimation.Looping) {
-                playAnimation(_currentAnimation.NextAnim);
+                PlayAnimation(_currentAnimation.NextAnim);
             }
         }
-        _currentFrame = _currentAnimation.Frames[_currentFrameIdx];
-        base.SetRect(_currentFrame.Rect);
-        base.Update(gameTime);
-    }
-
-    public override void Draw(GameTime gameTime) {
-        base.Draw(gameTime);
+        Rectangle rect = _animations[_currentAnimationName].Frames[_currentFrameIdx].Rect;
+        SetRect(rect);
     }
 }
