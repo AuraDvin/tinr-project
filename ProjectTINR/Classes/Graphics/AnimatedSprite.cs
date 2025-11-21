@@ -4,7 +4,7 @@ using System.Text.Json.Nodes;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectTINR.Classes;
+
 using ProjectTINR.Classes.ObjectsComponents;
 
 namespace TINR.Classes;

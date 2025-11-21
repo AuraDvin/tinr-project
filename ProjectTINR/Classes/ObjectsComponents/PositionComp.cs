@@ -1,5 +1,3 @@
-using System.Diagnostics.Contracts;
-
 using Microsoft.Xna.Framework;
 
 namespace ProjectTINR.Classes;

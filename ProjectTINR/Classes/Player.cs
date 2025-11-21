@@ -1,11 +1,4 @@
-using System;
-
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using ProjectTINR.Classes.ObjectsComponents;
-
-using TINR.Classes;
 
 namespace ProjectTINR.Classes;
 

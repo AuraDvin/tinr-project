@@ -3,8 +3,6 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
-using ProjectTINR.Classes.ObjectsComponents;
-
 namespace ProjectTINR.Classes.Levels;
 
 public class StartMenuLevel : Level {

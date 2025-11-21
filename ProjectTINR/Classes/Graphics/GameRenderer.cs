@@ -1,13 +1,8 @@
-using System;
-using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using ProjectTINR.Classes;
-using ProjectTINR.Classes.ObjectsComponents;
 
 namespace TINR.Classes.Graphics;
 

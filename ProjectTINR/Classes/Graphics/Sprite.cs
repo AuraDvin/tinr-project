@@ -1,12 +1,9 @@
-using System.Collections.Generic;
-
 using ProjectTINR.Classes.ObjectsComponents;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ProjectTINR.Classes;
-using System;
 
 namespace TINR.Classes;
 
