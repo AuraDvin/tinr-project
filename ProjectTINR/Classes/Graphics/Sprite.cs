@@ -10,7 +10,7 @@ using System;
 
 namespace TINR.Classes;
 
-public class Sprite : IGameComponent, IDrawableGameComponent, PositionComp {
+public class Sprite : GameComponent, IDrawableGameComponent, PositionComp {
     protected Rectangle _rect;
     static Texture2D _texture;
     protected Vector2 _position;
@@ -20,8 +20,8 @@ public class Sprite : IGameComponent, IDrawableGameComponent, PositionComp {
         set { _position = value; }
     }
 
-    public Sprite(Rectangle rect, Vector2 position, Texture2D texture)
-    // : base(game) 
+    public Sprite(Game game, Rectangle rect, Vector2 position, Texture2D texture)
+    : base(game) 
     {
         _rect = rect;
         _position = position;
@@ -32,11 +32,16 @@ public class Sprite : IGameComponent, IDrawableGameComponent, PositionComp {
         _rect = rect;
     }
 
+    public Rectangle Rect {
+        get { return _rect; }
+        set => SetRect(value);
+    }
+
     public void Initialize() {
     }
 
     public void Draw(SpriteBatch sp) {
-        Console.WriteLine($"Sprite - Draw at position {_position}");
+        // Console.WriteLine($"Sprite - Draw at position {_position}");
         sp.Draw(_texture, _position, _rect, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.0f);
     }
 }

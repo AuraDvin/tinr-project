@@ -32,7 +32,7 @@ public class AnimatedSprite : Sprite, IUpdatableGameComponent {
     private int _currentFrameIdx;
     private double _lastFrameTime;
 
-    public AnimatedSprite(Vector2 position, Texture2D texture) : base(new Rectangle(0, 0, 0, 0), position, texture) {
+    public AnimatedSprite(Game game, Vector2 position, Texture2D texture) : base(game, new Rectangle(0, 0, 0, 0), position, texture) {
         _animations = [];
     }
 
@@ -85,7 +85,7 @@ public class AnimatedSprite : Sprite, IUpdatableGameComponent {
         _currentFrameIdx = 0;
     }
 
-    public void Update(GameTime gameTime) {
+    public override void Update(GameTime gameTime) {
         Animation _currentAnimation = _animations[_currentAnimationName];
         _lastFrameTime += gameTime.ElapsedGameTime.Milliseconds;
         while (_lastFrameTime >= _currentAnimation.Frames[_currentFrameIdx].Duration) {

@@ -21,7 +21,9 @@ public class ProjectTinr : Game {
 
     protected override void Initialize() {
         _level = LevelMaker.CreateLevel(this, LevelType.StartMenu);
+        Components.Add(_level);
         _gameRenderer = new GameRenderer(this, _level);
+        Components.Add(_gameRenderer);
         base.Initialize();
     }
 
@@ -33,13 +35,13 @@ public class ProjectTinr : Game {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-        _level.Update(gameTime);
+        // _level.Update(gameTime);
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime) {
         // Console.WriteLine("Drawing game.");
-        _gameRenderer.Draw(gameTime);
+        // _gameRenderer.Draw(gameTime);
         base.Draw(gameTime);
     }
 }

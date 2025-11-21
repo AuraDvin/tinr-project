@@ -26,7 +26,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:chracters.png
+/build:images/characters.png
 
 #begin images/godot_icon.png
 /importer:TextureImporter
