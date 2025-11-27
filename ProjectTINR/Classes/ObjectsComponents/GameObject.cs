@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 using Microsoft.Xna.Framework;
 
@@ -8,10 +9,18 @@ namespace ProjectTINR.Classes;
 public class GameObject : GameComponent {
     protected List<IGameComponent> _components = [];
 
+    virtual protected string _prefix => "Object";
+
+    private readonly string _name = "";
+
+    public string Name { get => _prefix + _name; }
+
     public GameObject(Game game) : base(game) {
+        _name = NameGeneratorSingleton.Instance.GetName(_prefix);
     }
 
-    public void Initialize() {
+    public override void Initialize() {
+        base.Initialize();
     }
 
     public void AddGameComponent(IGameComponent component) {
