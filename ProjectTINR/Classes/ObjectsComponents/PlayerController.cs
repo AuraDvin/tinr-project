@@ -7,6 +7,8 @@ namespace ProjectTINR.Classes;
 
 public class PlayerController : IGameComponent, IUpdatableGameComponent {
 
+    private Keys _moveLeft = Keys.Left, _moveRight = Keys.Right;
+
     protected bool _isMovingLeft = false;
     protected bool _isMovingRight = false;
 
@@ -21,12 +23,12 @@ public class PlayerController : IGameComponent, IUpdatableGameComponent {
     }
 
     public void Update(GameTime gameTime) {
-        if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
+        if (Keyboard.GetState().IsKeyDown(_moveLeft)) {
             _isMovingLeft = true;
         } else {
             _isMovingLeft = false;
         }
-        if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
+        if (Keyboard.GetState().IsKeyDown(_moveRight)) {
             _isMovingRight = true;
         } else {
             _isMovingRight = false;
