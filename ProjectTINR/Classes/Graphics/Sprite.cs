@@ -34,7 +34,8 @@ public class Sprite : GameComponent, IDrawableGameComponent, PositionComp {
         set => SetRect(value);
     }
 
-    public void Initialize() {
+    public override void Initialize() {
+        base.Initialize();
     }
 
     public void Draw(SpriteBatch sp) {
