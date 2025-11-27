@@ -7,10 +7,12 @@ using ProjectTINR.Classes;
 
 namespace TINR.Classes;
 
-public class Sprite : GameComponent, IDrawableGameComponent, PositionComp {
+public class Sprite : GameComponent, IDrawableGameComponent, IPositionComponent {
     protected Rectangle _rect;
     static Texture2D _texture;
     protected Vector2 _position;
+    protected SpriteEffects _spriteEffects = SpriteEffects.None;
+    public SpriteEffects SpriteEffects { get => _spriteEffects; set => _spriteEffects = value; }
 
     public Vector2 Position {
         get { return _position; }
@@ -18,8 +20,7 @@ public class Sprite : GameComponent, IDrawableGameComponent, PositionComp {
     }
 
     public Sprite(Game game, Rectangle rect, Vector2 position, Texture2D texture)
-    : base(game) 
-    {
+    : base(game) {
         _rect = rect;
         _position = position;
         _texture = texture;
@@ -40,6 +41,6 @@ public class Sprite : GameComponent, IDrawableGameComponent, PositionComp {
 
     public void Draw(SpriteBatch sp) {
         // Console.WriteLine($"Sprite - Draw at position {_position}");
-        sp.Draw(_texture, _position, _rect, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.0f);
+        sp.Draw(_texture, _position, _rect, Color.White, 0f, Vector2.Zero, 1.0f, _spriteEffects, 0.0f);
     }
 }
