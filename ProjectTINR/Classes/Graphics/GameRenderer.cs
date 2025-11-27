@@ -12,24 +12,24 @@ using ProjectTINR.Classes.ObjectsComponents;
 namespace TINR.Classes.Graphics;
 
 public class GameRenderer : DrawableGameComponent {
-    Level _level;
-    SpriteBatch _spriteBatch;
-    private ContentManager _content;
+    readonly Level _level;
+    readonly SpriteBatch _spriteBatch;
+    private readonly ContentManager _content;
     protected Texture2D _characters;
 
-    private AnimatedSprite _playerSprite;
+    private readonly AnimatedSprite _playerSprite;
     private SpriteEffects _playerSpriteEffect;
-    private Dictionary<PlayerState, string> _playerAnimations;
 
     public GameRenderer(Game game, Level level) : base(game) {
         _level = level;
         _content = game.Content;
         _spriteBatch = new SpriteBatch(game.GraphicsDevice);
+
         _playerSprite = new AnimatedSprite(game, new Vector2(100, 100), game.Content.Load<Texture2D>("images/characters"));
         _playerSprite.AddAnimationFromJson("Content/Spritesheet_edited.json");
         _playerSprite.PlayAnimation("idle");
-        game.Components.Add(_playerSprite);
 
+        game.Components.Add(_playerSprite);
     }
 
     public override void Update(GameTime gameTime) {
@@ -80,7 +80,7 @@ public class GameRenderer : DrawableGameComponent {
                     0f,
                     Vector2.Zero,
                     Vector2.One,
-                    _playerSpriteEffect, // Todo, change if State has Mirrored/Left
+                    _playerSpriteEffect,
                     0f
                 );
 
