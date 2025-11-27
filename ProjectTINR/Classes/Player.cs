@@ -2,8 +2,8 @@ using Microsoft.Xna.Framework;
 
 namespace ProjectTINR.Classes;
 
-public class Player(Game game) : GameObject(game), MoveableComp {
-
+public class Player(Game game) : GameObject(game), IMoveComponent {
+    protected override string _prefix => "Player";
     protected PlayerState _playerState = PlayerState.None;
     public PlayerState State {
         // We could have a timed status (Like frozen) so we should return that just in case
@@ -16,21 +16,16 @@ public class Player(Game game) : GameObject(game), MoveableComp {
             if (Velocity.Y > 0) {
                 return PlayerState.Falling;
             }
+
             if (Velocity.Y < 0) {
                 return PlayerState.Jumping;
-            }
-
-            if (Velocity.X != 0) {
-                return PlayerState.Moving;
             }
 
             return PlayerState.Idling;
         }
     }
-    PlayerDirection _playerDirection;
-    public PlayerDirection Direction {
-        get => _playerDirection;
-    }
+
+    public PlayerDirection Direction { get; private set; }
 
     private readonly PlayerController _playerController = new();
     private Vector2 _position = new(0, 0);
@@ -52,23 +47,23 @@ public class Player(Game game) : GameObject(game), MoveableComp {
 
     public override void Update(GameTime gameTime) {
         _playerController.Update(gameTime);
-        UpdatePhysics(gameTime);
+        UpdateMovement(gameTime);
     }
 
-    protected void UpdatePhysics(GameTime gameTime) {
+    protected void UpdateMovement(GameTime gameTime) {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         float accel = 200f;
         float friction = 8f;
 
         if (_playerController.IsMovingLeft) {
             _velocity.X -= accel * dt;
-            _playerDirection = PlayerDirection.Left;
+            Direction = PlayerDirection.Left;
             _playerState = PlayerState.Moving;
         }
 
         if (_playerController.IsMovingRight) {
             _velocity.X += accel * dt;
-            _playerDirection = PlayerDirection.Right;
+            Direction = PlayerDirection.Right;
             _playerState = PlayerState.Moving;
         }
 
