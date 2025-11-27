@@ -9,9 +9,9 @@ public class StartMenuLevel : Level {
     public StartMenuLevel(Game game) : base(game) {
         _scene = [];
         Content = game.Content;
-        IGameComponent Player = new Player(game);
-        _scene.Add(Player);
-        game.Components.Add(Player);
+        IGameComponent player = new Player(game);
+        _scene.Add(player);
+        game.Components.Add(player);
         Console.WriteLine("Start Menu Level initialized.");
     }
 
