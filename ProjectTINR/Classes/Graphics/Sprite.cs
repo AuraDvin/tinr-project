@@ -9,11 +9,11 @@ namespace TINR.Classes;
 
 public class Sprite : GameComponent, IDrawableGameComponent, IPositionComponent {
     protected Rectangle _rect;
-    static Texture2D _texture;
+    protected Texture2D _texture;
     protected Vector2 _position;
     protected SpriteEffects _spriteEffects = SpriteEffects.None;
     public SpriteEffects SpriteEffects { get => _spriteEffects; set => _spriteEffects = value; }
-
+    public Texture2D Texture { get { return _texture; } }
     public Vector2 Position {
         get { return _position; }
         set { _position = value; }
