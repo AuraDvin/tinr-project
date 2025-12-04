@@ -5,5 +5,4 @@ namespace ProjectTINR.Classes.ObjectsComponents;
 
 public interface IDrawableGameComponent : IGameComponent
 {
-    void Draw(SpriteBatch sp);
 }
