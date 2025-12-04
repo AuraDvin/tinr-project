@@ -18,6 +18,12 @@ public class SpriteFactory {
             animatedSprite.PlayAnimation("idle");
             return animatedSprite;
         }
+
+        if (gameObject is Floor) {
+            Console.WriteLine("Creating floor sprite");
+            sprite = new Sprite(game, new(0, 0, 1000, 400), new(0, 0), game.Content.Load<Texture2D>("images/test"));
+            return sprite;
+        }
         // if object is enemy ... 
         sprite = new Sprite(game, new(0, 0, 194, 194), new(0, 0), game.Content.Load<Texture2D>("images/characters"));
         return sprite;
