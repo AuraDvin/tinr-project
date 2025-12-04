@@ -23,7 +23,7 @@ public class GameRenderer2D : DrawableGameComponent {
     private readonly Dictionary<string, Sprite> _sprites;
 
     public GameRenderer2D(Game game, Level level) : base(game) {
-        _game_ref = game; 
+        _game_ref = game;
         _level = level;
         _content = game.Content;
         _spriteBatch = new SpriteBatch(game.GraphicsDevice);
@@ -39,7 +39,7 @@ public class GameRenderer2D : DrawableGameComponent {
     public override void Update(GameTime gameTime) {
         HashSet<string> updatedObjects = new();
         foreach (GameObject obj in _level.Scene) {
-            if (obj is not IUpdatableGameComponent) {
+            if (obj is not IDrawableGameComponent) {
                 continue;
             }
             if (!_sprites.ContainsKey(obj.Name)) {
@@ -47,9 +47,12 @@ public class GameRenderer2D : DrawableGameComponent {
                 // So we should use a SpriteFactory of some sort
                 // Specifically for each enemy the 
                 Sprite sprite = SpriteFactory.CreateSprite(_game_ref, obj);
-                _game_ref.Components.Add(sprite); 
+                _game_ref.Components.Add(sprite);
                 _sprites.Add(obj.Name, sprite);
+            }
 
+            if (obj is not IUpdatableGameComponent) {
+                continue;
             }
 
             if (obj is Player player) {
@@ -74,10 +77,17 @@ public class GameRenderer2D : DrawableGameComponent {
         }
 
         // deload unused objects
-        foreach(string key in _sprites.Keys) {
+        HashSet<string> deleteMe = [];
+
+        foreach (string key in _sprites.Keys) {
             if (!updatedObjects.Contains(key)) {
-                _sprites.Remove(key); 
+                deleteMe.Add(key);
+                _game_ref.Components.Remove(_sprites[key]);
             }
+        }
+
+        foreach (string name in deleteMe) {
+            _sprites.Remove(name);
         }
 
         base.Update(gameTime);
@@ -90,7 +100,7 @@ public class GameRenderer2D : DrawableGameComponent {
 
     public override void Draw(GameTime gameTime) {
         GraphicsDevice.Clear(Color.CornflowerBlue);
-        _spriteBatch.Begin();
+        _spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend,SamplerState.LinearWrap);
         foreach (GameObject obj in _level.Scene) {
             if (!_sprites.ContainsKey(obj.Name)) {
                 continue;
@@ -99,7 +109,7 @@ public class GameRenderer2D : DrawableGameComponent {
             Sprite sprite = _sprites[obj.Name];
             if (obj is IPositionComponent pos) {
                 _spriteBatch.Draw(
-                    _characters,
+                    sprite.Texture,
                     pos.Position,
                     sprite.Rect,
                     Color.White,
