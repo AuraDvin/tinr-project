@@ -1,8 +1,12 @@
+using System;
+
 using Microsoft.Xna.Framework;
+
+using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes;
 
-public class Player(Game game) : GameObject(game), IMoveComponent {
+public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGameComponent {
     protected override string _prefix => "Player";
     protected PlayerState _playerState = PlayerState.None;
     public PlayerState State {
@@ -44,6 +48,13 @@ public class Player(Game game) : GameObject(game), IMoveComponent {
         }
     }
     public Vector2 Position { get => _position; set => _position = value; }
+    public CollisionShapeType CollisionType { get => CollisionShapeType.Rectangle; set { } }
+
+    public override void Initialize() {
+        base.Initialize();
+        _playerController.Initialize();
+        _position = new Vector2(0, -1000);
+    }
 
     public override void Update(GameTime gameTime) {
         _playerController.Update(gameTime);
@@ -75,5 +86,6 @@ public class Player(Game game) : GameObject(game), IMoveComponent {
 
         Velocity = _velocity;
         _position += Velocity * dt;
+        Console.WriteLine("Player" + Name + "Position: " + _position.ToString());
     }
 }
