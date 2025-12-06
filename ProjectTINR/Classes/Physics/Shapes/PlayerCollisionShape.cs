@@ -1,17 +1,13 @@
 using System;
 using System.Collections.Generic;
 
-using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 
 namespace ProjectTINR.Classes.Physics.Shapes;
 
 public class PlayerCollisionShape : RectCollisionShape {
     Vector2 _offset = new(50, 0);
-
-    bool _onFloor = false;
-    public bool OnFloor { get => _onFloor; set => _onFloor = value; }
-
+    public bool OnFloor { get; set; } = false;
     public override Vector2 Position {
         get => new Vector2(_rectangle.X, _rectangle.Y) - _offset;
         set {
@@ -22,12 +18,8 @@ public class PlayerCollisionShape : RectCollisionShape {
     public PlayerCollisionShape() : base(false) {
         _rectangle = new Rectangle(0, 0, 194/2, 194);
     }
-
     public override bool OnCollision(ICollisionShape other) {
         Console.WriteLine("PlayerCollisionShape OnCollision called.");
-        // Static objects should not resolve collisions
-        // Non-static objects have to handle collision with a static object themselves
-        // This should be Floor collision class rather than the Class for the floor object
         if (other is FloorCollisionShape floor) {
             Rectangle rect = floor.Rectangle;
             int top = 0, bottom = 1, left = 2, right = 3;
@@ -50,7 +42,7 @@ public class PlayerCollisionShape : RectCollisionShape {
             if (min == top) {
                 // Console.WriteLine("Player is on top of the floor!");
                 Velocity = new(Velocity.X, Math.Min(Velocity.Y, 0)); 
-                _onFloor = true;
+                OnFloor = true;
             } else if (min == bottom) {
                 // Console.WriteLine("Player is under the floor!");
                 Velocity = new(Velocity.X, Math.Max(Velocity.Y, 0)); 
