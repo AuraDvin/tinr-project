@@ -6,7 +6,7 @@ using System;
 
 namespace ProjectTINR.Classes;
 
-public class PlayerController : IGameComponent, IUpdatableGameComponent {
+public class PlayerController : IController {
 
     private Keys _moveLeft = Keys.Left, _moveRight = Keys.Right, _jump = Keys.Space;
 
@@ -49,6 +49,26 @@ public class PlayerController : IGameComponent, IUpdatableGameComponent {
             }
             _isMovingRight = ks.IsKeyDown(_moveRight);
             _isMovingLeft = ks.IsKeyDown(_moveLeft);
+        }
+    }
+
+    public void UpdatePlayerState(Player player) { 
+         if (IsMovingLeft) {
+            player.Direction = PlayerDirection.Left;
+            player.State = PlayerState.Moving;
+        }
+
+        if (IsMovingRight) {
+            player.Direction = PlayerDirection.Right;
+            player.State = PlayerState.Moving;
+        }
+
+        if (!IsMovingLeft && !IsMovingRight) {
+            player.State = PlayerState.Idling;
+        }
+
+        if (JustJumped) {
+            player.State = PlayerState.Jumping;
         }
     }
 }
