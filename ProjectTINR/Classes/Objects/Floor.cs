@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.ObjectsComponents;
 
-namespace ProjectTINR.Classes;
+namespace ProjectTINR.Classes.Objects;
 
 public class Floor : GameObject, IStaticPhysicsObject, IDrawableGameComponent {
     protected override string _prefix => "Floor";

@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Formats.Asn1;
-using System.IO;
 
 using Microsoft.Xna.Framework;
 
+using ProjectTINR.Classes.Objects;
 using ProjectTINR.Classes.ObjectsComponents;
 using ProjectTINR.Classes.Physics.Shapes;
 namespace ProjectTINR.Classes.Physics;

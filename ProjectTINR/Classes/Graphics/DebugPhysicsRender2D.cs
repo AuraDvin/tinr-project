@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectTINR.Classes;
-using ProjectTINR.Classes.ObjectsComponents;
 using ProjectTINR.Classes.Physics;
 using ProjectTINR.Classes.Physics.Shapes;
 

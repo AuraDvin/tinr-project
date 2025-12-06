@@ -1,10 +1,11 @@
-using ProjectTINR.Classes.ObjectsComponents;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
+using ProjectTINR.Classes.Objects;
+
 using System;
 
-namespace ProjectTINR.Classes;
+namespace ProjectTINR.Classes.ObjectsComponents;
 
 public class PlayerController(Game game) : GameObject(game), IController, ISceneManipulator {
     private Keys _moveLeft = Keys.Left;

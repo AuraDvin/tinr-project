@@ -4,6 +4,8 @@ using System.Collections;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ProjectTINR.Classes.Objects;
+
 using TINR.Classes;
 
 namespace ProjectTINR.Classes.Graphics;

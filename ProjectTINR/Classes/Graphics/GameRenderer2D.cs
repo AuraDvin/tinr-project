@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using ProjectTINR;
 using ProjectTINR.Classes;
 using ProjectTINR.Classes.Graphics;
+using ProjectTINR.Classes.Objects;
 using ProjectTINR.Classes.ObjectsComponents;
 
 namespace TINR.Classes.Graphics;

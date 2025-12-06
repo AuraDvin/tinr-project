@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.ObjectsComponents;
 
-namespace ProjectTINR.Classes;
+namespace ProjectTINR.Classes.Objects;
 
 public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGameComponent, IControlled {
     protected override string _prefix => "Player";

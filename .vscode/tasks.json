@@ -8,7 +8,14 @@
 			],
 			"group": "build",
 			"label": "Build: ProjectTINR.csproj",
-			"detail": "Build the ProjectTINR.csproj project using dotnet build",
+			"detail": "Build the ProjectTINR.csproj project using dotnet build"
+		},
+		{
+			"type": "dotnet",
+			"task": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "dotnet: build"
 		}
 	]
 }

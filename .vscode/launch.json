@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "C#: ProjectTINR Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/ProjectTINR/ProjectTINR.csproj"
+        },
+
+        {
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
