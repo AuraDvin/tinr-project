@@ -6,34 +6,34 @@ using System.Runtime.InteropServices;
 namespace ProjectTINR;
 
 public class NameGeneratorSingleton {
-    static NameGeneratorSingleton _instance;
-    static private Dictionary<string, HashSet<int>> _ids;
+    static private NameGeneratorSingleton s_instance;
+    static private Dictionary<string, HashSet<int>> s_ids;
 
     private NameGeneratorSingleton() {
     }
 
     public static NameGeneratorSingleton Instance {
         get {
-            if (_instance == null) {
-                _instance = new();
-                _ids = new();
+            if (s_instance == null) {
+                s_instance = new();
+                s_ids = [];
             }
-            return _instance;
+            return s_instance;
         }
     }
 
     public string GetName(string prefix) {
         Random rnd = new();
         int val = (int)rnd.NextInt64();
-        if (_ids.ContainsKey(prefix)) {
-            while (_ids[prefix].Contains(val)) {
+        if (s_ids.ContainsKey(prefix)) {
+            while (s_ids[prefix].Contains(val)) {
                 val = (int)rnd.NextInt64();
             }
         }
         else {
-            _ids.Add(prefix, new());
+            s_ids.Add(prefix, new());
         }
-        _ids[prefix].Add(val);
+        s_ids[prefix].Add(val);
         return prefix + val.ToString();
     }
 
