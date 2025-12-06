@@ -6,7 +6,7 @@ using System;
 
 namespace ProjectTINR.Classes;
 
-public class PlayerController : IController {
+public class PlayerController(Game game): GameObject(game), IController {
 
     private Keys _moveLeft = Keys.Left, _moveRight = Keys.Right, _jump = Keys.Space;
 
@@ -14,23 +14,18 @@ public class PlayerController : IController {
     protected bool _isMovingRight = false;
     protected bool _isJumping = false;
     protected bool _justJumped = false;
-
     public bool JustJumped {
         get { return _justJumped; }
     }
-
     public bool IsMovingLeft {
         get { return _isMovingLeft; }
     }
     public bool IsMovingRight {
         get { return _isMovingRight; }
     }
-
-    public void Initialize() {
+    public override void Initialize() {
     }
-
-    public void Update(GameTime gameTime) {
-        // Cache keyboard state to avoid reading it twice per frame
+    public override void Update(GameTime gameTime) {
         var ks = Keyboard.GetState();
         // Don't allow left/right movement before jump
         if (ks.IsKeyDown(_jump)) {

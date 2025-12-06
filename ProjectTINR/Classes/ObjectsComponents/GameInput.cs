@@ -9,12 +9,10 @@ namespace ProjectTINR.Classes;
 
 public class GameInput(Game game, Level level) : GameObject(game) {
     private readonly Level _level = level;
-    public readonly Dictionary<string, IController> _controllers = [];
-
+    private readonly Dictionary<string, IController> _controllers = [];
     public override void Initialize() {
         base.Initialize();
     }
-
     public override void Update(GameTime gameTime) {
         HashSet<string> updatedObjects = [];
         foreach (GameObject obj in _level.Scene) {
@@ -26,7 +24,7 @@ public class GameInput(Game game, Level level) : GameObject(game) {
             IController controller;
 
             if (!_controllers.ContainsKey(obj.Name)) {
-                controller = ControllerFactory.CreateController(controlledObject.ControllerType);
+                controller = ControllerFactory.CreateController(Game, controlledObject.ControllerType);
                 _controllers.Add(obj.Name, controller);
                 Game.Components.Add(controller);
                 Console.WriteLine($"Added controller for {obj.Name}");
@@ -38,7 +36,7 @@ public class GameInput(Game game, Level level) : GameObject(game) {
             updatedObjects.Add(obj.Name);
 
             // Update the controller
-            controller.Update(gameTime);
+            // controller.Update(gameTime);
 
             // Map controller state to controlled object
             if (controlledObject is Player player) {
@@ -55,6 +53,7 @@ public class GameInput(Game game, Level level) : GameObject(game) {
         }
 
         foreach (var name in objectsToRemove) {
+            Game.Components.Remove(_controllers[name]);
             _controllers.Remove(name);
             Console.WriteLine($"Removed controller for {name}");
         }
