@@ -17,8 +17,10 @@ public class Floor : GameObject, IStaticPhysicsObject, IDrawableGameComponent {
     public Vector2 Position { get => _position; set { } }
 
     public override void Initialize() {
+        base.Initialize();
     }
 
     public override void Update(GameTime gameTime) {
+        base.Update(gameTime);
     }
 }
