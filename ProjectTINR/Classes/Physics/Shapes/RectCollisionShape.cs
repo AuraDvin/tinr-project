@@ -4,18 +4,14 @@ using Microsoft.Xna.Framework;
 
 namespace ProjectTINR.Classes.Physics.Shapes;
 
-public class RectCollisionShape(bool _static) : ICollisionShape, IMoveComponent {
+public class RectCollisionShape(bool isStatic) : ICollisionShape, IMoveComponent {
     protected Rectangle _rectangle = new(0, 0, 128, 128);
     protected Vector2 _velocity;
-    private readonly bool _isStatic = _static;
+    private readonly bool _isStatic = isStatic;
     public bool ShouldSimulate { get => !_isStatic; }
     public virtual Vector2 Position {
         get => new(_rectangle.X, _rectangle.Y);
         set {
-            // if (_isStatic)
-            //     return;
-            // _rectangle.X = (int)(value.X - _rectangle.Width / 2.0);
-            // _rectangle.Y = (int)(value.Y - _rectangle.Height / 2.0);
             _rectangle.X = (int)value.X;
             _rectangle.Y = (int)value.Y;
         }
@@ -31,20 +27,14 @@ public class RectCollisionShape(bool _static) : ICollisionShape, IMoveComponent 
         }
     }
 
-    public void Initialize() {
-    }
-
-    public void Update(GameTime gameTime) {
-    }
-
     public virtual bool OnCollision(ICollisionShape other) {
         Console.WriteLine("Also bad bad bad");
-        // throw new NotImplementedException();
-        if (!_isStatic)
-            return true;
-        // Static objects should not resolve collisions
-        // Non-static objects have to handle collision with a static object themselves
-        return false;
+        return ShouldSimulate;
     }
-    
+
+    public virtual void Update(GameTime gameTime) {
+    }
+
+    public virtual void Initialize() {
+    }
 }
