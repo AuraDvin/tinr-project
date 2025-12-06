@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 using ProjectTINR.Classes.Objects;
+using ProjectTINR.Classes.Physics.Shapes;
 
 using System;
 
@@ -55,12 +56,17 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
 
         // Todo: add throwing knife to scene, and give it inital position facing the right way
         if (ks.IsKeyDown(_shoot)) {
+            Console.WriteLine("X is down");
             if (_canShoot) {
+                Console.WriteLine("Player can shoot");
                 _justShot = true;
                 _canShoot = false;
                 _lastShot = 0f;
-                float dir = player.Direction == PlayerDirection.Right ? 1f : -1f;
+                int dir = player.Direction == PlayerDirection.Right ? 1 : -1;
                 Vector2 playerPos = player.Position;
+                PlayerProjectileCollisionShape thing = new(playerPos, dir, Game) {
+                    Scene = Scene
+                };
                 // Make the throwing knife and send it off in the direction from the player's position
                 // Scene.Add();
             }
