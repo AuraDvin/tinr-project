@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Formats.Asn1;
 using System.IO;
@@ -48,8 +49,6 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                     continue;
                 }
 
-                // ((IMoveComponent)_shapes[obj.Name]).Velocity = physicsObject.Velocity;
-                // Console.WriteLine("Applied gravity for: " + obj.Name);
                 if (staticPhysicsObject is not IMoveComponent) {
                     continue;
                 }
@@ -80,6 +79,7 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                                 if (playerShape.OnFloor) {
                                     Console.WriteLine("Player is jumping from floor.");
                                     objVeloc.Y = -playerJumpForce;
+                                    objVeloc.X = player.Direction == PlayerDirection.Left ? -playerJumpForce : playerJumpForce;
                                     playerShape.OnFloor = false;
                                 }
                                 else {
@@ -148,35 +148,16 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 var shapeB = _shapes[keys[j]];
 
                 bool isColliding = CollisionAlgorithms.CheckCollision(shapeA, shapeB);
-
-
-
                 if (!isColliding) {
-                    // if (shapeA is PlayerCollisionShape pcA1 && shapeB is FloorCollisionShape) {
-                    //     pcA1.OnFloor = false;
-                    // }
-                    // if (shapeB is PlayerCollisionShape pcB1 && shapeA is FloorCollisionShape) {
-                    //     pcB1.OnFloor = false;
-                    // }
                     continue;
                 }
 
-                // if (shapeA is PlayerCollisionShape pcA && shapeB is FloorCollisionShape) {
-                //     pcA.OnFloor = true;
-                // }
-                // if (shapeB is PlayerCollisionShape pcB && shapeA is FloorCollisionShape) {
-                //     pcB.OnFloor = true;
-                // }
-
                 _objs[keys[i]].Position = shapeA.Position;
                 _objs[keys[j]].Position = shapeB.Position;
-
-                if (_objs[keys[i]] is IPhysicsObject) {
-                    ((IPhysicsObject)_objs[keys[i]]).Velocity = ((IMoveComponent)shapeA).Velocity;
-                }
-
-                if (_objs[keys[j]] is IPhysicsObject) {
-                    ((IPhysicsObject)_objs[keys[j]]).Velocity = ((IMoveComponent)shapeB).Velocity;
+                foreach (var thing in new List<int>{ i, j }) {
+                    if (_objs[keys[thing]] is IPhysicsObject object0) {
+                        object0.Velocity = ((IMoveComponent)(thing == i ? shapeA : shapeB)).Velocity;
+                    }
                 }
 
                 // Notify both shapes of the collision and resolve if both agree
@@ -185,12 +166,10 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
 
                 _objs[keys[i]].Position = shapeA.Position;
                 _objs[keys[j]].Position = shapeB.Position;
-
-                if (_objs[keys[i]] is IPhysicsObject) {
-                    ((IPhysicsObject)_objs[keys[i]]).Velocity = ((IMoveComponent)shapeA).Velocity;
-                }
-                if (_objs[keys[j]] is IPhysicsObject) {
-                    ((IPhysicsObject)_objs[keys[j]]).Velocity = ((IMoveComponent)shapeB).Velocity;
+                foreach (var thing in new List<int>{ i, j }) {
+                    if (_objs[keys[thing]] is IPhysicsObject object0) {
+                        object0.Velocity = ((IMoveComponent)(thing == i ? shapeA : shapeB)).Velocity;
+                    }
                 }
 
                 if (oncA && oncB) {
@@ -198,12 +177,10 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                     CollisionAlgorithms.ResolveCollision(shapeA, shapeB);
                     _objs[keys[i]].Position = shapeA.Position;
                     _objs[keys[j]].Position = shapeB.Position;
-
-                    if (_objs[keys[i]] is IPhysicsObject) {
-                        ((IPhysicsObject)_objs[keys[i]]).Velocity = ((IMoveComponent)shapeA).Velocity;
-                    }
-                    if (_objs[keys[j]] is IPhysicsObject) {
-                        ((IPhysicsObject)_objs[keys[j]]).Velocity = ((IMoveComponent)shapeB).Velocity;
+                    foreach (var thing in new List<int>{ i, j }) {
+                        if (_objs[keys[thing]] is IPhysicsObject object0) {
+                            object0.Velocity = ((IMoveComponent)(thing == i ? shapeA : shapeB)).Velocity;
+                        }
                     }
                 }
             }
