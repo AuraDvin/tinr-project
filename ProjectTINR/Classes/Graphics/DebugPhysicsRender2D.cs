@@ -1,3 +1,6 @@
+using System;
+using System.Security.Cryptography;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -26,13 +29,15 @@ public class DebugPhysicsRender2D : DrawableGameComponent {
     public override void Draw(GameTime gameTime) {
         _spriteBatch.Begin();
 
-        foreach(ICollisionShape shape in _physicsEngine._shapes.Values) {
+        foreach (ICollisionShape shape in _physicsEngine._shapes.Values) {
             if (shape is RectCollisionShape rectShape) {
                 Rectangle rect = rectShape.Rectangle;
                 DrawRectangle(rect, Color.Red);
+            } else if (shape is CircleCollisionShape circle) {
+                DrawCircle(circle, Color.Red);
             }
         }
-        
+
 
         _spriteBatch.End();
         base.Draw(gameTime);
@@ -47,6 +52,32 @@ public class DebugPhysicsRender2D : DrawableGameComponent {
         _spriteBatch.Draw(_whitePixel, new Rectangle(rect.X, rect.Y, 2, rect.Height), color);
         // Draw right line
         _spriteBatch.Draw(_whitePixel, new Rectangle(rect.X + rect.Width - 2, rect.Y, 2, rect.Height), color);
+    }
+
+    private void DrawCircle(CircleCollisionShape ccs, Color color) {
+        int radius = (int)ccs.Radius;
+        int outerRadius = radius * 2 + 2;
+        Texture2D texture = new Texture2D(GraphicsDevice, outerRadius, outerRadius);
+
+        Color[] data = new Color[outerRadius * outerRadius];
+
+        // Colour the entire texture transparent first.
+        for (int i = 0; i < data.Length; i++)
+            data[i] = Color.Transparent;
+
+        // Work out the minimum step necessary using trigonometry + sine approximation.
+        double angleStep = 1f / radius;
+
+        for (double angle = 0; angle < Math.PI * 2; angle += angleStep) {
+            // Use the parametric definition of a circle: http://en.wikipedia.org/wiki/Circle#Cartesian_coordinates
+            int x = (int)Math.Round(radius + radius * Math.Cos(angle));
+            int y = (int)Math.Round(radius + radius * Math.Sin(angle));
+
+            data[y * outerRadius + x + 1] = Color.White;
+        }
+
+        texture.SetData(data);
+        _spriteBatch.Draw(texture, ccs.Position, color);
     }
 
     protected override void Dispose(bool disposing) {
