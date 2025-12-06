@@ -23,7 +23,7 @@ public class ProjectTinr : Game {
     }
 
     protected override void Initialize() {
-        _level = LevelMaker.CreateLevel(this, LevelType.StartMenu);
+        _level = LevelFactory.CreateLevel(this, LevelType.StartMenu);
         _gameRenderer = new GameRenderer2D(this, _level);
         _physicsEngine = new PhysicsEngine2D(this, _level); 
         _debugRender2D = new DebugPhysicsRender2D(this, _physicsEngine);
