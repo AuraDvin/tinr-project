@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.Objects;
 using ProjectTINR.Classes.ObjectsComponents;
-using ProjectTINR.Classes.Physics.Shapes;
 namespace ProjectTINR.Classes.Physics;
 
 public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {

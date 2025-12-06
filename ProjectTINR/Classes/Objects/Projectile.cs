@@ -1,6 +1,3 @@
-using System;
-using System.Reflection.Metadata;
-
 using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.ObjectsComponents;
