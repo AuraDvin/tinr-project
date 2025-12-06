@@ -13,11 +13,11 @@ public class CircleCollisionShape(bool isStatic, float radius) : ICollisionShape
     public Vector2 Velocity {get => _velocity; set => _velocity = value; }
     public float Radius { get => _radius; set => _radius = value; }
 
-    public void Initialize() {
+    public virtual void Initialize() {
     }
-    public void Update(GameTime gameTime) {
+    public virtual void Update(GameTime gameTime) {
     }
-    public bool OnCollision(ICollisionShape other) {
+    public virtual bool OnCollision(ICollisionShape other) {
         if (ShouldSimulate)
             return true;
         // Static objects should not resolve collisions
