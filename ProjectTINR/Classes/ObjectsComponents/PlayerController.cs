@@ -33,6 +33,7 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
     public override void Update(GameTime gameTime) {
         if (Scene == null) throw new Exception("[PlayerController -> Scene Manipulator] Scene was not initalized!");
         Player player = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
+        
         _lastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (_lastShot >= ShootingDelay) {
             _canShoot = true;
