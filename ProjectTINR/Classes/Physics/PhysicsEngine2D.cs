@@ -22,10 +22,18 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         foreach (GameObject obj in _level.Scene) {
             if (obj is not IStaticPhysicsObject) continue;
+            // Console.WriteLine($"Physics updating obj {obj}");
             IStaticPhysicsObject staticPhysicsObject = (IStaticPhysicsObject)obj;
             ICollisionShape shape;
             if (!_shapes.TryGetValue(obj.Name, out ICollisionShape value)) {
                 shape = CollisionShapeFactory.MakeShape(staticPhysicsObject.CollisionType);
+                if (shape == null) {
+                    shape = staticPhysicsObject is Projectile projectile
+                        ? projectile.ProjectileShape
+                        : throw new Exception("Non Projectile object returned null collision shape!");
+                    // Console.WriteLine("Made the circle boss");
+                }
+                
                 if (shape is ISceneManipulator ss) {
                     ss.Scene = _level.Scene;
                 }
@@ -37,7 +45,7 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 shape.Position = staticPhysicsObject.Position;
                 _shapes.Add(obj.Name, shape);
                 _objs.Add(obj.Name, staticPhysicsObject);
-                Console.WriteLine("Added new shape");
+                // Console.WriteLine("Added new shape");
             }
             else {
                 shape = value;
@@ -70,7 +78,7 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 if (Math.Abs(objVeloc.Y) <= 1f) {
                     objVeloc.Y = 0f;
                 }
-                Console.WriteLine(((GameObject)physicsObject).Name + "'s velocity after physics update: " + objVeloc.ToString());
+                // Console.WriteLine(((GameObject)physicsObject).Name + "'s velocity after physics update: " + objVeloc.ToString());
 
                 ((IMoveComponent)shape).Velocity = objVeloc;
                 ((IPhysicsObject)_objs[obj.Name]).Velocity = objVeloc;
@@ -87,6 +95,7 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
             foreach (string key in _shapes.Keys) {
                 if (!updatedObjects.Contains(key)) {
                     _ = deleteMe.Add(key);
+                    // Console.WriteLine($"Gonna have to delete {key} boss");
                 }
             }
             foreach (string key in deleteMe) {

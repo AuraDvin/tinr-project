@@ -1,3 +1,5 @@
+using System;
+
 using ProjectTINR.Classes.Physics.Shapes;
 namespace ProjectTINR.Classes.Physics;
 
@@ -10,7 +12,8 @@ public class CollisionShapeFactory {
             CollisionShapeType.StaticRectangle => new RectCollisionShape(true),
             CollisionShapeType.Circle => new CircleCollisionShape(false, 10.0f),
             CollisionShapeType.StaticCircle => new CircleCollisionShape(true, 10.0f),
-            _ => null
+            CollisionShapeType.Projectile => null,
+            _ => throw new NotImplementedException()
         };
     }
 }
