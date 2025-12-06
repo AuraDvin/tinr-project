@@ -1,5 +1,3 @@
-using System;
-
 namespace ProjectTINR.Classes.ObjectsComponents;
 
 public interface IStaticPhysicsObject : IPositionComponent {

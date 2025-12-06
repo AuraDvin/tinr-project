@@ -1,5 +1,3 @@
-using System;
-
 using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.ObjectsComponents;

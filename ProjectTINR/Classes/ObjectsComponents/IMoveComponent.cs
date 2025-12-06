@@ -1,7 +1,6 @@
 using ProjectTINR.Classes.ObjectsComponents;
 
 using Microsoft.Xna.Framework;
-using System;
 
 namespace ProjectTINR.Classes;
 

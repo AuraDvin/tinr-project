@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Runtime.InteropServices;
 
 public class Scene : ArrayList {
     public void RemoveByType<T>() {
