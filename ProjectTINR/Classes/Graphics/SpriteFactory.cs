@@ -13,6 +13,7 @@ public class SpriteFactory {
         AnimatedSprite animatedSprite;
         Sprite sprite;
         if (gameObject is Player) {
+            Console.WriteLine("Creating player sprite");
             animatedSprite = new AnimatedSprite(game, Vector2.Zero, game.Content.Load<Texture2D>("images/characters"));
             animatedSprite.AddAnimationFromJson("Content/Spritesheet_edited.json");
             animatedSprite.PlayAnimation("idle");

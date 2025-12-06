@@ -13,7 +13,7 @@ public class ProjectTinr : Game {
     private readonly GraphicsDeviceManager _graphics;
     private GameRenderer2D _gameRenderer;
     private PhysicsEngine2D _physicsEngine;
-    private DebugRender2D _debugRender2D;
+    private DebugPhysicsRender2D _debugRender2D;
     private Level _level; 
 
     public ProjectTinr() {
@@ -26,7 +26,7 @@ public class ProjectTinr : Game {
         _level = LevelMaker.CreateLevel(this, LevelType.StartMenu);
         _gameRenderer = new GameRenderer2D(this, _level);
         _physicsEngine = new PhysicsEngine2D(this, _level); 
-        _debugRender2D = new DebugRender2D(this, _level, _physicsEngine);
+        _debugRender2D = new DebugPhysicsRender2D(this, _physicsEngine);
 
         Components.Add(_level);
         Components.Add(_gameRenderer);

@@ -5,4 +5,6 @@ public enum CollisionShapeType {
     Rectangle,
     Circle,
     StaticCircle,
+    PlayerShape,
+    FloorCollisionShape
 }

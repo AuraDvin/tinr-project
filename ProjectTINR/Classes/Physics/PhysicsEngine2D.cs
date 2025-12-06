@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.IO;
 
 using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.ObjectsComponents;
 using ProjectTINR.Classes.Physics.Shapes;
-
 namespace ProjectTINR.Classes.Physics;
 
 public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
@@ -20,6 +20,7 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
 
     public override void Update(GameTime gameTime) {
         HashSet<string> updatedObjects = [];
+        float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         foreach (GameObject obj in _level.Scene) {
             if (obj is not IStaticPhysicsObject) continue;
             IStaticPhysicsObject staticPhysicsObject = (IStaticPhysicsObject)obj;
@@ -54,18 +55,66 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 }
 
                 IPhysicsObject physicsObject = (IPhysicsObject)staticPhysicsObject;
-                // Copy Velocity and apply gravity
                 Vector2 objVeloc = physicsObject.Velocity;
-                // if (_shapes[obj.Name] is PlayerCollisionShape playerCollisionShape && playerCollisionShape.OnFloor) {
-                //     objVeloc.Y = Math.Min(0, objVeloc.Y);
-                // }
-                // else {
-                //     // objVeloc.Y += (int)(8000.0 * (float)gameTime.ElapsedGameTime.TotalSeconds);
-                // }
-                objVeloc.Y += (int)(10000.0 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+
+                if (physicsObject is Player player) {
+                    PlayerCollisionShape playerShape = (PlayerCollisionShape)shape;
+                    float playerAccel = 200f;
+                    float playerJumpForce = 100000f;
+                    float playerGravity = 10000f;
+                    float playerFriction = 8f;
+                    switch (player.State) {
+                        case PlayerState.Idling:
+                            objVeloc = Vector2.Lerp(objVeloc, new(0, objVeloc.Y), playerFriction * dt);
+                            break;
+                        case PlayerState.Moving:
+                            if (player.Direction == PlayerDirection.Left) {
+                                objVeloc.X += -playerAccel * dt;
+                            }
+                            else if (player.Direction == PlayerDirection.Right) {
+                                objVeloc.X += playerAccel * dt;
+                            }
+                            break;
+                        case PlayerState.Jumping:
+                            if (shape is PlayerCollisionShape) {
+                                if (playerShape.OnFloor) {
+                                    Console.WriteLine("Player is jumping from floor.");
+                                    objVeloc.Y = -playerJumpForce;
+                                    playerShape.OnFloor = false;
+                                }
+                                else {
+                                    Console.WriteLine("Player is in the air, cannot jump again.");
+                                }
+                            }
+                            break;
+                        case PlayerState.Falling:
+                            ;
+                            break;
+                        case PlayerState.Frozen:
+                            objVeloc = Vector2.Zero;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (playerShape.OnFloor) objVeloc.Y = Math.Min(objVeloc.Y, 0);
+                    else objVeloc.Y += playerGravity * dt;
+
+                }
+
+                if (objVeloc.LengthSquared() > 1000000f) {
+                    objVeloc.Normalize();
+                    objVeloc *= 1000.0f;
+                }
+                if (Math.Abs(objVeloc.X) <= 1f) {
+                    objVeloc.X = 0f;
+                }
+                if (Math.Abs(objVeloc.Y) <= 1f) {
+                    objVeloc.Y = 0f;
+                }
+                Console.WriteLine(((GameObject)physicsObject).Name + "'s velocity after physics update: " + objVeloc.ToString());
 
                 ((IMoveComponent)shape).Velocity = objVeloc;
-
                 ((IPhysicsObject)_objs[obj.Name]).Velocity = objVeloc;
                 _shapes[obj.Name] = shape;
             }
@@ -75,14 +124,16 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
             // this should be done each update from strach, because if not, we have to log which didn't appear and delete them or have some broadcast...
         }
 
-        HashSet<string> deleteMe = [];
-        foreach (string key in _shapes.Keys) {
-            if (!updatedObjects.Contains(key)) {
-                deleteMe.Add(key);
+        {
+            HashSet<string> deleteMe = [];
+            foreach (string key in _shapes.Keys) {
+                if (!updatedObjects.Contains(key)) {
+                    _ = deleteMe.Add(key);
+                }
             }
-        }
-        foreach (string name in deleteMe) {
-            _shapes.Remove(name);
+            foreach (string key in deleteMe) {
+                _ = _shapes.Remove(key);
+            }
         }
 
         string[] keys = [.. _shapes.Keys];
@@ -97,9 +148,25 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 var shapeB = _shapes[keys[j]];
 
                 bool isColliding = CollisionAlgorithms.CheckCollision(shapeA, shapeB);
+
+
+
                 if (!isColliding) {
+                    // if (shapeA is PlayerCollisionShape pcA1 && shapeB is FloorCollisionShape) {
+                    //     pcA1.OnFloor = false;
+                    // }
+                    // if (shapeB is PlayerCollisionShape pcB1 && shapeA is FloorCollisionShape) {
+                    //     pcB1.OnFloor = false;
+                    // }
                     continue;
                 }
+
+                // if (shapeA is PlayerCollisionShape pcA && shapeB is FloorCollisionShape) {
+                //     pcA.OnFloor = true;
+                // }
+                // if (shapeB is PlayerCollisionShape pcB && shapeA is FloorCollisionShape) {
+                //     pcB.OnFloor = true;
+                // }
 
                 _objs[keys[i]].Position = shapeA.Position;
                 _objs[keys[j]].Position = shapeB.Position;

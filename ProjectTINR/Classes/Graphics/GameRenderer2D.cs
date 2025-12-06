@@ -50,6 +50,8 @@ public class GameRenderer2D : DrawableGameComponent {
                 _game_ref.Components.Add(sprite);
                 _sprites.Add(obj.Name, sprite);
             }
+            
+            updatedObjects.Add(obj.Name);  
 
             if (obj is not IUpdatableGameComponent) {
                 continue;
@@ -73,7 +75,6 @@ public class GameRenderer2D : DrawableGameComponent {
                 };
                 _sprites[player.Name] = _playerSprite;
             }
-            updatedObjects.Add(obj.Name);
         }
 
         // deload unused objects

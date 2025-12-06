@@ -11,19 +11,19 @@ public class StartMenuLevel : Level {
     public StartMenuLevel(Game game) : base(game) {
         _scene = [];
         Content = game.Content;
-        IGameComponent player = new Player(game);
-        // Player player2 = new Player(game);
-        // player2.Position = new Vector2(200, -400);
 
-        Floor floor = new Floor(game);
+        Floor floor = new Floor(game, new(0, 400));
         _scene.Add(floor);
-        // IPhysicsObject physicsObject = new IPhysicsObject {
-        //     CollisionType = CollisionShapeType.Rectangle
-        // };
+
+        Floor floor2 = new Floor(game, new(500, 200));
+        _scene.Add(floor2);
+
+        Player player = new Player(game);
         _scene.Add(player);
-        // _scene.Add(player2);
         game.Components.Add(player);
-        // game.Components.Add(player2);
+
+        player.Position = new Vector2(0, 0);
+
         Console.WriteLine("Start Menu Level initialized.");
     }
 

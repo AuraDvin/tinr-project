@@ -2,15 +2,22 @@ using ProjectTINR.Classes.ObjectsComponents;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace ProjectTINR.Classes;
 
 public class PlayerController : IGameComponent, IUpdatableGameComponent {
 
-    private Keys _moveLeft = Keys.Left, _moveRight = Keys.Right;
+    private Keys _moveLeft = Keys.Left, _moveRight = Keys.Right, _jump = Keys.Space;
 
     protected bool _isMovingLeft = false;
     protected bool _isMovingRight = false;
+    protected bool _isJumping = false;
+    protected bool _justJumped = false;
+
+    public bool JustJumped {
+        get { return _justJumped; }
+    }
 
     public bool IsMovingLeft {
         get { return _isMovingLeft; }
@@ -23,15 +30,25 @@ public class PlayerController : IGameComponent, IUpdatableGameComponent {
     }
 
     public void Update(GameTime gameTime) {
-        if (Keyboard.GetState().IsKeyDown(_moveLeft)) {
-            _isMovingLeft = true;
-        } else {
-            _isMovingLeft = false;
+        // Cache keyboard state to avoid reading it twice per frame
+        var ks = Keyboard.GetState();
+        // Don't allow left/right movement before jump
+        if (ks.IsKeyDown(_jump)) {
+            _isJumping = true;
+            Console.WriteLine("Player started jumping.");
         }
-        if (Keyboard.GetState().IsKeyDown(_moveRight)) {
-            _isMovingRight = true;
-        } else {
-            _isMovingRight = false;
+        else {
+            // Jump on the key release
+            if (ks.IsKeyUp(_jump) && _isJumping) {
+                _isJumping = false;
+                Console.WriteLine("Player released jump.");
+                _justJumped = true;
+            } else {
+                Console.WriteLine("Player is not jumping.");
+                _justJumped = false;
+            }
+            _isMovingRight = ks.IsKeyDown(_moveRight);
+            _isMovingLeft = ks.IsKeyDown(_moveLeft);
         }
     }
 }
