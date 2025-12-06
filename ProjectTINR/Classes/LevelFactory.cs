@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace ProjectTINR.Classes;
 
-public class LevelMaker {
+public class LevelFactory {
     public static Level CreateLevel(Game game, LevelType levelType) {
         // Console.WriteLine("Creating level of type: ", nameof(levelType), ", ", (int) levelType);
         return levelType switch {
