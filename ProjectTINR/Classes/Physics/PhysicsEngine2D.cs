@@ -24,8 +24,11 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
             if (obj is not IStaticPhysicsObject) continue;
             IStaticPhysicsObject staticPhysicsObject = (IStaticPhysicsObject)obj;
             ICollisionShape shape;
-            if (!_shapes.ContainsKey(obj.Name)) {
+            if (!_shapes.TryGetValue(obj.Name, out ICollisionShape value)) {
                 shape = CollisionShapeFactory.MakeShape(staticPhysicsObject.CollisionType);
+                if (shape is ISceneManipulator ss) {
+                    ss.Scene = _level.Scene;
+                }
                 // Why don't we add these as Components? They're not animated and simply follow the sprite's position, so 
                 // this wouldn't really make sense to do, and for debug drawing they're going to be a color not a sprite
                 // What if these shapes had to affect the scene? Like removing themselves after being picked up?
@@ -37,7 +40,7 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 Console.WriteLine("Added new shape");
             }
             else {
-                shape = _shapes[obj.Name];
+                shape = value;
             }
             updatedObjects.Add(obj.Name);
             if (shape.ShouldSimulate) {
@@ -51,55 +54,12 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                     continue;
                 }
 
-                IPhysicsObject physicsObject = (IPhysicsObject)staticPhysicsObject;
-                Vector2 objVeloc = physicsObject.Velocity;
-
-                if (physicsObject is Player player) {
-                    PlayerCollisionShape playerShape = (PlayerCollisionShape)shape;
-                    float playerAccel = 200f;
-                    float playerJumpForce = 100000f;
-                    float playerGravity = 10000f;
-                    float playerFriction = 8f;
-                    switch (player.State) {
-                        case PlayerState.Idling:
-                            objVeloc = Vector2.Lerp(objVeloc, new(0, objVeloc.Y), playerFriction * dt);
-                            break;
-                        case PlayerState.Moving:
-                            if (player.Direction == PlayerDirection.Left) {
-                                objVeloc.X += -playerAccel * dt;
-                            }
-                            else if (player.Direction == PlayerDirection.Right) {
-                                objVeloc.X += playerAccel * dt;
-                            }
-                            break;
-                        case PlayerState.Jumping:
-                            if (shape is PlayerCollisionShape) {
-                                if (playerShape.OnFloor) {
-                                    Console.WriteLine("Player is jumping from floor.");
-                                    objVeloc.Y = -playerJumpForce;
-                                    objVeloc.X = player.Direction == PlayerDirection.Left ? -playerJumpForce : playerJumpForce;
-                                    playerShape.OnFloor = false;
-                                }
-                                else {
-                                    Console.WriteLine("Player is in the air, cannot jump again.");
-                                }
-                            }
-                            break;
-                        case PlayerState.Falling:
-                            ;
-                            break;
-                        case PlayerState.Frozen:
-                            objVeloc = Vector2.Zero;
-                            break;
-                        default:
-                            break;
-                    }
-
-                    if (playerShape.OnFloor) objVeloc.Y = Math.Min(objVeloc.Y, 0);
-                    else objVeloc.Y += playerGravity * dt;
-
+                if (shape is IUpdatableGameComponent updatableGameComponent) {
+                    updatableGameComponent.Update(gameTime);
                 }
 
+                IPhysicsObject physicsObject = (IPhysicsObject)staticPhysicsObject;
+                Vector2 objVeloc = physicsObject.Velocity;
                 if (objVeloc.LengthSquared() > 1000000f) {
                     objVeloc.Normalize();
                     objVeloc *= 1000.0f;
