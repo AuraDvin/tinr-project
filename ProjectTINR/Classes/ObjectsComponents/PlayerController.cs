@@ -6,26 +6,43 @@ using System;
 
 namespace ProjectTINR.Classes;
 
-public class PlayerController(Game game): GameObject(game), IController {
-
-    private Keys _moveLeft = Keys.Left, _moveRight = Keys.Right, _jump = Keys.Space;
-
+public class PlayerController(Game game) : GameObject(game), IController, ISceneManipulator {
+    private Keys _moveLeft = Keys.Left;
+    private Keys _moveRight = Keys.Right;
+    private Keys _jump = Keys.Space;
+    private Keys _shoot = Keys.X;
     protected bool _isMovingLeft = false;
     protected bool _isMovingRight = false;
     protected bool _isJumping = false;
     protected bool _justJumped = false;
-    public bool JustJumped {
-        get { return _justJumped; }
-    }
-    public bool IsMovingLeft {
-        get { return _isMovingLeft; }
-    }
-    public bool IsMovingRight {
-        get { return _isMovingRight; }
-    }
+    protected bool _justShot = false;
+
+    public float ShootingDelay { get; set; } = 0.4f;
+    private float _lastShot = 0f;
+
+    private bool _canShoot = true;
+
+    public bool JustJumped => _justJumped;
+    public bool IsMovingLeft => _isMovingLeft;
+    public bool IsMovingRight => _isMovingRight;
+
+    public Scene Scene { get; set; } = null;
+
     public override void Initialize() {
     }
     public override void Update(GameTime gameTime) {
+        if (Scene == null) throw new Exception("[PlayerController -> Scene Manipulator] Scene was not initalized!");
+        Player player = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
+        _lastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (_lastShot >= ShootingDelay) {
+            _canShoot = true;
+        }
+        else {
+            if (_justShot) {
+                _canShoot = false;
+            }
+        }
+
         var ks = Keyboard.GetState();
         // Don't allow left/right movement before jump
         if (ks.IsKeyDown(_jump)) {
@@ -38,17 +55,33 @@ public class PlayerController(Game game): GameObject(game), IController {
                 _isJumping = false;
                 Console.WriteLine("Player released jump.");
                 _justJumped = true;
-            } else {
+            }
+            else {
                 Console.WriteLine("Player is not jumping.");
                 _justJumped = false;
             }
             _isMovingRight = ks.IsKeyDown(_moveRight);
             _isMovingLeft = ks.IsKeyDown(_moveLeft);
         }
+
+        // Todo: add throwing knife to scene, and give it inital position facing the right way
+        if (ks.IsKeyDown(_shoot)) {
+            if (_canShoot) {
+                _justShot = true;
+                _canShoot = false;
+                _lastShot = 0f;
+                float dir = player.Direction == PlayerDirection.Right ? 1f : -1f;
+                Vector2 playerPos = player.Position;
+                // Make the throwing knife and send it off in the direction from the player's position
+                // Scene.Add();
+            }
+        }
+
+        UpdatePlayerState(player);
     }
 
-    public void UpdatePlayerState(Player player) { 
-         if (IsMovingLeft) {
+    public void UpdatePlayerState(Player player) {
+        if (IsMovingLeft) {
             player.Direction = PlayerDirection.Left;
             player.State = PlayerState.Moving;
         }
@@ -65,5 +98,7 @@ public class PlayerController(Game game): GameObject(game), IController {
         if (JustJumped) {
             player.State = PlayerState.Jumping;
         }
+
+
     }
 }
