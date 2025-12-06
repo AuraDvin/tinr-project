@@ -120,5 +120,4 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
         return true;
     }
     public Scene Scene { get; set; } = null;
-
 }

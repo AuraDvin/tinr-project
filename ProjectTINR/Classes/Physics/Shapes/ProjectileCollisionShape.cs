@@ -17,7 +17,7 @@ public class ProjectileCollisionShape : CircleCollisionShape, ISceneManipulator 
         _position = startingPosition;
         if (direction == 0) direction = 1;
         // give projectile an initial horizontal speed
-        const float initialSpeed = 600f;
+        const float initialSpeed = 60f;
         _velocity = new Vector2(initialSpeed * Math.Sign(direction), 0f);
         _owner = new(this, game) {
             Position = _position,
@@ -35,11 +35,12 @@ public class ProjectileCollisionShape : CircleCollisionShape, ISceneManipulator 
     }
 
     public override void Update(GameTime gameTime) {
-        Console.WriteLine("Projectile update called");
         if (_deleted) return;
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         _position += _velocity * dt;
+        Console.WriteLine($"Projectile current position {Position}, {Velocity}");
         _owner.Position = _position;
+        _owner.Velocity = _velocity;
         _sinceBorn += dt;
         if (_sinceBorn >= _lifeTime) {
             Console.WriteLine("Projectile ready to be removed");

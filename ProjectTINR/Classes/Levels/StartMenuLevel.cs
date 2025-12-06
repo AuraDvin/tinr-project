@@ -1,6 +1,8 @@
 using System;
 
 using Microsoft.Xna.Framework;
+
+using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.Objects;
 
 namespace ProjectTINR.Classes.Levels;
@@ -16,10 +18,15 @@ public class StartMenuLevel : Level {
         Player player = new(Game) {
             Position = _playerSpawnPosition
         };
+        StationaryEnemy se = new(Game) {
+            Position = new(500f, 0f),
+            Scene = Scene
+        };
 
         _scene.Add(floor2);
         _scene.Add(floor);
         _scene.Add(player);
+        _scene.Add(se);
 
         foreach (IGameComponent obj in _scene) {
             Game.Components.Add(obj);

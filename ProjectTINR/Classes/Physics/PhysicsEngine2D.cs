@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
+using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.Objects;
 using ProjectTINR.Classes.ObjectsComponents;
+using ProjectTINR.Classes.Physics.Shapes;
 namespace ProjectTINR.Classes.Physics;
 
 public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
@@ -49,10 +51,13 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
             else {
                 shape = value;
             }
+            Console.WriteLine($"{obj.Name} => {shape}, {shape.Position}");
+            if (shape is ProjectileCollisionShape){
+                Console.WriteLine();
+            }
             updatedObjects.Add(obj.Name);
             if (shape.ShouldSimulate) {
                 shape.Position = staticPhysicsObject.Position;
-
                 if (shape is not IMoveComponent) {
                     continue;
                 }
@@ -61,11 +66,12 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                     continue;
                 }
 
+                IPhysicsObject physicsObject = (IPhysicsObject)staticPhysicsObject;
+
                 if (shape is IUpdatableGameComponent updatableGameComponent) {
                     updatableGameComponent.Update(gameTime);
                 }
 
-                IPhysicsObject physicsObject = (IPhysicsObject)staticPhysicsObject;
                 Vector2 objVeloc = physicsObject.Velocity;
                 if (objVeloc.LengthSquared() > 1000000f) {
                     objVeloc.Normalize();
@@ -78,7 +84,9 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                     objVeloc.Y = 0f;
                 }
                 // Console.WriteLine(((GameObject)physicsObject).Name + "'s velocity after physics update: " + objVeloc.ToString());
-
+                if (physicsObject is Enemy) {
+                    objVeloc = Vector2.Zero;
+                }
                 ((IMoveComponent)shape).Velocity = objVeloc;
                 ((IPhysicsObject)_objs[obj.Name]).Velocity = objVeloc;
                 _shapes[obj.Name] = shape;

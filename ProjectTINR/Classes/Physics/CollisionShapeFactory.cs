@@ -13,6 +13,7 @@ public class CollisionShapeFactory {
             CollisionShapeType.Circle => new CircleCollisionShape(false, 10.0f),
             CollisionShapeType.StaticCircle => new CircleCollisionShape(true, 10.0f),
             CollisionShapeType.Projectile => null,
+            CollisionShapeType.EnemyCollisionShape => new EnemyCollisionShape(),
             _ => throw new NotImplementedException()
         };
     }

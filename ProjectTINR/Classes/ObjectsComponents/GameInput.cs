@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
+using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes;
@@ -27,6 +28,9 @@ public class GameInput(Game game, Level level) : GameObject(game) {
                 controller = ControllerFactory.CreateController(Game, controlledObject.ControllerType);
                 if (controller is ISceneManipulator sceneManipulator) {
                     sceneManipulator.Scene = _level.Scene;
+                }
+                if (controller is EnemyController ec) {
+                    ec.Owner = (StationaryEnemy)controlledObject;
                 }
                 _controllers.Add(obj.Name, controller);
                 Game.Components.Add(controller);

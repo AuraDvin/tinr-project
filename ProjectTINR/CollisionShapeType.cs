@@ -8,4 +8,5 @@ public enum CollisionShapeType {
     PlayerShape,
     FloorCollisionShape,
     Projectile,
+    EnemyCollisionShape,
 }
