@@ -1,5 +1,7 @@
 using System;
+
 using Microsoft.Xna.Framework;
+
 using ProjectTINR.Classes.Physics.Shapes;
 
 namespace ProjectTINR.Classes.Physics;
@@ -32,6 +34,11 @@ public class CollisionAlgorithms {
         // if (shapeA is PlayerCollisionShape playerShape && shapeB is FloorCollisionShape floorShape) {
         //     return CheckCollision(playerShape, floorShape);
         // }
+        if (shapeA is PlayerCollisionShape && shapeB is PlayerProjectileCollisionShape ||
+                shapeA is PlayerProjectileCollisionShape && shapeB is PlayerCollisionShape) {
+            return false;
+        }
+
         if (shapeA is RectCollisionShape rectA && shapeB is RectCollisionShape rectB) {
             return CheckCollision(rectA, rectB);
         }
@@ -61,7 +68,8 @@ public class CollisionAlgorithms {
         int signA;
         if (separateHorizontal) {
             signA = (a.Center.X < b.Center.X) ? -1 : 1; // A should move left if it's left of B
-        } else {
+        }
+        else {
             signA = (a.Center.Y < b.Center.Y) ? -1 : 1; // A should move up if it's above B
         }
         int signB = -signA;
@@ -84,7 +92,8 @@ public class CollisionAlgorithms {
             if (separateHorizontal) {
                 if (rectA.ShouldSimulate) ta.X += shiftA;
                 if (rectB.ShouldSimulate) tb.X += shiftB;
-            } else {
+            }
+            else {
                 if (rectA.ShouldSimulate) ta.Y += shiftA;
                 if (rectB.ShouldSimulate) tb.Y += shiftB;
             }
@@ -104,13 +113,15 @@ public class CollisionAlgorithms {
             if (separateHorizontal) {
                 if (rectA.ShouldSimulate) ta.X += shiftA;
                 if (rectB.ShouldSimulate) tb.X += shiftB;
-            } else {
+            }
+            else {
                 if (rectA.ShouldSimulate) ta.Y += shiftA;
                 if (rectB.ShouldSimulate) tb.Y += shiftB;
             }
             if (ta.Intersects(tb)) {
                 low = mid + 1;
-            } else {
+            }
+            else {
                 high = mid;
             }
         }
@@ -123,13 +134,16 @@ public class CollisionAlgorithms {
             if (rectA.ShouldSimulate && rectB.ShouldSimulate) {
                 shiftForA = minimalShift / 2;
                 shiftForB = minimalShift - shiftForA;
-            } else if (rectA.ShouldSimulate) {
+            }
+            else if (rectA.ShouldSimulate) {
                 shiftForA = minimalShift;
                 shiftForB = 0;
-            } else if (rectB.ShouldSimulate) {
+            }
+            else if (rectB.ShouldSimulate) {
                 shiftForA = 0;
                 shiftForB = minimalShift;
-            } else {
+            }
+            else {
                 shiftForA = 0;
                 shiftForB = 0;
             }
@@ -137,7 +151,8 @@ public class CollisionAlgorithms {
             if (separateHorizontal) {
                 a.X += signA * shiftForA;
                 b.X += signB * shiftForB;
-            } else {
+            }
+            else {
                 a.Y += signA * shiftForA;
                 b.Y += signB * shiftForB;
             }
