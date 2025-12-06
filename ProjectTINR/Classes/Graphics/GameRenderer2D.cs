@@ -14,44 +14,32 @@ using ProjectTINR.Classes.ObjectsComponents;
 namespace TINR.Classes.Graphics;
 
 public class GameRenderer2D : DrawableGameComponent {
-    readonly Game _game_ref;
     readonly Level _level;
     readonly SpriteBatch _spriteBatch;
-    private readonly ContentManager _content;
-    protected Texture2D _characters;
-    // private readonly AnimatedSprite _playerSprite;
     private readonly Dictionary<string, Sprite> _sprites;
-
     public GameRenderer2D(Game game, Level level) : base(game) {
-        _game_ref = game;
         _level = level;
-        _content = game.Content;
         _spriteBatch = new SpriteBatch(game.GraphicsDevice);
-        _sprites = new();
-
-        // _playerSprite = new AnimatedSprite(game, new Vector2(100, 100), game.Content.Load<Texture2D>("images/characters"));
-        // _playerSprite.AddAnimationFromJson("Content/Spritesheet_edited.json");
-        // _playerSprite.PlayAnimation("idle");
-
-        // game.Components.Add(_playerSprite);
+        _sprites = [];
     }
-
     public override void Update(GameTime gameTime) {
         HashSet<string> updatedObjects = new();
         foreach (GameObject obj in _level.Scene) {
+            Sprite sprite;
             if (obj is not IDrawableGameComponent) {
                 continue;
             }
+
             if (!_sprites.ContainsKey(obj.Name)) {
-                // Add a new sprite variable, has to come from the class 
-                // So we should use a SpriteFactory of some sort
-                // Specifically for each enemy the 
-                Sprite sprite = SpriteFactory.CreateSprite(_game_ref, obj);
-                _game_ref.Components.Add(sprite);
+                sprite = SpriteFactory.CreateSprite(Game, obj);
+                Game.Components.Add(sprite);
                 _sprites.Add(obj.Name, sprite);
             }
-            
-            updatedObjects.Add(obj.Name);  
+            else {
+                sprite = _sprites[obj.Name];
+            }
+
+            updatedObjects.Add(obj.Name);
 
             if (obj is not IUpdatableGameComponent) {
                 continue;
@@ -59,49 +47,47 @@ public class GameRenderer2D : DrawableGameComponent {
 
             if (obj is Player player) {
                 // TODO: Generalize this so any sprite can update it's animation
-                AnimatedSprite _playerSprite = (AnimatedSprite)_sprites[player.Name];
-                _playerSprite.PlayAnimation(
+                AnimatedSprite playerSprite = (AnimatedSprite)sprite;
+                playerSprite.PlayAnimation(
                     player.State switch {
                         PlayerState.Idling => "idle",
                         PlayerState.Moving => "walk",
                         PlayerState.Jumping => "jump",
                         PlayerState.Falling => "idle",
-                        _ => throw new System.NotImplementedException()
+                        _ => throw new NotImplementedException()
                     });
-                _playerSprite.SpriteEffects = player.Direction switch {
+                playerSprite.SpriteEffects = player.Direction switch {
                     PlayerDirection.Left => SpriteEffects.FlipHorizontally,
                     PlayerDirection.Right => SpriteEffects.None,
-                    _ => throw new System.NotImplementedException()
+                    _ => throw new NotImplementedException()
                 };
-                _sprites[player.Name] = _playerSprite;
+                _sprites[player.Name] = playerSprite;
             }
         }
 
         // deload unused objects
         HashSet<string> deleteMe = [];
-
         foreach (string key in _sprites.Keys) {
             if (!updatedObjects.Contains(key)) {
                 deleteMe.Add(key);
-                _game_ref.Components.Remove(_sprites[key]);
             }
         }
 
-        foreach (string name in deleteMe) {
-            _sprites.Remove(name);
+        foreach (string key in deleteMe) {
+            Game.Components.Remove(_sprites[key]);
+            _sprites.Remove(key);
         }
 
         base.Update(gameTime);
     }
 
     protected override void LoadContent() {
-        _characters = _content.Load<Texture2D>("images/characters");
         base.LoadContent();
     }
 
     public override void Draw(GameTime gameTime) {
         GraphicsDevice.Clear(Color.CornflowerBlue);
-        _spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend,SamplerState.LinearWrap);
+        _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap);
         foreach (GameObject obj in _level.Scene) {
             if (!_sprites.ContainsKey(obj.Name)) {
                 continue;
