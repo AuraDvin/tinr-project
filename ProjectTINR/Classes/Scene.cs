@@ -1,5 +1,6 @@
 using System.Collections;
 
+namespace ProjectTINR.Classes; 
 public class Scene : ArrayList {
     public void RemoveByType<T>() {
         T item = default;
