@@ -11,29 +11,16 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
     private Keys _moveRight = Keys.Right;
     private Keys _jump = Keys.Space;
     private Keys _shoot = Keys.X;
-    protected bool _isMovingLeft = false;
-    protected bool _isMovingRight = false;
-    protected bool _isJumping = false;
-    protected bool _justJumped = false;
-    protected bool _justShot = false;
-
     public float ShootingDelay { get; set; } = 0.4f;
-    private float _lastShot = 0f;
-
-    private bool _canShoot = true;
-
     public bool JustJumped => _justJumped;
     public bool IsMovingLeft => _isMovingLeft;
-    public bool IsMovingRight => _isMovingRight;
-
-    public Scene Scene { get; set; } = null;
-
+    public bool IsMovingRight => _isMovingRight;    
     public override void Initialize() {
     }
     public override void Update(GameTime gameTime) {
         if (Scene == null) throw new Exception("[PlayerController -> Scene Manipulator] Scene was not initalized!");
         Player player = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
-        
+
         _lastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (_lastShot >= ShootingDelay) {
             _canShoot = true;
@@ -102,4 +89,13 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
 
 
     }
+    private float _lastShot = 0f;
+    private bool _canShoot = true;
+    protected bool _isMovingLeft = false;
+    protected bool _isMovingRight = false;
+    protected bool _isJumping = false;
+    protected bool _justJumped = false;
+    protected bool _justShot = false;
+    public Scene Scene { get; set; } = null;
 }
+
