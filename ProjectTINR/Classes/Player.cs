@@ -35,24 +35,13 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
 
     public Vector2 Velocity {
         get => _velocity;
-        set {
-            // if (value.LengthSquared() > 250000.0f) {
-            //     value.Normalize();
-            //     value *= 500.0f;
-            // }
-            // else if (value.LengthSquared() <= 1f) {
-            //     value = Vector2.Zero;
-            // }
-            _velocity = value;
-        }
+        set => _velocity = value;
     }
 
 
     public override void Initialize() {
-        base.Initialize();
         _playerController.Initialize();
-        // _position = new Vector2(0, -1000);
-        // _position = new Vector2(0, 0);
+        base.Initialize();
     }
 
     public override void Update(GameTime gameTime) {
@@ -63,36 +52,27 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
     protected void UpdateMovement(GameTime gameTime) {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        // float accel = 200f;
-        // float friction = 8f;
-
         if (_playerController.IsMovingLeft) {
-            // _velocity.X -= accel * dt;
             Direction = PlayerDirection.Left;
             _playerState = PlayerState.Moving;
         }
 
         if (_playerController.IsMovingRight) {
-            // _velocity.X += accel * dt;
             Direction = PlayerDirection.Right;
             _playerState = PlayerState.Moving;
         }
 
         if (!_playerController.IsMovingLeft && !_playerController.IsMovingRight) {
-            // _velocity = Vector2.Lerp(_velocity, Vector2.Zero, friction * dt);
             _playerState = PlayerState.Idling;
-            // _playerDirection = PlayerDirection.Right;
         }
 
         if (_playerController.JustJumped) {
             _playerState = PlayerState.Jumping;
-            // _velocity.Y = -60000f;
         }
 
-        // Velocity = _velocity;
         _position += Velocity * dt;
-        Console.WriteLine("Player velocity: " + _velocity.ToString());
-        Console.WriteLine("Player Position: " + _position.ToString());
+        // Console.WriteLine("Player velocity: " + _velocity.ToString());
+        // Console.WriteLine("Player Position: " + _position.ToString());
     }
 
     protected PlayerState _playerState = PlayerState.None;
