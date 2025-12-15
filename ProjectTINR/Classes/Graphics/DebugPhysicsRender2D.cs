@@ -9,15 +9,10 @@ using ProjectTINR.Classes.Physics.Shapes;
 
 namespace ProjectTINR.Classes.Graphics;
 
-public class DebugPhysicsRender2D : DrawableGameComponent {
-    private readonly PhysicsEngine2D _physicsEngine;
-    private readonly SpriteBatch _spriteBatch;
+public class DebugPhysicsRender2D(Game game, PhysicsEngine2D physicsEngine) : DrawableGameComponent(game) {
+    private readonly PhysicsEngine2D _physicsEngine = physicsEngine;
+    private readonly SpriteBatch _spriteBatch = new SpriteBatch(game.GraphicsDevice);
     private Texture2D _whitePixel;
-
-    public DebugPhysicsRender2D(Game game, PhysicsEngine2D physicsEngine) : base(game) {
-        _physicsEngine = physicsEngine;
-        _spriteBatch = new SpriteBatch(game.GraphicsDevice);
-    }
 
     protected override void LoadContent() {
         // Create a 1x1 white texture for drawing rectangles

@@ -2,9 +2,6 @@ using Microsoft.Xna.Framework;
 
 namespace ProjectTINR.Classes.Objects;
 
-public class PlayerProjectile : Projectile{
-    public PlayerProjectile(Game game) : base(game)
-    {
-    }
+public class PlayerProjectile(Game game) : Projectile(game){
     public override CollisionShapeType CollisionType { get => CollisionShapeType.PlayerProjectile; }
 }

@@ -4,12 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace ProjectTINR.Classes;
 
-public class Level : GameComponent {
+public class Level(Game game) : GameComponent(game) {
     protected Scene _scene;
     protected LevelType _levelType;
-
-    public Level(Game game) : base(game) {
-    }
 
     public LevelType Type => _levelType;
 

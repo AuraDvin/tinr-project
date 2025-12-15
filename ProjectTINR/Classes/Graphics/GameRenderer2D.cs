@@ -9,15 +9,11 @@ using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes.Graphics;
 
-public class GameRenderer2D : DrawableGameComponent {
-    readonly Level _level;
-    readonly SpriteBatch _spriteBatch;
-    private readonly Dictionary<string, Sprite> _sprites;
-    public GameRenderer2D(Game game, Level level) : base(game) {
-        _level = level;
-        _spriteBatch = new SpriteBatch(game.GraphicsDevice);
-        _sprites = [];
-    }
+public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game) {
+    readonly Level _level = level;
+    readonly SpriteBatch _spriteBatch = new SpriteBatch(game.GraphicsDevice);
+    private readonly Dictionary<string, Sprite> _sprites = [];
+
     public override void Update(GameTime gameTime) {
         HashSet<string> updatedObjects = new();
         foreach (GameObject obj in _level.Scene) {

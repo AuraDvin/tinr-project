@@ -5,23 +5,16 @@ using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes.Graphics;
 
-public class Sprite : GameComponent, IDrawableGameComponent, IPositionComponent {
-    protected Rectangle _rect;
-    protected Texture2D _texture;
-    protected Vector2 _position;
+public class Sprite(Game game, Rectangle rect, Vector2 position, Texture2D texture) : GameComponent(game), IDrawableGameComponent, IPositionComponent {
+    protected Rectangle _rect = rect;
+    protected Texture2D _texture = texture;
+    protected Vector2 _position = position;
     protected SpriteEffects _spriteEffects = SpriteEffects.None;
     public SpriteEffects SpriteEffects { get => _spriteEffects; set => _spriteEffects = value; }
     public Texture2D Texture { get { return _texture; } }
     public Vector2 Position {
         get { return _position; }
         set { _position = value; }
-    }
-
-    public Sprite(Game game, Rectangle rect, Vector2 position, Texture2D texture)
-    : base(game) {
-        _rect = rect;
-        _position = position;
-        _texture = texture;
     }
 
     public void SetRect(Rectangle rect) {

@@ -20,17 +20,13 @@ struct Animation {
     public List<AnimationFrame> Frames;
 }
 
-public class AnimatedSprite : Sprite, IUpdatableGameComponent {
-    private readonly Dictionary<string, Animation> _animations;
+public class AnimatedSprite(Game game, Vector2 position, Texture2D texture) : Sprite(game, new Rectangle(0, 0, 0, 0), position, texture), IUpdatableGameComponent {
+    private readonly Dictionary<string, Animation> _animations = [];
     // private Animation _currentAnimation;
     private string _currentAnimationName;   
     // private AnimationFrame _currentFrame;
     private int _currentFrameIdx;
     private double _lastFrameTime;
-
-    public AnimatedSprite(Game game, Vector2 position, Texture2D texture) : base(game, new Rectangle(0, 0, 0, 0), position, texture) {
-        _animations = [];
-    }
 
     public void AddAnimationFromJson(string jsonPath) {
         string jsonString = File.ReadAllText(jsonPath);
