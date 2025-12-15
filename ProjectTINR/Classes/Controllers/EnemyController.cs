@@ -42,9 +42,6 @@ public class EnemyController(Game game) : GameObject(game), IController, ISceneM
         Player player = Scene.FindByType<Player>();
         if (player == null) return;
 
-        int dir = player.Position.X >= enemy.Position.X ? 1 : -1;
-        // int dir = -1;
-
         Vector2 spawnPos = enemy.Position;
         EnemyProjectile projectile = new (Game) {
             Position = spawnPos,
