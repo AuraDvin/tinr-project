@@ -1,12 +1,13 @@
+using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 using ProjectTINR.Classes.Objects;
+using ProjectTINR.Classes.ObjectsComponents;
 using ProjectTINR.Classes.Physics.Shapes;
 
-using System;
-
-namespace ProjectTINR.Classes.ObjectsComponents;
+namespace ProjectTINR.Classes.Controllers;
 
 public class PlayerController(Game game) : GameObject(game), IController, ISceneManipulator {
     private Keys _moveLeft = Keys.Left;
@@ -21,8 +22,10 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
     }
     public override void Update(GameTime gameTime) {
         if (Scene == null) throw new Exception("[PlayerController -> Scene Manipulator] Scene was not initalized!");
-        Player player = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
-
+        if (Owner == null){
+            Owner = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
+        }
+        // Player player = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
         _lastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (_lastShot >= ShootingDelay) {
             _canShoot = true;
@@ -53,6 +56,8 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
             _isMovingRight = ks.IsKeyDown(_moveRight);
             _isMovingLeft = ks.IsKeyDown(_moveLeft);
         }
+        
+        Player player = Owner as Player ?? throw new Exception("Player class not found in Scene!");
 
         // Todo: add throwing knife to scene, and give it inital position facing the right way
         if (ks.IsKeyDown(_shoot)) {
@@ -62,20 +67,22 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
                 _justShot = true;
                 _canShoot = false;
                 _lastShot = 0f;
-                int dir = player.Direction == PlayerDirection.Right ? 1 : -1;
+                // int dir = player.Direction == PlayerDirection.Right ? 1 : -1;
                 Vector2 playerPos = player.Position;
-                PlayerProjectileCollisionShape thing = new(playerPos, dir, Game) {
-                    Scene = Scene
+                PlayerProjectile projectile = new(Game) {
+                    Position = playerPos, FacingRight = player.Direction == PlayerDirection.Right,
                 };
-                // Make the throwing knife and send it off in the direction from the player's position
-                // Scene.Add();
+                Scene.Add(projectile);
+                // PlayerProjectileCollisionShape thing = new(playerPos, dir, Game) {
+                //     Scene = Scene
+                // };
             }
         }
 
         UpdatePlayerState(player);
     }
 
-    public void UpdatePlayerState(Player player) {
+    void UpdatePlayerState(Player player) {
         if (IsMovingLeft) {
             player.Direction = PlayerDirection.Left;
             player.State = PlayerState.Moving;
@@ -93,9 +100,10 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
         if (JustJumped) {
             player.State = PlayerState.Jumping;
         }
-
-
+        
+        Console.WriteLine($"This is player's state: {player.State}");
     }
+    
     private float _lastShot = 0f;
     private bool _canShoot = true;
     protected bool _isMovingLeft = false;
@@ -104,5 +112,6 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
     protected bool _justJumped = false;
     protected bool _justShot = false;
     public Scene Scene { get; set; } = null;
+    public GameObject Owner { get; set; }
 }
 

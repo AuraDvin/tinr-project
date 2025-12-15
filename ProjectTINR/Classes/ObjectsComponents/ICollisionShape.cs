@@ -1,6 +1,9 @@
 using System;
 
-namespace ProjectTINR.Classes.Physics;
+using ProjectTINR.Classes.Physics;
+using Microsoft.Xna.Framework;
+
+namespace ProjectTINR.Classes.ObjectsComponents;
 
 public interface ICollisionShape : IPositionComponent {
     public bool ShouldSimulate { get { return false; } }
@@ -8,4 +11,7 @@ public interface ICollisionShape : IPositionComponent {
         Console.WriteLine("Bad bad bad bad.");
         return false;
     }
+    virtual void BeginFrame() { }
+    IStaticPhysicsObject Owner { get; set; }
+    protected Vector2 Offset { get; set; }
 }

@@ -11,11 +11,14 @@
 			"detail": "Build the ProjectTINR.csproj project using dotnet build"
 		},
 		{
-			"type": "dotnet",
-			"task": "build",
-			"group": "build",
-			"problemMatcher": [],
-			"label": "dotnet: build"
-		}
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/ProjectTINR.sln"
+            ],
+            "problemMatcher": "$msCompile"
+        }
 	]
 }
