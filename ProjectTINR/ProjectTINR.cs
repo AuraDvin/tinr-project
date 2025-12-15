@@ -1,13 +1,12 @@
-﻿using ProjectTINR.Classes;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using ProjectTINR;
-using TINR.Classes.Graphics;
-using ProjectTINR.Classes.Physics;
-using ProjectTINR.Classes.Graphics;
 
-namespace TINR;
+using ProjectTINR.Classes;
+using ProjectTINR.Classes.Graphics;
+using ProjectTINR.Classes.ObjectsComponents;
+using ProjectTINR.Classes.Physics;
+
+namespace ProjectTINR;
 
 public class ProjectTinr : Game {
     private readonly GraphicsDeviceManager _graphics;

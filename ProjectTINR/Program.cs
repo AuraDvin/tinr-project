@@ -1,2 +1,4 @@
-﻿using var game = new TINR.ProjectTinr();
+﻿using ProjectTINR;
+
+using var game = new ProjectTinr();
 game.Run();
