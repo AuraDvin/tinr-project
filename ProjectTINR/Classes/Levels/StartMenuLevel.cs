@@ -9,17 +9,19 @@ namespace ProjectTINR.Classes.Levels;
 
 public class StartMenuLevel : Level {
     private Vector2 _playerSpawnPosition = new(0f, 0f);
+    private Vector2 _enemySpawnPosition = new(500f, 0f);
     public StartMenuLevel(Game game) : base(game) {
         _scene = [];
     }
     public override void Initialize() {
         Floor floor = new(Game, new(0, 400));
         Floor floor2 = new(Game, new(500, 200));
+        
         Player player = new(Game) {
             Position = _playerSpawnPosition
         };
         StationaryEnemy se = new(Game) {
-            Position = new(500f, 0f),
+            Position = _enemySpawnPosition,
             Scene = Scene
         };
 
