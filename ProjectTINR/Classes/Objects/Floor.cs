@@ -3,6 +3,7 @@ using System;
 using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.ObjectsComponents;
+using ProjectTINR.Classes.Physics;
 
 namespace ProjectTINR.Classes.Objects;
 

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
+using ProjectTINR.Classes.Controllers;
 using ProjectTINR.Classes.NPCs;
-using ProjectTINR.Classes.ObjectsComponents;
 
-namespace ProjectTINR.Classes;
+namespace ProjectTINR.Classes.ObjectsComponents;
 
 public class GameInput(Game game, Level level) : GameObject(game) {
     private readonly Level _level = level;
@@ -25,7 +25,7 @@ public class GameInput(Game game, Level level) : GameObject(game) {
             IController controller;
 
             if (!_controllers.TryGetValue(obj.Name, out IController value)) {
-                controller = ControllerFactory.CreateController(Game, controlledObject.ControllerType);
+                controller = ControllerFactory.CreateController(Game, controlledObject);
                 if (controller is ISceneManipulator sceneManipulator) {
                     sceneManipulator.Scene = _level.Scene;
                 }

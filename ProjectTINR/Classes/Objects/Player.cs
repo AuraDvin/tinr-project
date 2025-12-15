@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.ObjectsComponents;
+using ProjectTINR.Classes.Physics;
 
 namespace ProjectTINR.Classes.Objects;
 
@@ -39,8 +40,8 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
     }
 
     public override void Update(GameTime gameTime) {
-        float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        _position += Velocity * dt;
+        // float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        // _position += Velocity * dt;
         // Console.WriteLine("Player velocity: " + _velocity.ToString());
         // Console.WriteLine("Player Position: " + _position.ToString());
         base.Update(gameTime);

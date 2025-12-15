@@ -2,26 +2,25 @@ using System;
 
 using Microsoft.Xna.Framework;
 
+using ProjectTINR.Classes.ObjectsComponents;
+
 namespace ProjectTINR.Classes.Physics.Shapes;
 
 public class EnemyCollisionShape : RectCollisionShape {
-
-    public bool OnFloor { get; set; } = false;
-    public EnemyCollisionShape() : base(true) {
+    public EnemyCollisionShape() : base(false) {
     }
 
     public override void Update(GameTime gameTime) {
-
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         Vector2 objVeloc = Velocity;
         if (OnFloor) objVeloc.Y = Math.Min(objVeloc.Y, 0);
         else objVeloc.Y += 10000f * dt;
         Velocity = objVeloc;
-        // player.Velocity = objVeloc;
         base.Update(gameTime);
     }
+    
     public override bool OnCollision(ICollisionShape other) {
-        Console.WriteLine("Enemy colided with something");
+        // Console.WriteLine("Enemy colided with something");
         if (other is FloorCollisionShape floor) {
             Rectangle rect = floor.Rectangle;
             int top = 0, bottom = 1, left = 2, right = 3;

@@ -1,3 +1,5 @@
+using ProjectTINR.Classes.ObjectsComponents;
+
 namespace ProjectTINR.Classes.Physics.Shapes;
 
 public class PickupCollisionShape : CircleCollisionShape {

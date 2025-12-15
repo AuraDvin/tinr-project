@@ -7,29 +7,27 @@ using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes.Physics.Shapes;
 
-public class ProjectileCollisionShape : CircleCollisionShape, ISceneManipulator {
+public abstract class ProjectileCollisionShape : CircleCollisionShape, ISceneManipulator {
     private readonly float _lifeTime = 4f;
     private float _sinceBorn = 0f;
-    private readonly Projectile _owner;
+    private const float initialSpeed = 60f;
     bool _deleted = false;
+    
+    
     public ProjectileCollisionShape(Vector2 startingPosition, int direction, Game game) : base(false, 40f) {
         Console.WriteLine("making projectile");
-        _position = startingPosition;
         if (direction == 0) direction = 1;
         // give projectile an initial horizontal speed
-        const float initialSpeed = 60f;
-        _velocity = new Vector2(initialSpeed * Math.Sign(direction), 0f);
-        _owner = new(this, game) {
-            Position = _position,
-            Velocity = _velocity
-        };
+        if (Owner != null) {
+            Velocity = new Vector2(initialSpeed * direction, 0);
+        }
     }
 
     public override bool OnCollision(ICollisionShape other) {
         Console.WriteLine("projectile collided");
         if (!_deleted) {
             _deleted = true;
-            Scene.Remove(_owner);
+            Scene.Remove(Owner);
         }
         return false;
     }
@@ -37,15 +35,14 @@ public class ProjectileCollisionShape : CircleCollisionShape, ISceneManipulator 
     public override void Update(GameTime gameTime) {
         if (_deleted) return;
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        _position += _velocity * dt;
+        Position += Velocity * dt;
+        Velocity = new Vector2(initialSpeed * (((Projectile)Owner).FacingRight ? 1 : -1), 0);
         Console.WriteLine($"Projectile current position {Position}, {Velocity}");
-        _owner.Position = _position;
-        _owner.Velocity = _velocity;
         _sinceBorn += dt;
         if (_sinceBorn >= _lifeTime) {
             Console.WriteLine("Projectile ready to be removed");
             _deleted = true;
-            Scene.Remove(_owner);
+            Scene.Remove(Owner);
             return;
         }
         base.Update(gameTime);
@@ -56,8 +53,8 @@ public class ProjectileCollisionShape : CircleCollisionShape, ISceneManipulator 
         set { 
             if (ReferenceEquals(_scene, value)) return; // already set to this scene
             _scene = value;
-            if (_scene != null && !_scene.Contains(_owner)) {
-                _scene.Add(_owner);
+            if (_scene != null && !_scene.Contains(Owner)) {
+                _scene.Add(Owner);
                 Console.WriteLine("Projectile owner added to scene"); 
             }
         } 

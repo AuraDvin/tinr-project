@@ -7,6 +7,7 @@ public enum CollisionShapeType {
     StaticCircle,
     PlayerShape,
     FloorCollisionShape,
-    Projectile,
+    PlayerProjectile,
+    EnemyProjectile,
     EnemyCollisionShape,
 }

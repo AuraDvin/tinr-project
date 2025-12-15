@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
-namespace ProjectTINR.Classes;
+namespace ProjectTINR.Classes.ObjectsComponents;
 
 
 public class GameObject : GameComponent {

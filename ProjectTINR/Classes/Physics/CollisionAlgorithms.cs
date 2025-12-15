@@ -4,18 +4,20 @@ using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.Objects;
+using ProjectTINR.Classes.ObjectsComponents;
 using ProjectTINR.Classes.Physics.Shapes;
 
 namespace ProjectTINR.Classes.Physics;
 
 public class CollisionAlgorithms {
     public static bool CheckCollision(ICollisionShape shapeA, ICollisionShape shapeB) {
+        Console.WriteLine($"Between collisions! {shapeA.GetType()}, {shapeB.GetType()}");
         switch (shapeA) {
             case PlayerCollisionShape when shapeB is PlayerProjectileCollisionShape:
             case PlayerProjectileCollisionShape when shapeB is PlayerProjectileCollisionShape:
             case PlayerProjectileCollisionShape when shapeB is PlayerCollisionShape:
-            case ProjectileCollisionShape when shapeB is EnemyCollisionShape:
-            case EnemyCollisionShape when shapeB is ProjectileCollisionShape:
+            case EnemyProjectileCollisionShape when shapeB is EnemyCollisionShape:
+            case EnemyCollisionShape when shapeB is EnemyProjectileCollisionShape:
             case ProjectileCollisionShape when shapeB is ProjectileCollisionShape:
                 return false;
             case CircleCollisionShape ca when shapeB is CircleCollisionShape cb:

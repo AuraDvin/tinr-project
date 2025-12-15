@@ -3,6 +3,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ProjectTINR.Classes.ObjectsComponents;
 using ProjectTINR.Classes.Physics;
 using ProjectTINR.Classes.Physics.Shapes;
 
@@ -76,7 +77,7 @@ public class DebugPhysicsRender2D : DrawableGameComponent {
         }
 
         texture.SetData(data);
-        _spriteBatch.Draw(texture, ccs.Position, color);
+        _spriteBatch.Draw(texture, ccs.Position - new Vector2(radius, radius), color);
     }
 
     protected override void Dispose(bool disposing) {
