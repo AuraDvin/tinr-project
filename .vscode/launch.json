@@ -16,7 +16,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/net9.0/ProjectTinr.dll",
+            "program": "${workspaceFolder}/ProjectTINR/bin/Debug/net9.0/ProjectTINR.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
