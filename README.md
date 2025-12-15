@@ -6,7 +6,7 @@ A knight tries to overthrow the Castle overrun by monsters, only using their thr
 Has a throwing attack, and the platformer protagonist 
 ## Blobi 
 A stationary enemy that shoots the player when in view 
-## TBN 
+## TBN (To be named)
 A Flying enemy that tries to sweep in and attack the player from close 
 
 Engine and game code written by me with help from professors 
