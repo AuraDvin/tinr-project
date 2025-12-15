@@ -37,3 +37,13 @@ cd bin/Debug/net9.0/
 # Run resulting dlll
 dotnet ./ProjectTINR.dll
 ```
+# Animated Sprites & format
+To draw an animation the info about the sprite that should be drawn is needed, this is done by moving a Rectangle along the texture according to the framerate. This is updated and done in `GameRenderer2D` class. 
+To get the sprite atlas I used a known KDE Krita python script by [@Falano](https://github.com/Falano) at [this link](https://github.com/Falano/kritaSpritesheetManager), the result of which I edit with [my own python script](https://github.com/AuraDvin/tinr-project/blob/main/jsonEdit.py) at the project root, that edits this format to something that fits my needs, this is then parsed in the `AnimatedSprite` class.
+
+
+# Refernces/Links
+- Game engine [MonoGame](https://monogame.net/)
+- Drawing software [KDE Krita](https://krita.org/en/)
+- Spritesheet export plugin [kritaSpriteSheetManager](https://github.com/Falano/kritaSpritesheetManager)
+- IDE(s) [Visual Studio Code](https://code.visualstudio.com/) + [JetBrains Rider](https://www.jetbrains.com/rider/) (I used both during development)
