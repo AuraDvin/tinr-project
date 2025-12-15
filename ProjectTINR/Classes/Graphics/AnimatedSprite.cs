@@ -7,15 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ProjectTINR.Classes.ObjectsComponents;
 
-namespace TINR.Classes;
+namespace ProjectTINR.Classes.Graphics;
 
-struct AnimationFrame {
-    public Rectangle Rect;
-    public double Duration;
-    public AnimationFrame(Rectangle rect, double dur) {
-        Rect = rect;
-        Duration = dur;
-    }
+struct AnimationFrame(Rectangle rect, double dur) {
+    public Rectangle Rect = rect;
+    public double Duration = dur;
 }
 
 struct Animation {

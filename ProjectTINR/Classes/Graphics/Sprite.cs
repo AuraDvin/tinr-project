@@ -1,11 +1,9 @@
-using ProjectTINR.Classes.ObjectsComponents;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectTINR.Classes;
+using ProjectTINR.Classes.ObjectsComponents;
 
-namespace TINR.Classes;
+namespace ProjectTINR.Classes.Graphics;
 
 public class Sprite : GameComponent, IDrawableGameComponent, IPositionComponent {
     protected Rectangle _rect;

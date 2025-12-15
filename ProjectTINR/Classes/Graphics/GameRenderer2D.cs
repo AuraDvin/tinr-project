@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectTINR;
-using ProjectTINR.Classes;
-using ProjectTINR.Classes.Graphics;
 using ProjectTINR.Classes.Objects;
 using ProjectTINR.Classes.ObjectsComponents;
 
-namespace TINR.Classes.Graphics;
+namespace ProjectTINR.Classes.Graphics;
 
 public class GameRenderer2D : DrawableGameComponent {
     readonly Level _level;
