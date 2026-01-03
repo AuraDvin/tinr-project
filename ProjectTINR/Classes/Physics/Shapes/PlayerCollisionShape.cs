@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 using Microsoft.Xna.Framework;
 
+using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.Objects;
 using ProjectTINR.Classes.ObjectsComponents;
 
@@ -17,6 +19,10 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
     public override bool OnFloor { get; set; } = false;
     protected float _msSinceLastJump = 0f;
     protected readonly float _jumpTimerBeforeApplyingGravity = 0.3333333334f/2;
+
+    protected bool _tookDmg = false;
+    protected float _lastTookDmg = 0f;
+    protected float _immuneFramesMS = 33f;
 
     public override void Update(GameTime gameTime) {
         Player player = Owner as Player ?? throw new Exception("Where is the player reference?");
@@ -74,6 +80,17 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
         }
 
         Velocity = objVeloc;
+
+        if (_tookDmg) {
+            if (_lastTookDmg <= 0f) {
+                _lastTookDmg = _immuneFramesMS/1000f;
+                (Owner as Player).takeDamage();
+                _tookDmg = false;
+            } else {
+                _lastTookDmg -= dt;
+            }
+        } 
+
         // Console.WriteLine($"Ok so I'm Player with this velocity now: {Velocity}");
         // Console.WriteLine($"Ok so I'm Player with this Position now: {Position}");
     }
@@ -122,6 +139,10 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                 Velocity = new(Math.Max(Velocity.X, 0), Velocity.Y);
             }
             return false;
+        }
+
+        if (other is EnemyProjectileCollisionShape) {
+            _tookDmg = true;
         }
 
         return true;
