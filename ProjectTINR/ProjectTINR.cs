@@ -15,7 +15,9 @@ public class ProjectTinr : Game {
     private PhysicsEngine2D _physicsEngine;
     private GameInput _gameInput;
     private DebugPhysicsRender2D _debugRender2D;
-    private Level _level; 
+    private Level _level;
+
+    private Microsoft.Xna.Framework.Input.KeyboardState _prevKeyboardState;
 
     public ProjectTinr() {
         _graphics = new GraphicsDeviceManager(this);
@@ -24,10 +26,24 @@ public class ProjectTinr : Game {
     }
 
     protected override void Initialize() {
-        _level = LevelFactory.CreateLevel(this, LevelType.StartMenu);
+        SwitchLevel(LevelType.StartMenu);
+
+        base.Initialize();
+    }
+
+    private void SwitchLevel(LevelType newLevelType) {
+        // Remove current components if any
+        if (_level != null) Components.Remove(_level);
+        if (_gameInput != null) Components.Remove(_gameInput);
+        if (_gameRenderer != null) Components.Remove(_gameRenderer);
+        if (_physicsEngine != null) Components.Remove(_physicsEngine);
+        if (_debugRender2D != null) Components.Remove(_debugRender2D);
+        if (_uiRenderer2D != null) Components.Remove(_uiRenderer2D);
+
+        _level = LevelFactory.CreateLevel(this, newLevelType);
         _gameInput = new GameInput(this, _level);
         _gameRenderer = new GameRenderer2D(this, _level);
-        _physicsEngine = new PhysicsEngine2D(this, _level); 
+        _physicsEngine = new PhysicsEngine2D(this, _level);
         _debugRender2D = new DebugPhysicsRender2D(this, _physicsEngine);
         _uiRenderer2D = new UiRenderer2D(this, _level);
 
@@ -37,8 +53,6 @@ public class ProjectTinr : Game {
         Components.Add(_physicsEngine);
         Components.Add(_debugRender2D);
         Components.Add(_uiRenderer2D);
-
-        base.Initialize();
     }
 
     protected override void LoadContent() {
@@ -46,9 +60,23 @@ public class ProjectTinr : Game {
     }
 
     protected override void Update(GameTime gameTime) {
+        var kb = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+
+        // Toggle into Settings with F1 (edge triggered)
+        if (kb.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1) && !_prevKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1)) {
+            if (_level.Type == LevelType.Settings) {
+                SwitchLevel(LevelType.StartMenu);
+            } else {
+                SwitchLevel(LevelType.Settings);
+            }
+        }
+
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-            Keyboard.GetState().IsKeyDown(Keys.Escape))
+            kb.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
             Exit();
+
+        _prevKeyboardState = kb;
+
         base.Update(gameTime);
     }
 
