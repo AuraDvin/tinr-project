@@ -22,6 +22,11 @@ public class DebugPhysicsRender2D(Game game, PhysicsEngine2D physicsEngine) : Dr
     }
 
     public override void Draw(GameTime gameTime) {
+        // Respect settings
+        if (!ProjectTINR.Classes.GameSettings.DebugPhysicsCollisions) {
+            return;
+        }
+
         _spriteBatch.Begin();
 
         foreach (ICollisionShape shape in _physicsEngine._shapes.Values) {
