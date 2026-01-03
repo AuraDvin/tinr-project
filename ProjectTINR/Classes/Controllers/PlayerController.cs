@@ -40,17 +40,17 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
         // Don't allow left/right movement before jump
         if (ks.IsKeyDown(_jump)) {
             _isJumping = true;
-            Console.WriteLine("Player started jumping.");
+            // Console.WriteLine("Player started jumping.");
         }
         else {
             // Jump on the key release
             if (ks.IsKeyUp(_jump) && _isJumping) {
                 _isJumping = false;
-                Console.WriteLine("Player released jump.");
+                // Console.WriteLine("Player released jump.");
                 _justJumped = true;
             }
             else {
-                Console.WriteLine("Player is not jumping.");
+                // Console.WriteLine("Player is not jumping.");
                 _justJumped = false;
             }
             _isMovingRight = ks.IsKeyDown(_moveRight);
@@ -101,7 +101,7 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
             player.State = PlayerState.Jumping;
         }
         
-        Console.WriteLine($"This is player's state: {player.State}");
+        Console.WriteLine($"Set Player state: {player.State}");
     }
     
     private float _lastShot = 0f;

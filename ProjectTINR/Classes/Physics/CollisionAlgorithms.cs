@@ -11,7 +11,7 @@ namespace ProjectTINR.Classes.Physics;
 
 public class CollisionAlgorithms {
     public static bool CheckCollision(ICollisionShape shapeA, ICollisionShape shapeB) {
-        Console.WriteLine($"Between collisions! {shapeA.GetType()}, {shapeB.GetType()}");
+        // Console.WriteLine($"Between collisions! {shapeA.GetType()}, {shapeB.GetType()}");
         switch (shapeA) {
             case PlayerCollisionShape when shapeB is PlayerProjectileCollisionShape:
             case PlayerProjectileCollisionShape when shapeB is PlayerProjectileCollisionShape:
