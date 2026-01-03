@@ -2,6 +2,7 @@ using System;
 
 using Microsoft.Xna.Framework;
 
+using ProjectTINR.Classes.Graphics;
 using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.Objects;
 
@@ -13,6 +14,7 @@ public class StartMenuLevel : Level {
     private Vector2 _flyingEnemySpawnPosition = new(-500f, 0f);
     public StartMenuLevel(Game game) : base(game) {
         _scene = [];
+        _uiScene = [];
     }
     public override void Initialize() {
         Floor floor = new(Game, new(0, 400));
@@ -39,6 +41,13 @@ public class StartMenuLevel : Level {
         foreach (IGameComponent obj in _scene) {
             Game.Components.Add(obj);
         }
+
+        UIHealthElement he = new() {
+            Player = player
+        };
+
+        _uiScene.Add(he);
+
         Console.WriteLine("Start Menu Level initialized.");
         base.Initialize();
     }
