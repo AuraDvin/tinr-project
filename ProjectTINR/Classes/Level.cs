@@ -6,6 +6,7 @@ namespace ProjectTINR.Classes;
 
 public class Level(Game game) : GameComponent(game) {
     protected Scene _scene;
+    protected Scene _uiScene;
     protected LevelType _levelType;
 
     public LevelType Type => _levelType;
@@ -15,6 +16,11 @@ public class Level(Game game) : GameComponent(game) {
         set => _scene = value;
     }
 
+    public Scene UIScene {
+        get => _uiScene;
+        set => _uiScene = value;
+    }
+    
     public override void Initialize() {
         Console.WriteLine("Loading level.");
         base.Initialize();
