@@ -11,6 +11,7 @@ namespace ProjectTINR;
 public class ProjectTinr : Game {
     private readonly GraphicsDeviceManager _graphics;
     private GameRenderer2D _gameRenderer;
+    private UiRenderer2D _uiRenderer2D;
     private PhysicsEngine2D _physicsEngine;
     private GameInput _gameInput;
     private DebugPhysicsRender2D _debugRender2D;
@@ -28,12 +29,14 @@ public class ProjectTinr : Game {
         _gameRenderer = new GameRenderer2D(this, _level);
         _physicsEngine = new PhysicsEngine2D(this, _level); 
         _debugRender2D = new DebugPhysicsRender2D(this, _physicsEngine);
+        _uiRenderer2D = new UiRenderer2D(this, _level);
 
         Components.Add(_level);
         Components.Add(_gameInput);
         Components.Add(_gameRenderer);
         Components.Add(_physicsEngine);
         Components.Add(_debugRender2D);
+        Components.Add(_uiRenderer2D);
 
         base.Initialize();
     }
