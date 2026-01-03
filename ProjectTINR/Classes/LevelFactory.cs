@@ -9,6 +9,7 @@ public class LevelFactory {
         // Console.WriteLine("Creating level of type: ", nameof(levelType), ", ", (int) levelType);
         return levelType switch {
             LevelType.StartMenu => new Levels.StartMenuLevel(game),
+            LevelType.Settings => new Levels.SettingsLevel(game),
             // LevelType.StartMenu => new StartMenuLevel(game),
             // LevelType.Credits => new CreditsLevel(game),
             // LevelType.Options => new OptionsLevel(game),
