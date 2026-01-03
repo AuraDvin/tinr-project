@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
-using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes.Graphics;
 
@@ -25,13 +22,20 @@ public class UiRenderer2D(Game game, Level level) : GameRenderer2D(game, level) 
             string label = obj.String;
 
             if (label != null) {
-                _spriteBatch.DrawString(_spriteFont, label, obj.TextPosition, Color.White);
-                Console.WriteLine("Mf string printed");
+                _spriteBatch.DrawString(
+                    _spriteFont, 
+                    label, 
+                    obj.TextPosition, 
+                    Color.White,
+                    0f,
+                    Vector2.One,
+                    1f,
+                    SpriteEffects.None,
+                    0);
             }
 
             if (texture != null) {
                 _spriteBatch.Draw(texture, new Rectangle(){X = 0, Y = 0, Width = texture.Width, Height = texture.Height}, Color.White);
-                Console.WriteLine("Mf texture drawn");
             }
 
         }
