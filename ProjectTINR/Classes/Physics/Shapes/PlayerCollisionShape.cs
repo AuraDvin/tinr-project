@@ -13,9 +13,10 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
     protected float _playerJumpForce = 100000f;
     protected float _playerGravity = 10000f;
     protected float _playerFriction = 8f;
-
     public override Vector2 Offset { get => new(50, 0); }
     public override bool OnFloor { get; set; } = false;
+    protected float _msSinceLastJump = 0f;
+    protected readonly float _jumpTimerBeforeApplyingGravity = 0.3333333334f/2;
 
     public override void Update(GameTime gameTime) {
         Player player = Owner as Player ?? throw new Exception("Where is the player reference?");
@@ -46,6 +47,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                     objVeloc.Y = -_playerJumpForce;
                     objVeloc.X = player.Direction == PlayerDirection.Left ? -_playerJumpForce : _playerJumpForce;
                     Console.WriteLine($"Velocity after: {objVeloc}");
+                    _msSinceLastJump = 0f;
                 }
                 else {
                     Console.WriteLine("Player is in the air, cannot jump again.");
@@ -61,20 +63,28 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                 break;
         }
 
-        if (WasOnFloor) objVeloc.Y = Math.Min(objVeloc.Y, 0);
-        else objVeloc.Y += _playerGravity * dt;
+        if (WasOnFloor) {
+            objVeloc.Y = Math.Min(objVeloc.Y, 0);
+        }
+
+        _msSinceLastJump += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (_msSinceLastJump >= _jumpTimerBeforeApplyingGravity) {
+            // Apply gravity 
+            objVeloc.Y += _playerGravity * dt;
+        }
+
         Velocity = objVeloc;
-        Console.WriteLine($"Ok so I'm Player with this velocity now: {Velocity}");
-        Console.WriteLine($"Ok so I'm Player with this Position now: {Position}");
+        // Console.WriteLine($"Ok so I'm Player with this velocity now: {Velocity}");
+        // Console.WriteLine($"Ok so I'm Player with this Position now: {Position}");
     }
 
     public PlayerCollisionShape() : base(false) {
         _rectangle = new Rectangle(0, 0, 194 / 2, 194);
     }
     public override bool OnCollision(ICollisionShape other) {
-        Console.WriteLine("PlayerCollisionShape OnCollision called.");
+        // Console.WriteLine("PlayerCollisionShape OnCollision called.");
         if (other is FloorCollisionShape floor) {
-            Console.WriteLine($"PlayerCollisionShape OnCollision with Floor.");
+            // Console.WriteLine($"PlayerCollisionShape OnCollision with Floor.");
             Rectangle rect = floor.Rectangle;
             int top = 0, bottom = 1, left = 2, right = 3;
             var distances = new List<float> {
@@ -96,7 +106,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
             if (min == top) {
                 // Console.WriteLine("Player is on top of the floor!");
                 Velocity = new(Velocity.X, Math.Min(Velocity.Y, 0));
-                Console.WriteLine("Player On floor");
+                // Console.WriteLine("Player On floor");
                 OnFloor = true;
             }
             else if (min == bottom) {
