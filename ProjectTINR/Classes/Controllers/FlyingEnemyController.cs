@@ -14,7 +14,7 @@ public class FlyingEnemyController(Game game) : GameObject(game), IController, I
     private State _state = State.Patrol;
     private float _stateTimer = 0f;
     private Vector2 _patrolTarget = Vector2.Zero;
-    private Random _rand = new();
+    private readonly Random _rand = new();
 
     public Scene Scene { get; set; } = null;
     public GameObject Owner { get; set; }
