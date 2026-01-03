@@ -18,6 +18,7 @@ public class CollisionShapeFactory {
             CollisionShapeType.Circle => new CircleCollisionShape(false, 10.0f){Owner = staticPhysicsObject},
             CollisionShapeType.StaticCircle => new CircleCollisionShape(true, 10.0f){Owner = staticPhysicsObject},
             CollisionShapeType.EnemyCollisionShape => new EnemyCollisionShape(){Owner = staticPhysicsObject as StationaryEnemy},
+            CollisionShapeType.FlyingEnemyCollisionShape => new FlyingEnemyCollisionShape(){Owner = staticPhysicsObject as FlyingEnemy},
             CollisionShapeType.EnemyProjectile => new EnemyProjectileCollisionShape(
                 (projectile ?? throw new Exception("Projectile has no parent")).Position,
                 projectile.FacingRight? 1:-1, 

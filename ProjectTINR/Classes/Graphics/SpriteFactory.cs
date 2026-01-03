@@ -38,6 +38,12 @@ public class SpriteFactory {
             
             return sprite;
         }
+
+        if (gameObject is FlyingEnemy) {
+            sprite = new Sprite(game, StationaryEnemyTextureRect, Vector2.Zero, game.Content.Load<Texture2D>(CharactersPath));
+            
+            return sprite;
+        }
         return null;
     }
 }

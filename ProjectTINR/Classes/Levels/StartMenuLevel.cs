@@ -10,6 +10,7 @@ namespace ProjectTINR.Classes.Levels;
 public class StartMenuLevel : Level {
     private Vector2 _playerSpawnPosition = new(0f, 0f);
     private Vector2 _enemySpawnPosition = new(500f, 0f);
+    private Vector2 _flyingEnemySpawnPosition = new(-500f, 0f);
     public StartMenuLevel(Game game) : base(game) {
         _scene = [];
     }
@@ -24,11 +25,16 @@ public class StartMenuLevel : Level {
             Position = _enemySpawnPosition,
             Scene = Scene
         };
+        FlyingEnemy fe = new(Game) {
+          Position = _flyingEnemySpawnPosition,
+          Scene = Scene
+        };
 
         _scene.Add(floor2);
         _scene.Add(floor);
         _scene.Add(player);
         _scene.Add(se);
+        _scene.Add(fe);
 
         foreach (IGameComponent obj in _scene) {
             Game.Components.Add(obj);
