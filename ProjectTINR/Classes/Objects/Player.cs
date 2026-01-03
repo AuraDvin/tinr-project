@@ -6,6 +6,9 @@ using ProjectTINR.Classes.Physics;
 namespace ProjectTINR.Classes.Objects;
 
 public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGameComponent, IControlled {
+    protected int _health = 3;
+    public int Health => _health;
+
     protected override string _prefix => "Player";
     public Vector2 Position { get => _position; set => _position = value; }
     public CollisionShapeType CollisionType { get => CollisionShapeType.PlayerShape; set { } }
