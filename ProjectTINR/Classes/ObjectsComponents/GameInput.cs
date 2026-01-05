@@ -24,7 +24,7 @@ public class GameInput(Game game, Level level) : GameObject(game) {
             IControlled controlledObject = (IControlled)obj;
             IController controller;
 
-            if (!_controllers.TryGetValue(obj.Name, out IController value)) {
+            if (!_controllers.ContainsKey(obj.Name)) {
                 controller = ControllerFactory.CreateController(Game, controlledObject);
                 if (controller is ISceneManipulator sceneManipulator) {
                     sceneManipulator.Scene = _level.Scene;
@@ -36,16 +36,8 @@ public class GameInput(Game game, Level level) : GameObject(game) {
                 Game.Components.Add(controller);
                 Console.WriteLine($"Added controller for {obj.Name}");
             }
-            else {
-                controller = value;
-            }
 
             updatedObjects.Add(obj.Name);
-
-            // // Map controller state to controlled object
-            // if (controlledObject is Player player) {
-            //     ((PlayerController)controller).UpdatePlayerState(player);
-            // }
         }
 
         // Clean up removed objects

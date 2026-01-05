@@ -32,11 +32,17 @@ public class MainLevel : Level {
           Scene = Scene
         };
 
+        CameraObject camera = new(Game) {
+            Position = new Vector2(0, 0),
+            Zoom = 1.0f
+        };
+
         _scene.Add(floor2);
         _scene.Add(floor);
         _scene.Add(player);
         _scene.Add(se);
         _scene.Add(fe);
+        _scene.Add(camera);
 
         foreach (IGameComponent obj in _scene) {
             Game.Components.Add(obj);
@@ -72,7 +78,5 @@ public class MainLevel : Level {
         // Can we just save the scene array object? 
 
     }
-
-
 }
 
