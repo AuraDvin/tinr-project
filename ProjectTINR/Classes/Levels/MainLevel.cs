@@ -8,11 +8,11 @@ using ProjectTINR.Classes.Objects;
 
 namespace ProjectTINR.Classes.Levels;
 
-public class StartMenuLevel : Level {
+public class MainLevel : Level {
     private Vector2 _playerSpawnPosition = new(0f, 0f);
     private Vector2 _enemySpawnPosition = new(500f, 0f);
     private Vector2 _flyingEnemySpawnPosition = new(-500f, 0f);
-    public StartMenuLevel(Game game) : base(game) {
+    public MainLevel(Game game) : base(game) {
         _scene = [];
         _uiScene = [];
     }
@@ -60,4 +60,19 @@ public class StartMenuLevel : Level {
         Console.WriteLine("Start Menu Level reset.");
         base.Reset();
     }
+
+
+    public override void Serialize() {
+        // Player should have the health, position etc 
+
+        // Enemies should be saved positions, state of attack (if applicable)
+        
+        // Projectiles should be retained 
+        
+        // Can we just save the scene array object? 
+
+    }
+
+
 }
+

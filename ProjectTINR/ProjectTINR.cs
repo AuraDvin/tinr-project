@@ -26,7 +26,7 @@ public class ProjectTinr : Game {
     }
 
     protected override void Initialize() {
-        SwitchLevel(LevelType.StartMenu);
+        SwitchLevel(LevelType.MainLevel);
 
         base.Initialize();
     }
@@ -60,19 +60,23 @@ public class ProjectTinr : Game {
     }
 
     protected override void Update(GameTime gameTime) {
-        var kb = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+        var kb = Keyboard.GetState();
 
         // Toggle into Settings with F1 (edge triggered)
-        if (kb.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1) && !_prevKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1)) {
+        if (kb.IsKeyDown(Keys.F1) && !_prevKeyboardState.IsKeyDown(Keys.F1)) {
             if (_level.Type == LevelType.Settings) {
-                SwitchLevel(LevelType.StartMenu);
+                SwitchLevel(LevelType.MainLevel);
+
             } else {
+                // serialize level data / state 
+
+                // switch to settings
                 SwitchLevel(LevelType.Settings);
             }
         }
 
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-            kb.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+            kb.IsKeyDown(Keys.Escape))
             Exit();
 
         _prevKeyboardState = kb;

@@ -36,4 +36,10 @@ public class Level(Game game) : GameComponent(game) {
         base.Dispose(disposing);
     }
 
+    public virtual void Serialize() {
+    }
+
+    public virtual void Deserialize() {
+    }
+
 }
