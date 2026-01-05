@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using ProjectTINR.Classes.Graphics;
