@@ -13,6 +13,7 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
     readonly Level _level = level;
     protected readonly SpriteBatch _spriteBatch = new SpriteBatch(game.GraphicsDevice);
     private readonly Dictionary<string, Sprite> _sprites = [];
+    private Camera2D _camera = new Camera2D();
 
     public override void Update(GameTime gameTime) {
         HashSet<string> updatedObjects = new();
@@ -79,7 +80,9 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
 
     public override void Draw(GameTime gameTime) {
         GraphicsDevice.Clear(Color.CornflowerBlue);
-        _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap);
+        Matrix viewMatrix = _camera.GetViewMatrix();
+        _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap, transformMatrix: viewMatrix);
+
         foreach (GameObject obj in _level.Scene) {
             if (!_sprites.ContainsKey(obj.Name)) {
                 continue;
