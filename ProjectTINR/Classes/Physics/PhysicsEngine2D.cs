@@ -108,7 +108,7 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 bool agreeShapeB = shapeB.OnCollision(shapeA);
                 // Resolve collision if both shapes agree
                 if (agreeShapeA && agreeShapeB) {
-                    Console.WriteLine("Resolving Collision between " + keys[i] + " and " + keys[j]);
+                    // Console.WriteLine("Resolving Collision between " + keys[i] + " and " + keys[j]);
                     CollisionAlgorithms.ResolveCollision(shapeA, shapeB);
                 }
             }

@@ -20,7 +20,7 @@ public class SpriteFactory {
         AnimatedSprite animatedSprite;
         Sprite sprite;
         if (gameObject is Player) {
-            Console.WriteLine("Creating player sprite");
+            // Console.WriteLine("Creating player sprite");
             animatedSprite = new AnimatedSprite(game, Vector2.Zero, game.Content.Load<Texture2D>(CharactersPath));
             animatedSprite.AddAnimationFromJson(PlayerAnimationPath);
             animatedSprite.PlayAnimation("idle");
@@ -28,7 +28,7 @@ public class SpriteFactory {
         }
 
         if (gameObject is Floor) {
-            Console.WriteLine("Creating floor sprite");
+            // Console.WriteLine("Creating floor sprite");
             sprite = new Sprite(game, FloorTextureRect, Vector2.Zero, game.Content.Load<Texture2D>(TestFloorPath));
             return sprite;
         }

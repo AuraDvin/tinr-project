@@ -48,15 +48,15 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                 break;
             case PlayerState.Jumping:
                 if (WasOnFloor) {
-                    Console.WriteLine("Player is jumping from floor.");
-                    Console.WriteLine($"Velocity before: {objVeloc}");
+                    // Console.WriteLine("Player is jumping from floor.");
+                    // Console.WriteLine($"Velocity before: {objVeloc}");
                     objVeloc.Y = -_playerJumpForce;
                     objVeloc.X = player.Direction == PlayerDirection.Left ? -_playerJumpForce : _playerJumpForce;
-                    Console.WriteLine($"Velocity after: {objVeloc}");
+                    // Console.WriteLine($"Velocity after: {objVeloc}");
                     _msSinceLastJump = 0f;
                 }
                 else {
-                    Console.WriteLine("Player is in the air, cannot jump again.");
+                    // Console.WriteLine("Player is in the air, cannot jump again.");
                 }
                 break;
             case PlayerState.Falling:

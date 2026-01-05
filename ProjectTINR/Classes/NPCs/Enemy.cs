@@ -24,7 +24,7 @@ public abstract class Enemy(Game game) : GameObject(game), IPhysicsObject, ICont
 
         Player player = Scene.FindByType<Player>();
         if (player == null) {
-            Console.WriteLine("Player is null");
+            // Console.WriteLine("Player is null");
             return;
         }
         Vector2 vector2 = Position - player.Position;

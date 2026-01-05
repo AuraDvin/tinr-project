@@ -54,7 +54,7 @@ public class MainLevel : Level {
 
         _uiScene.Add(he);
 
-        Console.WriteLine("Start Menu Level initialized.");
+        Console.WriteLine("Main Level initialized.");
         base.Initialize();
     }
     public override void Update(GameTime gameTime) {
@@ -63,7 +63,7 @@ public class MainLevel : Level {
     public override void Reset() {
         Player player = _scene.FindByType<Player>();
         player.Position = _playerSpawnPosition;
-        Console.WriteLine("Start Menu Level reset.");
+        Console.WriteLine("Main Level reset.");
         base.Reset();
     }
 

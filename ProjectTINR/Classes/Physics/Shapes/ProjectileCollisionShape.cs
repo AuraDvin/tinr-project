@@ -15,7 +15,7 @@ public abstract class ProjectileCollisionShape : CircleCollisionShape, ISceneMan
     
     
     public ProjectileCollisionShape(Vector2 startingPosition, int direction, Game game) : base(false, 40f) {
-        Console.WriteLine("making projectile");
+        // Console.WriteLine("making projectile");
         if (direction == 0) direction = 1;
         // give projectile an initial horizontal speed
         if (Owner != null) {
@@ -24,7 +24,7 @@ public abstract class ProjectileCollisionShape : CircleCollisionShape, ISceneMan
     }
 
     public override bool OnCollision(ICollisionShape other) {
-        Console.WriteLine("projectile collided");
+        // Console.WriteLine("projectile collided");
         if (!_deleted) {
             _deleted = true;
             Scene.Remove(Owner);
@@ -37,10 +37,10 @@ public abstract class ProjectileCollisionShape : CircleCollisionShape, ISceneMan
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         Position += Velocity * dt;
         Velocity = new Vector2(initialSpeed * (((Projectile)Owner).FacingRight ? 1 : -1), 0);
-        Console.WriteLine($"Projectile current position {Position}, {Velocity}");
+        // Console.WriteLine($"Projectile current position {Position}, {Velocity}");
         _sinceBorn += dt;
         if (_sinceBorn >= _lifeTime) {
-            Console.WriteLine("Projectile ready to be removed");
+            // Console.WriteLine("Projectile ready to be removed");
             _deleted = true;
             Scene.Remove(Owner);
             return;
@@ -55,7 +55,7 @@ public abstract class ProjectileCollisionShape : CircleCollisionShape, ISceneMan
             _scene = value;
             if (_scene != null && !_scene.Contains(Owner)) {
                 _scene.Add(Owner);
-                Console.WriteLine("Projectile owner added to scene"); 
+                // Console.WriteLine("Projectile owner added to scene"); 
             }
         } 
     }

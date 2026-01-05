@@ -61,9 +61,9 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
 
         // Todo: add throwing knife to scene, and give it inital position facing the right way
         if (ks.IsKeyDown(_shoot)) {
-            Console.WriteLine("X is down");
+            // Console.WriteLine("X is down");
             if (_canShoot) {
-                Console.WriteLine("Player can shoot");
+                // Console.WriteLine("Player can shoot");
                 _justShot = true;
                 _canShoot = false;
                 _lastShot = 0f;
@@ -101,7 +101,7 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
             player.State = PlayerState.Jumping;
         }
         
-        Console.WriteLine($"Set Player state: {player.State}");
+        // Console.WriteLine($"Set Player state: {player.State}");
     }
     
     private float _lastShot = 0f;

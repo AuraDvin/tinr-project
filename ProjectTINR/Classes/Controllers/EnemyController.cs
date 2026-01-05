@@ -25,7 +25,7 @@ public class EnemyController(Game game) : GameObject(game), IController, ISceneM
     public override void Update(GameTime gameTime) {
         // Console.WriteLine("Updated Enemy controller");
         if (Scene == null) {
-            Console.WriteLine("[Enemy Controller] Scene is null!");
+            // Console.WriteLine("[Enemy Controller] Scene is null!");
             return;
         }
 

@@ -13,7 +13,7 @@ public class UiRenderer2D(Game game, Level level) : GameRenderer2D(game, level) 
     SpriteFont _spriteFont = game.Content.Load<SpriteFont>("gameFont");
 
     public override void Draw(GameTime gameTime) {
-        Console.WriteLine("Starting draw batch");
+        // Console.WriteLine("Starting draw batch");
         _spriteBatch.Begin();
         foreach (IUiDrawableComponent obj in _level.UIScene) {
             if (!obj.Visible) continue;

@@ -44,7 +44,7 @@ public class RectCollisionShape(bool isStatic) : ICollisionShape, IMoveComponent
     }
 
     public virtual bool OnCollision(ICollisionShape other) {
-        Console.WriteLine("Warning! RectCollisionShape collided (missing override?)");
+        // Console.WriteLine("Warning! RectCollisionShape collided (missing override?)");
         if (other is FloorCollisionShape floor) {
             Rectangle rect = floor.Rectangle;
             int top = 0, bottom = 1, left = 2, right = 3;

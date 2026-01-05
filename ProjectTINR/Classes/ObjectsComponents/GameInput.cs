@@ -34,7 +34,7 @@ public class GameInput(Game game, Level level) : GameObject(game) {
                 }
                 _controllers.Add(obj.Name, controller);
                 Game.Components.Add(controller);
-                Console.WriteLine($"Added controller for {obj.Name}");
+                // Console.WriteLine($"Added controller for {obj.Name}");
             }
 
             updatedObjects.Add(obj.Name);
@@ -51,7 +51,7 @@ public class GameInput(Game game, Level level) : GameObject(game) {
         foreach (var name in objectsToRemove) {
             Game.Components.Remove(_controllers[name]);
             _controllers.Remove(name);
-            Console.WriteLine($"Removed controller for {name}");
+            // Console.WriteLine($"Removed controller for {name}");
         }
     }
 }

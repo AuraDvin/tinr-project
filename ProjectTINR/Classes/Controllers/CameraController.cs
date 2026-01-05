@@ -15,7 +15,7 @@ public class CameraController(Game game) : GameObject(game), IController {
     }
 
     public override void Update(GameTime gameTime) {
-        Console.WriteLine("Updating CameraController.");
+        // Console.WriteLine("Updating CameraController.");
         ICameraComponent camera = Owner as ICameraComponent;
         if (Owner == null || camera == null) {
             Console.WriteLine("CameraController has no valid owner.");
@@ -52,6 +52,6 @@ public class CameraController(Game game) : GameObject(game), IController {
             }
         }
 
-        Console.WriteLine($"Camera Position: {camera.Position}, Zoom: {camera.Zoom}, {camera}");
+        // Console.WriteLine($"Camera Position: {camera.Position}, Zoom: {camera.Zoom}, {camera}");
     }
 }

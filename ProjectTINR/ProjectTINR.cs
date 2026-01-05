@@ -75,6 +75,11 @@ public class ProjectTinr : Game {
             }
         }
 
+        // Resert level with R 
+        if (kb.IsKeyUp(Keys.R) && _prevKeyboardState.IsKeyDown(Keys.R)) {
+            _level.Reset();
+        }
+
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             kb.IsKeyDown(Keys.Escape))
             Exit();

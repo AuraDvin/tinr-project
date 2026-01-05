@@ -13,21 +13,19 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
     readonly Level _level = level;
     protected readonly SpriteBatch _spriteBatch = new SpriteBatch(game.GraphicsDevice);
     private readonly Dictionary<string, Sprite> _sprites = [];
-    private Camera2D _camera = new Camera2D();
+    private readonly Camera2D _camera = new Camera2D();
     public override void Update(GameTime gameTime) {
         HashSet<string> updatedObjects = new();
         foreach (GameObject obj in _level.Scene) {
             Sprite sprite;
 
             if (obj is ICameraComponent cam) {
-                Console.WriteLine($"Updating camera from GameRenderer2D. {cam}");
-                
+                // Console.WriteLine($"Updating camera from GameRenderer2D. {cam}");
                 _camera.Position = cam.Position;
                 _camera.Zoom = cam.Zoom;
-
-                Console.WriteLine($"Camera position: {_camera.Position}, Zoom: {_camera.Zoom}");
+                // Console.WriteLine($"Camera position: {_camera.Position}, Zoom: {_camera.Zoom}");
             }
-            
+
             if (obj is not IDrawableGameComponent) {
                 continue;
             }

@@ -22,17 +22,17 @@ public class Level(Game game) : GameComponent(game) {
     }
     
     public override void Initialize() {
-        Console.WriteLine("Loading level.");
+        // Console.WriteLine("Loading level.");
         base.Initialize();
         Reset();
     }
 
     public virtual void Reset() {
-        Console.WriteLine("Resetting level.");
+        // Console.WriteLine("Resetting level.");
     }
 
     protected override void Dispose(bool disposing) {
-        Console.WriteLine("Unloading level.");
+        // Console.WriteLine("Unloading level.");
         base.Dispose(disposing);
     }
 
