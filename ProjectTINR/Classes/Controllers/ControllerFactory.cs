@@ -15,6 +15,7 @@ public class ControllerFactory {
             ControllerType.PlayerController => new PlayerController(game){Owner = owner as Player},
             ControllerType.AiController => new EnemyController(game){Owner = owner as StationaryEnemy},
             ControllerType.FlyingAiController => new FlyingEnemyController(game){Owner = owner as FlyingEnemy},
+            ControllerType.CameraController => new CameraController(game){Owner = owner as CameraObject},
             _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unsupported controller type: {type}"),
         };
     }
