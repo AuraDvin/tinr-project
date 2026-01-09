@@ -124,111 +124,112 @@ public class CollisionAlgorithms {
         Rectangle b = rectB.Rectangle;
 
         if (!a.Intersects(b)) return false;
+        return true; 
 
-        // Compute penetration along each axis
-        int overlapX = Math.Min(a.Right, b.Right) - Math.Max(a.Left, b.Left);
-        int overlapY = Math.Min(a.Bottom, b.Bottom) - Math.Max(a.Top, b.Top);
+        // // Compute penetration along each axis
+        // int overlapX = Math.Min(a.Right, b.Right) - Math.Max(a.Left, b.Left);
+        // int overlapY = Math.Min(a.Bottom, b.Bottom) - Math.Max(a.Top, b.Top);
 
-        // Choose the axis with the smallest overlap (closest faces)
-        bool separateHorizontal = overlapX <= overlapY;
+        // // Choose the axis with the smallest overlap (closest faces)
+        // bool separateHorizontal = overlapX <= overlapY;
 
-        // Determine direction signs for A and B along the chosen axis
-        int signA;
-        if (separateHorizontal) {
-            signA = (a.Center.X < b.Center.X) ? -1 : 1; // A should move left if it's left of B
-        }
-        else {
-            signA = (a.Center.Y < b.Center.Y) ? -1 : 1; // A should move up if it's above B
-        }
-        int signB = -signA;
+        // // Determine direction signs for A and B along the chosen axis
+        // int signA;
+        // if (separateHorizontal) {
+        //     signA = (a.Center.X < b.Center.X) ? -1 : 1; // A should move left if it's left of B
+        // }
+        // else {
+        //     signA = (a.Center.Y < b.Center.Y) ? -1 : 1; // A should move up if it's above B
+        // }
+        // int signB = -signA;
 
-        // Binary-search (integer) for the minimal shift that separates the rectangles.
-        // We consider shifting A by signA * t and B by signB * t; the actual applied
-        // shift may be split between objects depending on ShouldSimulate.
-        int low = 0;
-        int high = Math.Max(Math.Max(a.Width, a.Height), Math.Max(b.Width, b.Height));
-        if (high <= 0) high = 1;
+        // // Binary-search (integer) for the minimal shift that separates the rectangles.
+        // // We consider shifting A by signA * t and B by signB * t; the actual applied
+        // // shift may be split between objects depending on ShouldSimulate.
+        // int low = 0;
+        // int high = Math.Max(Math.Max(a.Width, a.Height), Math.Max(b.Width, b.Height));
+        // if (high <= 0) high = 1;
 
-        // increase high until separated (cap to avoid infinite loop)
-        Rectangle ta, tb;
-        int safety = 0;
-        while (true) {
-            ta = a;
-            tb = b;
-            int shiftA = signA * high;
-            int shiftB = signB * high;
-            if (separateHorizontal) {
-                if (rectA.ShouldSimulate) ta.X += shiftA;
-                if (rectB.ShouldSimulate) tb.X += shiftB;
-            }
-            else {
-                if (rectA.ShouldSimulate) ta.Y += shiftA;
-                if (rectB.ShouldSimulate) tb.Y += shiftB;
-            }
-            if (!ta.Intersects(tb)) break;
-            high *= 2;
-            safety++;
-            if (safety > 30) break; // avoid pathological infinite loops
-        }
+        // // increase high until separated (cap to avoid infinite loop)
+        // Rectangle ta, tb;
+        // int safety = 0;
+        // while (true) {
+        //     ta = a;
+        //     tb = b;
+        //     int shiftA = signA * high;
+        //     int shiftB = signB * high;
+        //     if (separateHorizontal) {
+        //         if (rectA.ShouldSimulate) ta.X += shiftA;
+        //         if (rectB.ShouldSimulate) tb.X += shiftB;
+        //     }
+        //     else {
+        //         if (rectA.ShouldSimulate) ta.Y += shiftA;
+        //         if (rectB.ShouldSimulate) tb.Y += shiftB;
+        //     }
+        //     if (!ta.Intersects(tb)) break;
+        //     high *= 2;
+        //     safety++;
+        //     if (safety > 30) break; // avoid pathological infinite loops
+        // }
 
-        // Binary search between low and high
-        while (low < high) {
-            int mid = (low + high) / 2;
-            ta = a;
-            tb = b;
-            int shiftA = signA * mid;
-            int shiftB = signB * mid;
-            if (separateHorizontal) {
-                if (rectA.ShouldSimulate) ta.X += shiftA;
-                if (rectB.ShouldSimulate) tb.X += shiftB;
-            }
-            else {
-                if (rectA.ShouldSimulate) ta.Y += shiftA;
-                if (rectB.ShouldSimulate) tb.Y += shiftB;
-            }
-            if (ta.Intersects(tb)) {
-                low = mid + 1;
-            }
-            else {
-                high = mid;
-            }
-        }
+        // // Binary search between low and high
+        // while (low < high) {
+        //     int mid = (low + high) / 2;
+        //     ta = a;
+        //     tb = b;
+        //     int shiftA = signA * mid;
+        //     int shiftB = signB * mid;
+        //     if (separateHorizontal) {
+        //         if (rectA.ShouldSimulate) ta.X += shiftA;
+        //         if (rectB.ShouldSimulate) tb.X += shiftB;
+        //     }
+        //     else {
+        //         if (rectA.ShouldSimulate) ta.Y += shiftA;
+        //         if (rectB.ShouldSimulate) tb.Y += shiftB;
+        //     }
+        //     if (ta.Intersects(tb)) {
+        //         low = mid + 1;
+        //     }
+        //     else {
+        //         high = mid;
+        //     }
+        // }
 
-        int minimalShift = low;
+        // int minimalShift = low;
 
-        // Apply the minimal shift, splitting it between objects if both simulate
-        if (minimalShift > 0) {
-            int shiftForA, shiftForB;
-            if (rectA.ShouldSimulate && rectB.ShouldSimulate) {
-                shiftForA = minimalShift / 2;
-                shiftForB = minimalShift - shiftForA;
-            }
-            else if (rectA.ShouldSimulate) {
-                shiftForA = minimalShift;
-                shiftForB = 0;
-            }
-            else if (rectB.ShouldSimulate) {
-                shiftForA = 0;
-                shiftForB = minimalShift;
-            }
-            else {
-                shiftForA = 0;
-                shiftForB = 0;
-            }
+        // // Apply the minimal shift, splitting it between objects if both simulate
+        // if (minimalShift > 0) {
+        //     int shiftForA, shiftForB;
+        //     if (rectA.ShouldSimulate && rectB.ShouldSimulate) {
+        //         shiftForA = minimalShift / 2;
+        //         shiftForB = minimalShift - shiftForA;
+        //     }
+        //     else if (rectA.ShouldSimulate) {
+        //         shiftForA = minimalShift;
+        //         shiftForB = 0;
+        //     }
+        //     else if (rectB.ShouldSimulate) {
+        //         shiftForA = 0;
+        //         shiftForB = minimalShift;
+        //     }
+        //     else {
+        //         shiftForA = 0;
+        //         shiftForB = 0;
+        //     }
 
-            if (separateHorizontal) {
-                a.X += signA * shiftForA;
-                b.X += signB * shiftForB;
-            }
-            else {
-                a.Y += signA * shiftForA;
-                b.Y += signB * shiftForB;
-            }
-        }
+        //     if (separateHorizontal) {
+        //         a.X += signA * shiftForA;
+        //         b.X += signB * shiftForB;
+        //     }
+        //     else {
+        //         a.Y += signA * shiftForA;
+        //         b.Y += signB * shiftForB;
+        //     }
+        // }
 
-        rectA.Rectangle = a;
-        rectB.Rectangle = b;
-        return true;
+        // rectA.Rectangle = a;
+        // rectB.Rectangle = b;
+        // return true;
     }
 
     public static void ResolveCollision(RectCollisionShape rectA, RectCollisionShape rectB) {
