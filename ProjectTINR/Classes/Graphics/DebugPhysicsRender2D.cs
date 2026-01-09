@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,9 +11,10 @@ using ProjectTINR.Classes.Physics.Shapes;
 
 namespace ProjectTINR.Classes.Graphics;
 
-public class DebugPhysicsRender2D(Game game, PhysicsEngine2D physicsEngine) : DrawableGameComponent(game) {
-    private readonly PhysicsEngine2D _physicsEngine = physicsEngine;
+public class DebugPhysicsRender2D(Game game, Level level) : DrawableGameComponent(game) {
     private readonly SpriteBatch _spriteBatch = new SpriteBatch(game.GraphicsDevice);
+    private readonly Camera2D _camera = new Camera2D();
+    private readonly Level _level = level;
     private Texture2D _whitePixel;
 
     protected override void LoadContent() {
@@ -23,22 +26,38 @@ public class DebugPhysicsRender2D(Game game, PhysicsEngine2D physicsEngine) : Dr
 
     public override void Draw(GameTime gameTime) {
         // Respect settings
-        if (!ProjectTINR.Classes.GameSettings.DebugPhysicsCollisions) {
+        if (!GameSettings.DebugPhysicsCollisions) {
             return;
         }
 
-        _spriteBatch.Begin();
+        HashSet<ICollisionShape> shapes = new();
+        foreach (GameObject obj in _level.Scene) {
+            if (obj is ICameraComponent cam) {
+                _camera.Position = cam.Position;
+                _camera.Zoom = cam.Zoom;
+                continue;
+            }
 
-        foreach (ICollisionShape shape in _physicsEngine._shapes.Values) {
+            if (obj is not IStaticPhysicsObject) {
+                continue;
+            }
+
+            IStaticPhysicsObject spo = (IStaticPhysicsObject)obj;
+            ICollisionShape shape = CollisionShapeFactory.MakeShape(spo);
+
+            shapes.Add(shape);
+        }
+
+        _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+        foreach (ICollisionShape shape in shapes) {
             if (shape is RectCollisionShape rectShape) {
                 Rectangle rect = rectShape.Rectangle;
                 DrawRectangle(rect, Color.Red);
-            } else if (shape is CircleCollisionShape circle) {
+            }
+            else if (shape is CircleCollisionShape circle) {
                 DrawCircle(circle, Color.Red);
             }
         }
-
-
         _spriteBatch.End();
         base.Draw(gameTime);
     }

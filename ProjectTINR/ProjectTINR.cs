@@ -53,7 +53,7 @@ public class ProjectTinr : Game {
         _gameInput = new GameInput(this, _level);
         _gameRenderer = new GameRenderer2D(this, _level);
         _physicsEngine = new PhysicsEngine2D(this, _level);
-        _debugRender2D = new DebugPhysicsRender2D(this, _physicsEngine);
+        _debugRender2D = new DebugPhysicsRender2D(this, _level);
         _uiRenderer2D = new UiRenderer2D(this, _level);
 
         Components.Add(_level);
