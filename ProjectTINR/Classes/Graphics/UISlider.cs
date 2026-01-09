@@ -24,7 +24,7 @@ public class UISlider : GameObject, IUiDrawableComponent {
         get {
             int segments = 10;
             int filled = (int)System.Math.Round(Value * segments);
-            string bar = new string('#', filled).PadRight(segments, ' ');
+            string bar = new string('#', filled).PadRight(segments, '-');
             return $"{Label}: {Value:0.00} [{bar}]";
         }
         set { }

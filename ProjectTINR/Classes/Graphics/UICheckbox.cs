@@ -12,7 +12,7 @@ public class UICheckbox : GameObject, IUiDrawableComponent {
     public UICheckbox(Game game) : base(game) { }
 
     // String to be drawn by the UiRenderer2D
-    public string String { get => $"[{(Checked ? 'X' : ' ')}] {Label}"; set { } }
+    public string String { get => $"{Label} [{(Checked ? 'X' : ' ')}]"; set { } }
     public Texture2D Texture { get; set; } = null;
     public Vector2 TextPosition { get => _pos; set => _pos = value; }
     public Vector2 TexturePosition { get; set; } = Vector2.Zero;
