@@ -10,13 +10,12 @@ namespace ProjectTINR.Classes.Physics.Shapes;
 public class RectCollisionShape(bool isStatic) : ICollisionShape, IMoveComponent {
     public virtual bool OnFloor { get; set; } = false;
     protected Rectangle _rectangle = new(0, 0, 128, 128);
-    protected Vector2 _velocity;
+    // protected Vector2 _velocity;
     private readonly bool _isStatic = isStatic;
     public bool ShouldSimulate { get => !_isStatic; }
     public virtual Vector2 Position {
         get => Owner.Position + Offset;
         set {
-            Owner.Position = value;
         }
     }
 
@@ -25,7 +24,6 @@ public class RectCollisionShape(bool isStatic) : ICollisionShape, IMoveComponent
             return new((int)Position.X, (int)Position.Y, _rectangle.Width, _rectangle.Height);
         }
         set {
-            Position = new Vector2(value.X, value.Y) - Offset;
             _rectangle = value;
         }
     }
