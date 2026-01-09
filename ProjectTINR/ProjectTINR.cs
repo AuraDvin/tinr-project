@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 using ProjectTINR.Classes;
@@ -9,7 +11,6 @@ using ProjectTINR.Classes.Physics;
 namespace ProjectTINR;
 
 public class ProjectTinr : Game {
-    private readonly GraphicsDeviceManager _graphics;
     private GameRenderer2D _gameRenderer;
     private UiRenderer2D _uiRenderer2D;
     private PhysicsEngine2D _physicsEngine;
@@ -17,23 +18,31 @@ public class ProjectTinr : Game {
     private DebugPhysicsRender2D _debugRender2D;
     private Level _level;
 
-    private Microsoft.Xna.Framework.Input.KeyboardState _prevKeyboardState;
+    private KeyboardState _prevKeyboardState;
 
-    public ProjectTinr() {
-        _graphics = new GraphicsDeviceManager(this);
+    public ProjectTinr() : base(){
+        new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
 
     protected override void Initialize() {
         SwitchLevel(LevelType.MainLevel);
-
+        IsFixedTimeStep = true;
+        TargetElapsedTime = TimeSpan.FromSeconds(1/60f);
+        
         base.Initialize();
     }
 
     private void SwitchLevel(LevelType newLevelType) {
         // Remove current components if any
-        if (_level != null) Components.Remove(_level);
+        if (_level != null) {
+            Components.Remove(_level);
+            // Remove elements in the Scene 
+            foreach (GameObject thing in _level.Scene) {
+                Components.Remove(thing);
+            }
+        }
         if (_gameInput != null) Components.Remove(_gameInput);
         if (_gameRenderer != null) Components.Remove(_gameRenderer);
         if (_physicsEngine != null) Components.Remove(_physicsEngine);
