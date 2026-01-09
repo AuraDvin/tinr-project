@@ -110,87 +110,49 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
         _rectangle = new Rectangle(0, 0, 194 / 2, 194);
     }
     public override bool OnCollision(ICollisionShape other) {
-        // Console.WriteLine("PlayerCollisionShape OnCollision called.");
-        if (other is FloorCollisionShape floor) {
-            // Console.WriteLine($"PlayerCollisionShape OnCollision with Floor.");
-            Rectangle rect = floor.Rectangle;
-
-            // int top = 0, bottom = 1, left = 2, right = 3;
-            // // TODO: fix so it detects correctly
-            // var distances = new List<float> {
-            //     Math.Abs(_rectangle.Bottom - rect.Top), // Top
-            //     Math.Abs(_rectangle.Top - rect.Bottom), // Bottom
-            //     Math.Abs(_rectangle.Right - rect.Left), // Left
-            //     Math.Abs(_rectangle.Left - rect.Right)  // Right
-            // };
-
-            float overlapX = Math.Min(rect.Right, _rectangle.Right) - Math.Max(rect.Left, _rectangle.Left);
-            float overlapY = Math.Min(rect.Bottom, _rectangle.Bottom) - Math.Max(rect.Top, _rectangle.Top);
-
-            if (overlapX < overlapY) {
-                // Console.WriteLine("Collision on the sides");
-                
-            }
-            else {
-                // Console.WriteLine("Collision on top/bottom");
-                if (_rectangle.Center.Y < rect.Center.Y) {
-                    // Player on top of floor
-                    Console.WriteLine("Player is on top of the floor!");
-                    Velocity = new(Velocity.X, 0);
-                    Owner.Position = new Vector2(Owner.Position.X, rect.Top - _rectangle.Height - Offset.Y + 1);
-                    OnFloor = true;
-                }
-                else {
-                    // Player under the floor
-                    Console.WriteLine("Player is under the floor!");
-                    Velocity = new(Velocity.X, Math.Max(Velocity.Y, 0));
-                }
-            }
-            
-            // int min = -1;
-            // float minDistance = float.MaxValue;
-            // for (int i = 0; i < distances.Count; i++) {
-            //     if (minDistance > distances[i]) {
-            //         minDistance = distances[i];
-            //         min = i;
-            //     }
-
-            // }
-
-            // // Player on top of floor
-            // if (min == top) {
-            //     // Velocity = new(Velocity.X, Math.Min(Velocity.Y, 0));
-            //     Console.WriteLine("Player is on top of the floor!");
-            //     Velocity = new(Velocity.X, 0);
-            //     // Position = new Vector2(Position.X, rect.Top - _rectangle.Height / 2);
-            //     // Owner.Position = new Vector2(Owner.Position.X, rect.Top - _rectangle.Height);
-            //     OnFloor = true;
-            // }
-            // // Player under the floor
-            // else if (min == bottom) {
-            //     Console.WriteLine("Player is under the floor!");
-            //     Velocity = new(Velocity.X, Math.Max(Velocity.Y, 0));
-            //     Owner.Position = new Vector2(Owner.Position.X, rect.Bottom + _rectangle.Height / 2);
-            // }
-            // // Player to the left of the floor (wall)
-            // else if (min == left) {
-            //     Console.WriteLine("Player is to the left of the floor!");
-            //     Velocity = new(Math.Min(Velocity.X, 0), Velocity.Y);
-            //     Owner.Position = new Vector2(rect.Left - _rectangle.Width / 2, Position.Y);
-            // }
-            // // Player to the right of the floor (wall)
-            // else if (min == right) {
-            //     Console.WriteLine("Player is to the right of the floor!");
-            //     Velocity = new(Math.Max(Velocity.X, 0), Velocity.Y);
-            //     Owner.Position = new Vector2(rect.Right + _rectangle.Width / 2, Position.Y);
-            // }
-            return false;
-        }
 
         if (other is EnemyProjectileCollisionShape) {
             _tookDmg = true;
         }
 
+        if (other is FloorCollisionShape floor) {
+            Rectangle floorRect = floor.Rectangle;
+
+            // overlap (at least one) should always be non zero here
+            float overlapX = Math.Min(floorRect.Right, _rectangle.Right) - Math.Max(floorRect.Left, _rectangle.Left);
+            float overlapY = Math.Min(floorRect.Bottom, _rectangle.Bottom) - Math.Max(floorRect.Top, _rectangle.Top);
+
+            if (overlapX < overlapY) {
+                if (_rectangle.Center.X < floorRect.Center.X) {
+                    // Player to the left of the floor (wall)
+                    Console.WriteLine("Player is to the left of the floor!");
+                    Velocity = new(Math.Min(Velocity.X, 0), Velocity.Y);
+                    Owner.Position = new Vector2(floorRect.Left - _rectangle.Width - Offset.X + 1, Owner.Position.Y);
+                }
+                else {
+                    // Player to the right of the floor (wall)
+                    Console.WriteLine("Player is to the right of the floor!");
+                    Velocity = new(Math.Max(Velocity.X, 0), Velocity.Y);
+                    Owner.Position = new Vector2(floorRect.Right + Offset.X - 1, Owner.Position.Y);
+                }
+            }
+            else {
+                // Player on top of floor
+                if (_rectangle.Center.Y < floorRect.Center.Y) {
+                    Velocity = new(Velocity.X, 0);
+                    Owner.Position = new Vector2(Owner.Position.X, floorRect.Top - _rectangle.Height - Offset.Y + 1);
+                    OnFloor = true;
+                }
+                // Player under the floor
+                else {
+                    Velocity = new(Velocity.X, Math.Max(Velocity.Y, 0));
+                    Owner.Position = new Vector2(Owner.Position.X, floorRect.Bottom + Offset.Y - 1);
+                }
+            }
+            return false;
+        }
+
+   
         return true;
     }
     public Scene Scene { get; set; } = null;
