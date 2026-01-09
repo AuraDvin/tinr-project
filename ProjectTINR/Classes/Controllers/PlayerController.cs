@@ -93,7 +93,7 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
             player.State = PlayerState.Moving;
         }
 
-        if (!IsMovingLeft && !IsMovingRight) {
+        if (IsMovingLeft == IsMovingRight) {
             player.State = PlayerState.Idling;
         }
 
