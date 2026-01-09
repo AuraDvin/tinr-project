@@ -51,6 +51,7 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
                 playerSprite.PlayAnimation(
                     player.State switch {
                         PlayerState.Idling => "idle",
+                        PlayerState.None => "idle",
                         PlayerState.Moving => "walk",
                         PlayerState.Jumping => "jump",
                         PlayerState.Falling => "idle",
@@ -89,8 +90,8 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
     public override void Draw(GameTime gameTime) {
         GraphicsDevice.Clear(Color.CornflowerBlue);
         Matrix viewMatrix = _camera.GetViewMatrix();
-        _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap, transformMatrix: viewMatrix);
-
+        // _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap, transformMatrix: viewMatrix);
+        _spriteBatch.Begin(transformMatrix: viewMatrix);
         foreach (GameObject obj in _level.Scene) {
             if (!_sprites.ContainsKey(obj.Name)) {
                 continue;
