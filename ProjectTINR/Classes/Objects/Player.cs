@@ -7,26 +7,31 @@ namespace ProjectTINR.Classes.Objects;
 
 public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGameComponent, IControlled {
     protected override string _prefix => "Player";
-    public Vector2 Position { get => _position; set => _position = value; }
+    public Vector2 Position { 
+        get => _position; 
+        set => _position = value; 
+    }
+    
     public CollisionShapeType CollisionType { get => CollisionShapeType.PlayerShape; set { } }
     public ControllerType ControllerType => ControllerType.PlayerController;
     public PlayerState State {
         // We could have a timed status (Like frozen) so we should return that just in case
         set => _playerState = value;
         get {
-            if (_playerState != PlayerState.None) {
-                return _playerState;
-            }
+            return _playerState;
+            // if (_playerState != PlayerState.None) {
+            //     return _playerState;
+            // }
 
-            if (Velocity.Y > 0) {
-                return PlayerState.Falling;
-            }
+            // if (Velocity.Y > 0) {
+            //     return PlayerState.Falling;
+            // }
 
-            if (Velocity.Y < 0) {
-                return PlayerState.Jumping;
-            }
+            // if (Velocity.Y < 0) {
+            //     return PlayerState.Jumping;
+            // }
 
-            return PlayerState.Idling;
+            // return PlayerState.Idling;
         }
     }
     public PlayerDirection Direction { get => _direction; set => _direction = value; }
@@ -48,7 +53,7 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
     }
     private PlayerDirection _direction = PlayerDirection.Right;
     protected PlayerState _playerState = PlayerState.None;
-    private Vector2 _position = new(0, 0);
+    private Vector2 _position = new(0.0f, 0.0f);
     private Vector2 _velocity = new(0, 0);
     protected int _health = 3;
     public int Health => _health;
