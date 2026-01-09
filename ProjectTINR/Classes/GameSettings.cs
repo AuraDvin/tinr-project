@@ -1,17 +1,18 @@
 namespace ProjectTINR.Classes;
 
 public static class GameSettings {
-    // Whether to render collision debug shapes
+    public static bool GamePaused { get; set; } = false;
     public static bool DebugPhysicsCollisions { get; set; } = false;
-
-    // Master volume from 0.0 to 1.0
-    private static float _volume = 1.0f;
-    public static float Volume {
-        get => _volume;
+    private static float _masterVolume = 1.0f;
+    public static float MasterVolume {
+        get => _masterVolume;
         set {
-            if (value < 0f) _volume = 0f;
-            else if (value > 1f) _volume = 1f;
-            else _volume = value;
+            if (value < 0f) _masterVolume = 0f;
+            else if (value > 1f) _masterVolume = 1f;
+            else _masterVolume = value;
         }
     }
+
+    public static float MusicVolume { get; set; } = 1f;
+    public static float SfxVolume { get; set; } = 1f;
 }
