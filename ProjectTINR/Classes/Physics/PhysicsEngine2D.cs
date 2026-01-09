@@ -43,10 +43,12 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
             shape.BeginFrame();
             updatedObjects.Add(obj.Name);
             if (shape.ShouldSimulate) {
-                shape.Position = staticPhysicsObject.Position;
+                // shape.Position = staticPhysicsObject.Position;
                 if (shape is not IMoveComponent) {
                     continue;
                 }
+
+                IMoveComponent shapeMoveComponent = (IMoveComponent)shape;
 
                 if (staticPhysicsObject is not IMoveComponent) {
                     continue;
@@ -59,18 +61,25 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 }
 
                 Vector2 objVeloc = physicsObject.Velocity;
-                if (objVeloc.LengthSquared() > 1000000f) {
-                    objVeloc.Normalize();
-                    objVeloc *= 1000.0f;
-                }
+                // if (objVeloc.LengthSquared() > 1000000f) {
+                //     objVeloc.Normalize();
+                //     objVeloc *= 1000.0f;
+                // }
                 if (Math.Abs(objVeloc.X) <= 1f) {
                     objVeloc.X = 0f;
                 }
                 if (Math.Abs(objVeloc.Y) <= 1f) {
                     objVeloc.Y = 0f;
                 }
-                physicsObject.Velocity = objVeloc;
-                physicsObject.Position += physicsObject.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                shapeMoveComponent.Velocity = objVeloc;
+                Vector2 oldPosition = physicsObject.Position;
+                Vector2 deltaPosition = shapeMoveComponent.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Vector2 finalPosition = oldPosition + deltaPosition;
+                physicsObject.Position = finalPosition;
+
+                Console.WriteLine($"[PhysicsEngine2D] Object: {obj.Name} Velocity: {physicsObject.Velocity} startPos: {oldPosition} Position delta: {deltaPosition} Final Pos: {finalPosition}");
+
                 _shapes[obj.Name] = shape;
             }
         }
