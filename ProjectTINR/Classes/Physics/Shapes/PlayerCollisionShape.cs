@@ -130,16 +130,16 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                 OnWall = true;
                 if (_rectangle.Center.X < floorRect.Center.X) {
                     // Player to the left of the floor (wall)
-                    Console.WriteLine("Player is to the left of the floor!");
                     Velocity = new(Math.Min(Velocity.X, 0), Velocity.Y);
                     Owner.Position = new Vector2(floorRect.Left - _rectangle.Width - Offset.X + 1, Owner.Position.Y);
+                    
                 }
                 else {
                     // Player to the right of the floor (wall)
-                    Console.WriteLine("Player is to the right of the floor!");
                     Velocity = new(Math.Max(Velocity.X, 0), Velocity.Y);
                     Owner.Position = new Vector2(floorRect.Right + Offset.X - 1, Owner.Position.Y);
                 }
+                Console.WriteLine($"Snapping player to wall x: {Owner.Position.X}, overlaps {new Vector2(overlapX, overlapY)}");
             }
             else {
                 // Player on top of floor
@@ -153,6 +153,8 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                     Velocity = new(Velocity.X, Math.Max(Velocity.Y, 0));
                     Owner.Position = new Vector2(Owner.Position.X, floorRect.Bottom + Offset.Y - 1);
                 }
+                Console.WriteLine($"Snapping player to floor {Owner.Position.Y}, overlaps {new Vector2(overlapX, overlapY)}");
+
             }
             return false;
         }
