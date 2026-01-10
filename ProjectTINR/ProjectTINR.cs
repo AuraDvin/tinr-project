@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 using ProjectTINR.Classes;
 using ProjectTINR.Classes.Graphics;
+using ProjectTINR.Classes.Levels;
 using ProjectTINR.Classes.ObjectsComponents;
 using ProjectTINR.Classes.Physics;
 
@@ -27,7 +28,7 @@ public class ProjectTinr : Game {
     }
 
     protected override void Initialize() {
-        SwitchLevel(LevelType.MainLevel);
+        SwitchLevel(LevelType.StartMenu);
         IsFixedTimeStep = true;
         TargetElapsedTime = TimeSpan.FromSeconds(1/60f);
         
@@ -35,6 +36,10 @@ public class ProjectTinr : Game {
     }
 
     private void SwitchLevel(LevelType newLevelType) {
+        if (_level is MainLevel) {
+            _level.Serialize();
+        }
+        
         // Remove current components if any
         if (_level != null) {
             Components.Remove(_level);

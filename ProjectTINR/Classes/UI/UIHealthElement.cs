@@ -5,10 +5,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ProjectTINR.Classes.Objects;
 
-namespace ProjectTINR.Classes.Graphics;
+namespace ProjectTINR.Classes.UI;
 
 public class UIHealthElement : IUiDrawableComponent {
     private Vector2 _pos = new(0,0);
+    private Game _game;
+    
+    public UIHealthElement(Game game) {
+        _game = game;
+    }
+    
     public Player Player {get; set;} = null;
     public string String { get => "" + Player.Health; set {} }
     public Texture2D Texture { get; set; } = null;

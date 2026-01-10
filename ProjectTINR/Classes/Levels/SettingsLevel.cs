@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using ProjectTINR.Classes.Graphics;
+using ProjectTINR.Classes.UI;
 
 namespace ProjectTINR.Classes.Levels;
 

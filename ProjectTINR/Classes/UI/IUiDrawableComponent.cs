@@ -3,7 +3,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ProjectTINR.Classes.Graphics;
+namespace ProjectTINR.Classes.UI;
 
 public interface IUiDrawableComponent {
     // Gives you if the Ui Element has a Label

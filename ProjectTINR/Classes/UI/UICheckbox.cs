@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectTINR.Classes.ObjectsComponents;
 
-namespace ProjectTINR.Classes.Graphics;
+namespace ProjectTINR.Classes.UI;
 
 public class UICheckbox : GameObject, IUiDrawableComponent {
     public string Label { get; set; } = "";
