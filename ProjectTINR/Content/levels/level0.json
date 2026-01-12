@@ -1,0 +1,65 @@
+{
+    "level" : 0,
+    "player" : {
+        "health": 3, 
+        "spawnPosition" : {
+            "x" : 0,
+            "y" : 0
+        }
+    },
+    "checkpoints": [
+        {
+            "position" : {
+                "x" : 4,
+                "y" : 4
+            }
+        },
+        {
+            "position" : {
+                "x" : 8,
+                "y" : 8
+            }
+        }
+    ],
+    "enemies" : [
+        { 
+            "type" : "stationary", 
+            "position" : {
+                "x" : 5,
+                "y" : 5
+            },
+            "facing" : "right"
+        }, 
+        {
+            "type": "flying",
+            "position": {
+                "x": 10,    
+                "y": 8
+            },
+            "facing": "left"
+        }
+    ],
+    "pickups" : [
+        {
+            "type" : "health",
+            "position" : {
+                "x" : 3,
+                "y" : 4
+            }
+        }, 
+        {
+            "type" : "big",
+            "position" : {
+                "x" : 7,
+                "y" : 2
+            }
+        },
+        {
+            "type" : "reloadSpeed",
+            "position" : {
+                "x" : 12,
+                "y" : 6
+            }
+        }
+    ]
+}
