@@ -91,7 +91,7 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
         GraphicsDevice.Clear(Color.CornflowerBlue);
         Matrix viewMatrix = _camera.GetViewMatrix();
         // _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap, transformMatrix: viewMatrix);
-        _spriteBatch.Begin(transformMatrix: viewMatrix);
+        _spriteBatch.Begin(transformMatrix: viewMatrix, samplerState: SamplerState.LinearWrap);
         foreach (GameObject obj in _level.Scene) {
             if (!_sprites.ContainsKey(obj.Name)) {
                 continue;
