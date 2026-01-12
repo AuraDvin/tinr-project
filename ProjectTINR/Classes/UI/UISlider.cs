@@ -1,15 +1,16 @@
+using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes.UI;
 
-public class UISlider : GameObject, IUiDrawableComponent {
-    public string Label { get; set; } = "";
+public class UISlider : UiLabel {
     private float _value = 1.0f;
-    private Vector2 _pos = Vector2.Zero;
 
-    public UISlider(Game game) : base(game) { }
+    public UISlider(Game game, string str, string textureName) : base(game, str, textureName) { }
 
     public float Value {
         get => _value;
@@ -19,21 +20,18 @@ public class UISlider : GameObject, IUiDrawableComponent {
             else _value = value;
         }
     }
-
-    public string String {
+    public override string String {
         get {
+            string up = base.String;
             int segments = 10;
-            int filled = (int)System.Math.Round(Value * segments);
+            int filled = (int)Math.Round(Value * segments);
             string bar = new string('#', filled).PadRight(segments, '-');
-            return $"{Label}: {Value:0.00} [{bar}]";
+            return up + " [" + bar + "]";
         }
-        set { }
+        set {
+            base.String = value;
+        }
     }
-
-    public Texture2D Texture { get; set; } = null;
-    public Vector2 TextPosition { get => _pos; set => _pos = value; }
-    public Vector2 TexturePosition { get; set; } = Vector2.Zero;
-    public bool Visible { get; set; } = true;
 
     public void Increase(float step = 0.05f) {
         Value += step;
