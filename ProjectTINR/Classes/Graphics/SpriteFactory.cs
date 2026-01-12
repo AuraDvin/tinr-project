@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.Objects;
 using ProjectTINR.Classes.ObjectsComponents;
+using ProjectTINR.Classes.UI;
 
 namespace ProjectTINR.Classes.Graphics;
 
@@ -44,6 +45,13 @@ public class SpriteFactory {
             
             return sprite;
         }
+
+        if (gameObject is SimpleUIElement sie) {
+            if (sie.HasTexture) {
+                sprite = new Sprite(game, sie.TextureRect, Vector2.Zero, game.Content.Load<Texture2D>(sie.TextureName));
+                return sprite;
+            }
+        } 
         return null;
     }
 }
