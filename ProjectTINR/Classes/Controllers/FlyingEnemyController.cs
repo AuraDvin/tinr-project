@@ -15,7 +15,11 @@ public class FlyingEnemyController(Game game) : GameObject(game), IController, I
     private float _stateTimer = 0f;
     private Vector2 _patrolTarget = Vector2.Zero;
     private readonly Random _rand = new();
-
+    private readonly float _patrolSpeed = 60f;
+    private readonly float _chaseSpeed = 180f;
+    private readonly float _diveSpeed = 450f;
+    private readonly float _retreatSpeed = 200f;
+    private readonly float _attackRange = 80f;
     public Scene Scene { get; set; } = null;
     public GameObject Owner { get; set; }
 
@@ -28,12 +32,8 @@ public class FlyingEnemyController(Game game) : GameObject(game), IController, I
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         _stateTimer += dt;
 
-        float patrolSpeed = 60f;
-        float chaseSpeed = 180f;
-        float diveSpeed = 450f;
-        float retreatSpeed = 200f;
-        float attackRange = 80f;
 
+        Console.WriteLine($"[FlyingEnemyController] State: {_state} Timer: {_stateTimer}");
         switch (_state) {
             case State.Patrol:
                 // pick a new patrol target every few seconds
@@ -45,7 +45,7 @@ public class FlyingEnemyController(Game game) : GameObject(game), IController, I
                 if (dir.LengthSquared() < 25f) {
                     _patrolTarget = Vector2.Zero;
                 } else {
-                    enemy.Velocity = Vector2.Normalize(dir) * patrolSpeed;
+                    enemy.Velocity = Vector2.Normalize(dir) * _patrolSpeed;
                 }
 
                 if (enemy.SeesPlayer && player != null) {
@@ -57,11 +57,11 @@ public class FlyingEnemyController(Game game) : GameObject(game), IController, I
                 if (player == null) { _state = State.Patrol; break; }
                 var dirToPlayer = player.Position - enemy.Position;
                 float dist = dirToPlayer.Length();
-                if (dist < attackRange) {
+                if (dist < _attackRange) {
                     _state = State.Dive;
                     _stateTimer = 0f;
                 } else {
-                    enemy.Velocity = Vector2.Normalize(dirToPlayer) * chaseSpeed;
+                    enemy.Velocity = Vector2.Normalize(dirToPlayer) * _chaseSpeed;
                 }
 
                 if (!enemy.SeesPlayer) {
@@ -72,12 +72,12 @@ public class FlyingEnemyController(Game game) : GameObject(game), IController, I
                 if (player == null) { _state = State.Retreat; _stateTimer = 0f; break; }
                 // perform a fast dive toward the player's current position
                 var diveDir = player.Position - enemy.Position;
-                enemy.Velocity = Vector2.Normalize(diveDir) * diveSpeed;
+                enemy.Velocity = Vector2.Normalize(diveDir) * _diveSpeed;
                 if (_stateTimer > 0.5f) {
                     _state = State.Retreat;
                     _stateTimer = 0f;
                     var awayDir = enemy.Position - player.Position;
-                    enemy.Velocity = Vector2.Normalize(awayDir) * retreatSpeed;
+                    enemy.Velocity = Vector2.Normalize(awayDir) * _retreatSpeed;
                 }
                 break;
             case State.Retreat:
