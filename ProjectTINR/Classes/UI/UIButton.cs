@@ -11,18 +11,15 @@ using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes.UI;
 
-public class UIButton : GameObject, IUiDrawableComponent, Subject {
-    public UIButton(Game game) : base(game) {
+public class UIButton : UiLabel, Subject {
+    protected override string _prefix => "UIButton";
+    public UIButton(Game game, string str, string textureName) : base(game, str, textureName) {
     }
-    public string String { get; set; } = "";
-    public Texture2D Texture { get; set; }
-    public Vector2 TextPosition { get; set; }
-    public Vector2 TexturePosition { get; set; }
-    public bool Visible { get; set; }
-    public new bool Enabled {get; set;} = true;
+    public UIButton(Game game, string str) : base(game, str) {
+    }
+    public Rectangle Padding { get; set; } = new Rectangle(10,10,10,10);
+
     public List<Observer> Observers { get; set; } = new();
-    public Texture2D BackgroundTexture { get; set; }
-    public Rectangle ButtonBounds { get; set; }
 
     public void AddObserver(Observer observer) {
         Observers.Add(observer);
@@ -30,6 +27,10 @@ public class UIButton : GameObject, IUiDrawableComponent, Subject {
 
     public virtual void OnClick() {
         ((Subject)this).Notify();
+    }
+
+    public virtual void OnClick(string message, object? args) {
+        ((Subject)this).Notify(message, args);
     }
 
     public void RemoveObserver(Observer observer) {
