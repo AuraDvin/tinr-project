@@ -27,9 +27,9 @@ public class SpriteFactory {
             return animatedSprite;
         }
 
-        if (gameObject is Floor) {
+        if (gameObject is Floor floor) {
             // Console.WriteLine("Creating floor sprite");
-            sprite = new Sprite(game, FloorTextureRect, Vector2.Zero, game.Content.Load<Texture2D>(TestFloorPath));
+            sprite = new Sprite(game, floor.BoundingBox, Vector2.Zero, game.Content.Load<Texture2D>(TestFloorPath));
             return sprite;
         }
 

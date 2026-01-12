@@ -78,7 +78,7 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 Vector2 finalPosition = oldPosition + deltaPosition;
                 physicsObject.Position = finalPosition;
 
-                Console.WriteLine($"[PhysicsEngine2D] Object: {obj.Name} Velocity: {physicsObject.Velocity} startPos: {oldPosition} Position delta: {deltaPosition} Final Pos: {finalPosition}");
+                // Console.WriteLine($"[PhysicsEngine2D] Object: {obj.Name} Velocity: {physicsObject.Velocity} startPos: {oldPosition} Position delta: {deltaPosition} Final Pos: {finalPosition}");
 
                 _shapes[obj.Name] = shape;
             }

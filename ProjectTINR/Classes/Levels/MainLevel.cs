@@ -11,7 +11,7 @@ namespace ProjectTINR.Classes.Levels;
 public class MainLevel : Level {
     private Vector2 _playerSpawnPosition = new(0f, 0f);
     private Vector2 _enemySpawnPosition = new(500f, 0f);
-    private Vector2 _flyingEnemySpawnPosition = new(-500f, 0f);
+    private Vector2 _flyingEnemySpawnPosition = new(-800f, -100f);
     public MainLevel(Game game) : base(game) {
         _scene = [];
         _uiScene = [];
@@ -19,8 +19,10 @@ public class MainLevel : Level {
     public override void Initialize() {
         Player player;
         if (!LevelDataManager.LoadData(this)){
-            Floor floor = new(Game, new(0, 400));
-            Floor floor2 = new(Game, new(500, 200));
+            Floor floor = new(Game, new(-100, 400), 400, 50);
+            Floor floor4 = new(Game, new(0, 0), 400, 50);
+            Floor floor2 = new(Game, new(500, 200), 400, 50);
+            Floor floor3 = new(Game, new(-1400, 200), 400, 50);
             
             player = new(Game) {
                 Position = _playerSpawnPosition
@@ -39,12 +41,14 @@ public class MainLevel : Level {
                 Zoom = 1.0f
             };
 
-            _scene.Add(floor2);
-            _scene.Add(floor);
-            _scene.Add(player);
-            _scene.Add(se);
-            _scene.Add(fe);
-            _scene.Add(camera);
+        _scene.Add(floor2);
+        _scene.Add(floor);
+        _scene.Add(floor3);
+        _scene.Add(floor4);
+        _scene.Add(player);
+        _scene.Add(se);
+        _scene.Add(fe);
+        _scene.Add(camera);
 
             foreach (IGameComponent obj in _scene) {
                 Game.Components.Add(obj);

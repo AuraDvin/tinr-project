@@ -21,10 +21,25 @@ public class FlyingEnemyCollisionShape : RectCollisionShape {
 
     public override bool OnCollision(ICollisionShape other) {
         if (other is FloorCollisionShape floor) {
-            // If we hit the top of a floor, bounce upward a bit
-            if (_rectangle.Bottom > floor.Rectangle.Top) {
-                Velocity = new(Velocity.X, -Math.Abs(Velocity.Y));
+            int myRightSide = (int)(Position.X + _rectangle.Width);
+            int myBottomSide = (int)(Position.Y + _rectangle.Height);
+            float overlapX = Math.Min(floor.Rectangle.Right, myRightSide) - Math.Max(floor.Rectangle.Left, Position.X);
+            float overlapY = Math.Min(floor.Rectangle.Bottom, myBottomSide) - Math.Max(floor.Rectangle.Top, Position.Y);
+
+            Vector2 velocityBefore = Velocity;
+            base.OnCollision(other); // snap to floor 
+            Vector2 velocityAfter = Velocity;
+
+            // bounce off the floors, walls, ceilings
+            if (overlapX < overlapY) {
+                // wall
+                Velocity = new(-velocityBefore.X * 0.7f, velocityAfter.Y);
             }
+            else {
+                // floor or ceiling
+                Velocity = new(velocityAfter.X, -velocityBefore.Y * 0.7f);
+            }
+            // Floor is static so collision won't be resolved by the physics engine anyway 
             return false;
         }
         return false;

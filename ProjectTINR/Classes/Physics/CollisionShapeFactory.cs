@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 
 using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.Objects;
@@ -11,7 +12,7 @@ public class CollisionShapeFactory {
         Projectile projectile = staticPhysicsObject as Projectile;
         CollisionShapeType type = staticPhysicsObject.CollisionType; 
         return type switch {
-            CollisionShapeType.FloorCollisionShape => new FloorCollisionShape(){Owner = staticPhysicsObject},
+            CollisionShapeType.FloorCollisionShape => new FloorCollisionShape((staticPhysicsObject as Floor).BoundingBox){Owner = staticPhysicsObject},
             CollisionShapeType.PlayerShape => new PlayerCollisionShape(){Owner = staticPhysicsObject as Player},
             CollisionShapeType.Rectangle => new RectCollisionShape(false){Owner = staticPhysicsObject},
             CollisionShapeType.StaticRectangle => new RectCollisionShape(true){Owner = staticPhysicsObject},
