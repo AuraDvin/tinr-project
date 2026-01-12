@@ -1,3 +1,6 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 namespace ProjectTINR.Classes;
 
 public static class GameSettings {
@@ -15,4 +18,5 @@ public static class GameSettings {
 
     public static float MusicVolume { get; set; } = 1f;
     public static float SfxVolume { get; set; } = 1f;
+    public static SpriteFont SpriteFont { get; set; }
 }
