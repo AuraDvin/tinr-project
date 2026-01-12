@@ -8,7 +8,7 @@ namespace ProjectTINR.Classes.ObjectsComponents;
 public class GameObject : GameComponent {
     protected List<IGameComponent> _components = [];
 
-    virtual protected string _prefix => "Object";
+    protected virtual string _prefix => "Object";
 
     private readonly string _name = "";
 
