@@ -60,7 +60,7 @@ public class MainLevel : Level {
             player = Scene.FindByType<Player>() ?? throw new Exception("player is gone in level reserilization");
         }
 
-        UIHealthElement he = new(Game) {
+        UIHealthElement he = new(Game, "", "") {
             Player = player
         };
 

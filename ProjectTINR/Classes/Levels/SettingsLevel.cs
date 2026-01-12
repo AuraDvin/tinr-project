@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -7,11 +8,12 @@ using ProjectTINR.Classes.UI;
 namespace ProjectTINR.Classes.Levels;
 
 public class SettingsLevel : Level {
+    private UIVerticalList _uIVerticalList;
     private UICheckbox _debugCheckbox;
     private UISlider _masterVolumeSlider;
     private UISlider _musicVolumeSlider;
     private UISlider _sfxVolumeSlider;
-    private List<IUiDrawableComponent> _controls = new();
+    // private List<IUiDrawableComponent> _controls = new();
     private int _selectedIndex = 0;
     private KeyboardState _prevKb;
 
@@ -22,52 +24,48 @@ public class SettingsLevel : Level {
         _levelType = LevelType.Settings;
         _scene = new();
         _uiScene = new();
+        _uIVerticalList = new(game) {
+            Position = new Vector2(10, 10)
+        };
     }
 
     public override void Initialize() {
         base.Initialize();
 
-        _debugCheckbox = new UICheckbox(Game) {
-            Label = "Debug Physics",
+        _debugCheckbox = new UICheckbox(Game, "Debug Physics", "") {
             Checked = GameSettings.DebugPhysicsCollisions,
-            TextPosition = new Vector2(10, 10)
         };
 
-        _masterVolumeSlider = new UISlider(Game) {
-            Label = "Master Volume",
+        _masterVolumeSlider = new UISlider(Game, "Master Volume", "") {
             Value = GameSettings.MasterVolume,
-            TextPosition = new Vector2(10, 50)
         };
 
-        _musicVolumeSlider = new UISlider(Game) {
-            Label = "Music Volume",
+        _musicVolumeSlider = new UISlider(Game, "Music Volume", "") {
             Value = GameSettings.MusicVolume,
-            TextPosition = new Vector2(10, 90)
         };  
 
-        _sfxVolumeSlider = new UISlider(Game) {
-            Label = "SFX Volume",
+        _sfxVolumeSlider = new UISlider(Game, "SFX Volume", "") {
             Value = GameSettings.SfxVolume,
-            TextPosition = new Vector2(10, 130)
         };
 
 
-        _controls.Add(_debugCheckbox);
-        _controls.Add(_masterVolumeSlider);
-        _controls.Add(_musicVolumeSlider);
-        _controls.Add(_sfxVolumeSlider);
+        _uIVerticalList.Children.Add(_debugCheckbox);
+        _uIVerticalList.Children.Add(_masterVolumeSlider);
+        _uIVerticalList.Children.Add(_musicVolumeSlider);
+        _uIVerticalList.Children.Add(_sfxVolumeSlider);
 
         // Add to UI scene for rendering
-        _uiScene.Add(_debugCheckbox);
-        _uiScene.Add(_masterVolumeSlider);
-        _uiScene.Add(_musicVolumeSlider);
-        _uiScene.Add(_sfxVolumeSlider);
+        _uiScene.Add(_uIVerticalList);
+        // _uiScene.Add(_debugCheckbox);
+        // _uiScene.Add(_masterVolumeSlider);
+        // _uiScene.Add(_musicVolumeSlider);
+        // _uiScene.Add(_sfxVolumeSlider);
 
         // Add to Game.Components so their Update runs when needed (if they need it later)
-        Game.Components.Add((IGameComponent)_debugCheckbox);
-        Game.Components.Add((IGameComponent)_masterVolumeSlider);
-        Game.Components.Add((IGameComponent)_musicVolumeSlider);
-        Game.Components.Add((IGameComponent)_sfxVolumeSlider);
+        // Game.Components.Add((IGameComponent)_debugCheckbox);
+        // Game.Components.Add((IGameComponent)_masterVolumeSlider);
+        // Game.Components.Add((IGameComponent)_musicVolumeSlider);
+        // Game.Components.Add((IGameComponent)_sfxVolumeSlider);
 
         // Set starting focus
         _selectedIndex = 0;
@@ -78,17 +76,17 @@ public class SettingsLevel : Level {
     public override void Update(GameTime gameTime) {
         _inputTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
         var kb = Keyboard.GetState();
-
+        Console.WriteLine($"Selected item: {_selectedIndex}");
         // Navigate up/down
         if (IsKeyPressed(kb, Keys.Down)) {
-            _selectedIndex = (_selectedIndex + 1) % _controls.Count;
+            _selectedIndex = (_selectedIndex + 1) % _uIVerticalList.Children.Count;
         }
         if (IsKeyPressed(kb, Keys.Up)) {
-            _selectedIndex = (_selectedIndex - 1 + _controls.Count) % _controls.Count;
+            _selectedIndex = (_selectedIndex - 1 + _uIVerticalList.Children.Count) % _uIVerticalList.Children.Count;
         }
 
         // Interact with selected control
-        var selected = _controls[_selectedIndex];
+        var selected = _uIVerticalList.Children[_selectedIndex];
         if (selected == _debugCheckbox) {
             if (IsKeyPressed(kb, Keys.Space) || IsKeyPressed(kb, Keys.Enter)) {
                 _debugCheckbox.Toggle();
@@ -120,7 +118,7 @@ public class SettingsLevel : Level {
             }
             
             if (change) {
-                switch (slider.Label.TrimStart('>', ' ')) {
+                switch (slider.String.TrimStart('>', ' ')) {
                     case "Master Volume":
                         GameSettings.MasterVolume = slider.Value;
                         break;
@@ -135,18 +133,18 @@ public class SettingsLevel : Level {
         }
 
         // Visual feedback in labels for focused control: prepend '>'
-        for (int i = 0; i < _controls.Count; i++) {
-            if (_controls[i] is UICheckbox uh) {
-                uh.String = null; // setter does nothing, keep behavior - we'll modify label when drawing by prefixing
-                // Build label with focus prefix
-                var prefix = (i == _selectedIndex) ? "> " : "  ";
-                uh.Label = prefix + (uh.Label.TrimStart('>', ' '));
-            }
-            if (_controls[i] is UISlider us) {
-                var prefix = (i == _selectedIndex) ? "> " : "  ";
-                us.Label = prefix + us.Label.TrimStart('>', ' ');
-            }
-        }
+        // for (int i = 0; i < _controls.Count; i++) {
+        //     if (_controls[i] is UICheckbox uh) {
+        //         uh.String = null; // setter does nothing, keep behavior - we'll modify label when drawing by prefixing
+        //         // Build label with focus prefix
+        //         var prefix = (i == _selectedIndex) ? "> " : "  ";
+        //         uh.String = prefix + (uh.String.TrimStart('>', ' '));
+        //     }
+        //     if (_controls[i] is UISlider us) {
+        //         var prefix = (i == _selectedIndex) ? "> " : "  ";
+        //         us.String = prefix + us.String.TrimStart('>', ' ');
+        //     }
+        // }
 
         _prevKb = kb;
 
