@@ -17,7 +17,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
     protected float _playerGravity = 1000f;
     protected float _playerFriction = 8f;
     public override Vector2 Offset { get => new(50, 0); }
-    private int _wallJumpCount = 0; 
+    private int _wallJumpCount = 0;
     private readonly int _maxWallJumps = 1;
     protected readonly float _jumpTimerBeforeApplyingGravity = 0.005f;
     protected float _msSinceLastJump;
@@ -25,10 +25,10 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
     protected float _lastTookDmg = 0f;
     protected float _immuneFramesMS = 33f;
 
-    public PlayerCollisionShape() : base(false){
+    public PlayerCollisionShape() : base(false) {
         // Apply gravity right away 
-        _msSinceLastJump = _jumpTimerBeforeApplyingGravity; 
-        _rectangle = new Rectangle(0, 0, 194 / 2, 194);
+        _msSinceLastJump = _jumpTimerBeforeApplyingGravity;
+        Rectangle = new Rectangle(0, 0, 194 / 2, 194);
     }
 
     public override void Update(GameTime gameTime) {
@@ -116,56 +116,17 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
     public override bool OnCollision(ICollisionShape other) {
         // snaps to floor, returns ShouldSimulate which is always true for player
         // so the type needs to be checked as well
-        if (base.OnCollision(other) && other is FloorCollisionShape) {
+        
+        if (other is FloorCollisionShape) {
+            base.OnCollision(other);
             return false;
         }
-
+        
         if (other is EnemyProjectileCollisionShape) {
             _tookDmg = true;
             return false;
         }
 
-        // if (other is FloorCollisionShape floor) {
-        //     Rectangle floorRect = floor.Rectangle;
-
-        //     int myRightSide = (int)(Position.X + _rectangle.Width);
-        //     int myBottomSide = (int)(Position.Y + _rectangle.Height);
-        //     // overlap (at least one) should always be non zero here
-        //     float overlapX = Math.Min(floorRect.Right, myRightSide) - Math.Max(floorRect.Left, Position.X);
-        //     float overlapY = Math.Min(floorRect.Bottom, myBottomSide) - Math.Max(floorRect.Top, Position.Y);
-
-        //     if (overlapX < overlapY) {
-        //         OnWall = true;
-        //         if (_rectangle.Center.X < floorRect.Center.X) {
-        //             // Wall is on the right
-        //             Velocity = new(Math.Min(Velocity.X, 0), Velocity.Y);
-        //             Owner.Position = new Vector2(floorRect.Left - _rectangle.Width - Offset.X + 1, Owner.Position.Y);
-                    
-        //         }
-        //         else {
-        //             // Wall is on the left
-        //             Velocity = new(Math.Max(Velocity.X, 0), Velocity.Y);
-        //             Owner.Position = new Vector2(floorRect.Right - Offset.X - 1, Owner.Position.Y);
-        //         }
-        //         // Console.WriteLine($"Snapping player to wall x: {Owner.Position.X}, overlaps {new Vector2(overlapX, overlapY)}, floor: {floorRect} obj: { _rectangle} ");
-        //     }
-        //     else {
-        //         // Player on top of floor
-        //         if (_rectangle.Center.Y < floorRect.Center.Y) {
-        //             Velocity = new(Velocity.X, 0);
-        //             Owner.Position = new Vector2(Owner.Position.X, floorRect.Top - _rectangle.Height - Offset.Y + 1);
-        //             OnFloor = true;
-        //         }
-        //         // Player under the floor
-        //         else {
-        //             Velocity = new(Velocity.X, Math.Max(Velocity.Y, 0));
-        //             Owner.Position = new Vector2(Owner.Position.X, floorRect.Bottom + Offset.Y - 1);
-        //         }
-        //     }
-        //     return false;
-        // }
-
-   
         return true;
     }
     public Scene Scene { get; set; } = null;
