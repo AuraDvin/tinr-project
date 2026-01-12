@@ -4,7 +4,8 @@ using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.UI;
 using ProjectTINR.Classes.NPCs;
-using ProjectTINR.Classes.Objects;using ProjectTINR.Classes.UI;
+using ProjectTINR.Classes.Objects;
+using ProjectTINR.Classes.UI;
 namespace ProjectTINR.Classes.Levels;
 
 
@@ -18,12 +19,12 @@ public class MainLevel : Level {
     }
     public override void Initialize() {
         Player player;
-        if (!LevelDataManager.LoadData(this)){
+        if (!LevelDataManager.LoadData(this)) {
             Floor floor = new(Game, new(-100, 400), 400, 50);
-            Floor floor4 = new(Game, new(0, 0), 400, 50);
             Floor floor2 = new(Game, new(500, 200), 400, 50);
-            Floor floor3 = new(Game, new(-1400, 200), 400, 50);
-            
+            Floor floor3 = new(Game, new(-500, 200), 400, 50);
+            Floor floor4 = new(Game, new(0, 0), 400, 50);
+
             player = new(Game) {
                 Position = _playerSpawnPosition
             };
@@ -32,8 +33,8 @@ public class MainLevel : Level {
                 Scene = Scene
             };
             FlyingEnemy fe = new(Game) {
-            Position = _flyingEnemySpawnPosition,
-            Scene = Scene
+                Position = _flyingEnemySpawnPosition,
+                Scene = Scene
             };
 
             CameraObject camera = new(Game) {
@@ -41,20 +42,21 @@ public class MainLevel : Level {
                 Zoom = 1.0f
             };
 
-        _scene.Add(floor2);
-        _scene.Add(floor);
-        _scene.Add(floor3);
-        _scene.Add(floor4);
-        _scene.Add(player);
-        _scene.Add(se);
-        _scene.Add(fe);
-        _scene.Add(camera);
+            _scene.Add(floor2);
+            _scene.Add(floor);
+            _scene.Add(floor3);
+            _scene.Add(floor4);
+            _scene.Add(player);
+            _scene.Add(se);
+            _scene.Add(fe);
+            _scene.Add(camera);
 
             foreach (IGameComponent obj in _scene) {
                 Game.Components.Add(obj);
             }
-            
-        } else {
+
+        }
+        else {
             player = Scene.FindByType<Player>() ?? throw new Exception("player is gone in level reserilization");
         }
 
@@ -82,9 +84,9 @@ public class MainLevel : Level {
         // Player should have the health, position etc 
 
         // Enemies should be saved positions, state of attack (if applicable)
-        
+
         // Projectiles should be retained 
-        
+
         // Can we just save the scene array object? 
 
     }
