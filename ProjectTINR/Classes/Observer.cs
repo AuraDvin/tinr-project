@@ -8,5 +8,5 @@ public interface Observer
     public void AddToSubject(Subject subject) {
         subject.AddObserver(this);
     }
-    
+    public void Notify(string message, object? args);
 }

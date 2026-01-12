@@ -13,5 +13,10 @@ public interface Subject
             observer.Notify();
         }
     }
+    public void Notify(string message, object? args) {
+        foreach (var observer in Observers){
+            observer.Notify(message, args);
+        }
+    }
 
 }
