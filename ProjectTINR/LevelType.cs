@@ -3,8 +3,8 @@ namespace ProjectTINR;
 public enum LevelType {
     StartMenu,
     MainLevel,
+    LevelSelect,
     Credits,
-    Options,
     Settings,
     PauseMenu,
     GameOver
