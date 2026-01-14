@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.Marshalling;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using ProjectTINR.Classes.Graphics;
@@ -118,17 +120,30 @@ public class SettingsLevel : Level {
             }
             
             if (change) {
-                switch (slider.String.TrimStart('>', ' ')) {
-                    case "Master Volume":
-                        GameSettings.MasterVolume = slider.Value;
-                        break;
-                    case "Music Volume":
-                        GameSettings.MusicVolume = slider.Value;
-                        break;
-                    case "SFX Volume":
-                        GameSettings.SfxVolume = slider.Value;
-                        break;
+                Console.WriteLine($"Change {slider.String}");
+                if (slider.String.StartsWith("Master")) {
+                    GameSettings.MasterVolume = slider.Value; 
+                } else if (slider.String.StartsWith("Music")) {
+                    GameSettings.MusicVolume = slider.Value;
+                }else if (slider.String.StartsWith("SFX")) {
+                    GameSettings.SfxVolume = slider.Value;
+                } else {
+                    Console.WriteLine("Something went wrong");
                 }
+                // switch (slider.String.TrimStart('>', ' ')) {
+                //     case "Master Volume":
+                //         GameSettings.MasterVolume = slider.Value;
+                //         Console.WriteLine($"Updated Master volume {slider.Value}");
+                //         break;
+                //     case "Music Volume":
+                //         GameSettings.MusicVolume = slider.Value;
+                //         Console.WriteLine($"Updated Music volume {slider.Value}");
+                //         break;
+                //     case "SFX Volume":
+                //         GameSettings.SfxVolume = slider.Value;
+                //         Console.WriteLine($"Updated SFX volume {slider.Value}");
+                //         break;
+                // }
             }
         }
 
