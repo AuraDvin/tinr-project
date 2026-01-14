@@ -12,8 +12,7 @@ using ProjectTINR.Classes.Physics;
 
 namespace ProjectTINR;
 
-public class ProjectTinr : Game
-{
+public class ProjectTinr : Game {
     private GameRenderer2D _gameRenderer;
     private UiRenderer2D _uiRenderer2D;
     private PhysicsEngine2D _physicsEngine;
@@ -23,40 +22,39 @@ public class ProjectTinr : Game
 
     private KeyboardState _prevKeyboardState;
 
-    public ProjectTinr() : base()
-    {
+    public ProjectTinr() : base() {
         new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
 
-    protected override void Initialize()
-    {
+    protected override void Initialize() {
         SwitchLevel(LevelType.StartMenu);
+        GameSettings.Initialize();
         IsFixedTimeStep = true;
         TargetElapsedTime = TimeSpan.FromSeconds(1 / 60f);
 
         base.Initialize();
     }
 
-    public void SwitchLevel(LevelType newLevelType)
-    {
-        if (_level is MainLevel)
-        {
+
+    public void SwitchLevel(LevelType newLevelType) {
+        if (_level is MainLevel) {
             _level.Serialize();
         }
 
         // Remove current components if any
-        if (_level != null)
-        {
+        if (_level != null) {
             Components.Remove(_level);
             // Remove elements in the Scene 
-            foreach (GameObject thing in _level.Scene)
-            {
+            foreach (GameObject thing in _level.Scene) {
                 Components.Remove(thing);
             }
         }
-        if (_gameInput != null) Components.Remove(_gameInput);
+        if (_gameInput != null) { 
+            Components.Remove(_gameInput); 
+            _gameInput.RemoveControllers();
+        }
         if (_gameRenderer != null) Components.Remove(_gameRenderer);
         if (_physicsEngine != null) Components.Remove(_physicsEngine);
         if (_debugRender2D != null) Components.Remove(_debugRender2D);
@@ -77,26 +75,21 @@ public class ProjectTinr : Game
         Components.Add(_uiRenderer2D);
     }
 
-    protected override void LoadContent()
-    {
+    protected override void LoadContent() {
         base.LoadContent();
         GameSettings.SpriteFont = Content.Load<SpriteFont>("gameFont");
     }
 
-    protected override void Update(GameTime gameTime)
-    {
+    protected override void Update(GameTime gameTime) {
         var kb = Keyboard.GetState();
 
         // Toggle into Settings with F1 (edge triggered)
-        if (kb.IsKeyDown(Keys.F1) && !_prevKeyboardState.IsKeyDown(Keys.F1))
-        {
-            if (_level.Type == LevelType.Settings)
-            {
+        if (kb.IsKeyDown(Keys.F1) && !_prevKeyboardState.IsKeyDown(Keys.F1)) {
+            if (_level.Type == LevelType.Settings) {
                 SwitchLevel(LevelType.MainLevel);
 
             }
-            else
-            {
+            else {
                 // serialize level data / state 
 
                 // switch to settings
@@ -105,8 +98,7 @@ public class ProjectTinr : Game
         }
 
         // Resert level with R 
-        if (kb.IsKeyUp(Keys.R) && _prevKeyboardState.IsKeyDown(Keys.R))
-        {
+        if (kb.IsKeyUp(Keys.R) && _prevKeyboardState.IsKeyDown(Keys.R)) {
             _level.Reset();
         }
 
@@ -119,8 +111,12 @@ public class ProjectTinr : Game
         base.Update(gameTime);
     }
 
-    protected override void Draw(GameTime gameTime)
-    {
+    protected override void Draw(GameTime gameTime) {
         base.Draw(gameTime);
+    }
+    protected override void Dispose(bool disposing) {
+        Console.WriteLine("Called dispose");
+        base.Dispose(disposing);
+        GameSettings.SaveSettings();
     }
 }
