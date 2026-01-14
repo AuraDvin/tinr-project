@@ -62,7 +62,7 @@ public class RectCollisionShape(bool isStatic) : ICollisionShape, IMoveComponent
                     Velocity = new(Math.Max(Velocity.X, 0), Velocity.Y);
                     Owner.Position = new Vector2(floorRect.Right - Offset.X - 1, Owner.Position.Y);
                 }
-                Console.WriteLine($"Snapping Rect to wall x: {Owner.Position.X}, overlaps {new Vector2(overlapX, overlapY)}, floor: {floorRect} obj: {Rectangle} ");
+                // Console.WriteLine($"Snapping Rect to wall x: {Owner.Position.X}, overlaps {new Vector2(overlapX, overlapY)}, floor: {floorRect} obj: {Rectangle} ");
             }
             else {
                 // Player on top of floor
@@ -77,7 +77,7 @@ public class RectCollisionShape(bool isStatic) : ICollisionShape, IMoveComponent
                     Velocity = new(Velocity.X, Math.Max(Velocity.Y, 0));
                     Owner.Position = new Vector2(Owner.Position.X, floorRect.Bottom + Offset.Y - 1);
                 }
-                Console.WriteLine($"Snapping Rect to floor y: {Owner.Position.Y}, overlaps {new Vector2(overlapX, overlapY)}, floor: {floorRect} obj: {Rectangle} ");
+                // Console.WriteLine($"Snapping Rect to floor y: {Owner.Position.Y}, overlaps {new Vector2(overlapX, overlapY)}, floor: {floorRect} obj: {Rectangle} ");
             }
             return false;
         }
