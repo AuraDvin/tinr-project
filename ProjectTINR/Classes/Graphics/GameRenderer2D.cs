@@ -52,9 +52,10 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
                     player.State switch {
                         PlayerState.Idling => "idle",
                         PlayerState.None => "idle",
+                        PlayerState.Sliding => "idle",
+                        PlayerState.Falling => "idle",
                         PlayerState.Moving => "walk",
                         PlayerState.Jumping => "jump",
-                        PlayerState.Falling => "idle",
                         _ => throw new NotImplementedException()
                     });
                 playerSprite.SpriteEffects = player.Direction switch {
