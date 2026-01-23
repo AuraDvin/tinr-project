@@ -10,6 +10,7 @@ public enum PlayerState
     TookDmg = 16, // 1 << 4
     Frozen = 32, // 1 << 5
     Shooting = 64, // 1 << 6
+    Sliding = 128, // 1 << 7
 }
 
 public enum PlayerDirection {
