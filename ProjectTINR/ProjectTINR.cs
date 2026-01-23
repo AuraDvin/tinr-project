@@ -9,6 +9,7 @@ using ProjectTINR.Classes.Graphics;
 using ProjectTINR.Classes.Levels;
 using ProjectTINR.Classes.ObjectsComponents;
 using ProjectTINR.Classes.Physics;
+using ProjectTINR.Classes.Sound;
 
 namespace ProjectTINR;
 
@@ -18,8 +19,8 @@ public class ProjectTinr : Game {
     private PhysicsEngine2D _physicsEngine;
     private GameInput _gameInput;
     private DebugPhysicsRender2D _debugRender2D;
+    private GameSoundController _gameSoundController;
     private Level _level;
-
     private KeyboardState _prevKeyboardState;
 
     public ProjectTinr() : base() {
@@ -59,6 +60,7 @@ public class ProjectTinr : Game {
         if (_physicsEngine != null) Components.Remove(_physicsEngine);
         if (_debugRender2D != null) Components.Remove(_debugRender2D);
         if (_uiRenderer2D != null) Components.Remove(_uiRenderer2D);
+        if (_gameSoundController != null) Components.Remove(_gameSoundController);
 
         _level = LevelFactory.CreateLevel(this, newLevelType);
         _gameInput = new GameInput(this, _level);
@@ -66,6 +68,7 @@ public class ProjectTinr : Game {
         _physicsEngine = new PhysicsEngine2D(this, _level);
         _debugRender2D = new DebugPhysicsRender2D(this, _level);
         _uiRenderer2D = new UiRenderer2D(this, _level);
+        _gameSoundController = new GameSoundController(this, _level);
 
         Components.Add(_level);
         Components.Add(_gameInput);
@@ -73,6 +76,7 @@ public class ProjectTinr : Game {
         Components.Add(_physicsEngine);
         Components.Add(_debugRender2D);
         Components.Add(_uiRenderer2D);
+        Components.Add(_gameSoundController);
     }
 
     protected override void LoadContent() {
