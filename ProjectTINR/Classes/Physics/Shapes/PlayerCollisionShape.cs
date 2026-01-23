@@ -15,6 +15,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
     protected float _playerAccel = 200f;
     protected float _playerJumpForce = 600f;
     protected float _playerGravity = 1000f;
+    protected float _playerSlideGravity = 600f;
     protected float _playerFriction = 8f;
     public override Vector2 Offset { get => new(50, 0); }
     private int _wallJumpCount = 0;
@@ -34,12 +35,25 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
     public override void Update(GameTime gameTime) {
         Player player = Owner as Player ?? throw new Exception("Where is the player reference?");
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
         Vector2 objVeloc = Velocity;
+        bool shouldApplyGravity = false;
+        _msSinceLastJump += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        // Apply gravity if enough time has passed
+        if (_msSinceLastJump >= _jumpTimerBeforeApplyingGravity) {
+            shouldApplyGravity = true;
+        }
+
         switch (player.State) {
             case PlayerState.Idling:
                 objVeloc = Vector2.Lerp(objVeloc, new(0, objVeloc.Y), _playerFriction * dt);
                 break;
+            case PlayerState.Sliding:
+                if (shouldApplyGravity) {
+                    objVeloc.Y = objVeloc.Y + _playerSlideGravity * dt;
+                    shouldApplyGravity = false;
+                }
+                goto case PlayerState.Moving;
             case PlayerState.Moving:
                 int sign;
                 switch (player.Direction) {
@@ -78,8 +92,12 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                 }
                 break;
             case PlayerState.Falling:
-                ;
+                if (shouldApplyGravity) {
+                    objVeloc.Y = objVeloc.Y + _playerGravity * dt;
+                    shouldApplyGravity = false;
+                }
                 break;
+
             case PlayerState.Frozen:
                 objVeloc = Vector2.Zero;
                 break;
@@ -87,20 +105,19 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                 break;
         }
 
+
         if (WasOnFloor) {
             objVeloc.Y = Math.Min(objVeloc.Y, 0);
             _wallJumpCount = 0;
         }
 
-        _msSinceLastJump += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-        // Apply gravity if enough time has passed
-        if (_msSinceLastJump >= _jumpTimerBeforeApplyingGravity) {
-            objVeloc.Y += _playerGravity * dt;
+        if (shouldApplyGravity) {
+            objVeloc.Y = objVeloc.Y + _playerGravity * dt;
         }
 
         Velocity = objVeloc;
 
+        // This should be in PlayerController (?) I get it's a oncollision type event but feels out of place
         if (_tookDmg) {
             if (_lastTookDmg <= 0f) {
                 _lastTookDmg = _immuneFramesMS / 1000f;
@@ -116,14 +133,14 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
     public override bool OnCollision(ICollisionShape other) {
         // snaps to floor, returns ShouldSimulate which is always true for player
         // so the type needs to be checked as well
-        
+
         if (other is FloorCollisionShape) {
             base.OnCollision(other);
             (Owner as Player).OnFloor = OnFloor;
             (Owner as Player).OnWall = OnWall;
             return false;
         }
-        
+
         if (other is EnemyProjectileCollisionShape) {
             _tookDmg = true;
             return false;
