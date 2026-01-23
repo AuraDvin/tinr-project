@@ -23,13 +23,19 @@ public class PlayerSoundController : SoundController {
 
         // Only updating on state change
         if (_oldState == currentState) {
-            Console.WriteLine("PlayerState shows no change!");
             return;
         }
 
         if (currentState == PlayerState.Jumping) {
-            Console.WriteLine("Player has jumped according to this");
-            
+            SoundEffectInstance soundEffectInstance = _jumpEffect.CreateInstance();
+            soundEffectInstance.IsLooped = false; 
+            soundEffectInstance.Volume = GameSettings.SfxVolume;
+            SoundState state = soundEffectInstance.State;
+            if (state != SoundState.Playing) {
+                soundEffectInstance.Play();
+            }
+        }
+        if (_oldState == PlayerState.Falling && player.OnFloor) {
             SoundEffectInstance soundEffectInstance = _jumpEffect.CreateInstance();
             soundEffectInstance.IsLooped = false; 
             soundEffectInstance.Volume = GameSettings.SfxVolume;
