@@ -17,12 +17,12 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
     public float ShootingDelay { get; set; } = 0.4f;
     public bool JustJumped => _justJumped;
     public bool IsMovingLeft => _isMovingLeft;
-    public bool IsMovingRight => _isMovingRight;    
+    public bool IsMovingRight => _isMovingRight;
     public override void Initialize() {
     }
     public override void Update(GameTime gameTime) {
         if (Scene == null) throw new Exception("[PlayerController -> Scene Manipulator] Scene was not initalized!");
-        if (Owner == null){
+        if (Owner == null) {
             Owner = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
         }
         // Player player = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
@@ -56,7 +56,7 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
             _isMovingRight = ks.IsKeyDown(_moveRight);
             _isMovingLeft = ks.IsKeyDown(_moveLeft);
         }
-        
+
         Player player = Owner as Player ?? throw new Exception("Player class not found in Scene!");
 
         // Todo: add throwing knife to scene, and give it inital position facing the right way
@@ -70,7 +70,8 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
                 // int dir = player.Direction == PlayerDirection.Right ? 1 : -1;
                 Vector2 playerPos = player.Position;
                 PlayerProjectile projectile = new(Game) {
-                    Position = playerPos, FacingRight = player.Direction == PlayerDirection.Right,
+                    Position = playerPos,
+                    FacingRight = player.Direction == PlayerDirection.Right,
                 };
                 Scene.Add(projectile);
                 // PlayerProjectileCollisionShape thing = new(playerPos, dir, Game) {
@@ -83,27 +84,33 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
     }
 
     void UpdatePlayerState(Player player) {
-        if (IsMovingLeft) {
-            player.Direction = PlayerDirection.Left;
+        bool isMoving = IsMovingLeft || IsMovingRight;
+        
+        if (isMoving) {
             player.State = PlayerState.Moving;
+            player.Direction = IsMovingLeft ? PlayerDirection.Left : PlayerDirection.Right;
         }
-
-        if (IsMovingRight) {
-            player.Direction = PlayerDirection.Right;
-            player.State = PlayerState.Moving;
-        }
-
-        if (IsMovingLeft == IsMovingRight) {
+        else {
             player.State = PlayerState.Idling;
         }
 
+        // TODO: think, can we have wall sliding and possibly falling sfx play if the player state is not proper. 
+        // and on top of that how will we know if the other things are also true at the same time? 
+        // Should the player have multiple states?
         if (JustJumped) {
             player.State = PlayerState.Jumping;
         }
-        
-        // Console.WriteLine($"Set Player state: {player.State}");
+        else {
+            if (!player.OnFloor && !isMoving) {
+                player.State = PlayerState.Falling;
+            }
+
+            if (player.OnWall && isMoving) {
+                player.State = PlayerState.Sliding;
+            }
+        }
     }
-    
+
     private float _lastShot = 0f;
     private bool _canShoot = true;
     protected bool _isMovingLeft = false;
