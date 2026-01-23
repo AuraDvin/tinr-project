@@ -119,6 +119,8 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
         
         if (other is FloorCollisionShape) {
             base.OnCollision(other);
+            (Owner as Player).OnFloor = OnFloor;
+            (Owner as Player).OnWall = OnWall;
             return false;
         }
         
