@@ -5,34 +5,20 @@ using ProjectTINR.Classes.Physics;
 
 namespace ProjectTINR.Classes.Objects;
 
-public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGameComponent, IControlled {
+public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGameComponent, IControlled, ISoundPlayer {
     protected override string _prefix => "Player";
-    public Vector2 Position { 
-        get => _position; 
-        set => _position = value; 
+    public Vector2 Position {
+        get => _position;
+        set => _position = value;
     }
-    
+    public bool OnFloor { get; set; } = false;
+    public bool OnWall { get; set; } = false;
     public CollisionShapeType CollisionType { get => CollisionShapeType.PlayerShape; set { } }
     public ControllerType ControllerType => ControllerType.PlayerController;
     public PlayerState State {
         // We could have a timed status (Like frozen) so we should return that just in case
         set => _playerState = value;
-        get {
-            return _playerState;
-            // if (_playerState != PlayerState.None) {
-            //     return _playerState;
-            // }
-
-            // if (Velocity.Y > 0) {
-            //     return PlayerState.Falling;
-            // }
-
-            // if (Velocity.Y < 0) {
-            //     return PlayerState.Jumping;
-            // }
-
-            // return PlayerState.Idling;
-        }
+        get { return _playerState; }
     }
     public PlayerDirection Direction { get => _direction; set => _direction = value; }
     public Vector2 Velocity {
