@@ -50,7 +50,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                 break;
             case PlayerState.Sliding:
                 if (shouldApplyGravity) {
-                    objVeloc.Y = objVeloc.Y + _playerSlideGravity * dt;
+                    objVeloc.Y += _playerSlideGravity * dt;
                     shouldApplyGravity = false;
                 }
                 goto case PlayerState.Moving;
@@ -73,7 +73,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                         throw new Exception("Invalid player direction!");
                 }
                 objVeloc.X += sign * _playerAccel * dt;
-                Console.WriteLine($"[PlayerCollisionShape] Player state: {player.State} {player.Direction} x: {objVeloc.X} y: {objVeloc.Y}");
+                // Console.WriteLine($"[PlayerCollisionShape] Player state: {player.State} {player.Direction} x: {objVeloc.X} y: {objVeloc.Y}");
                 break;
             case PlayerState.Jumping:
                 if (WasOnFloor) {
@@ -93,7 +93,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                 break;
             case PlayerState.Falling:
                 if (shouldApplyGravity) {
-                    objVeloc.Y = objVeloc.Y + _playerGravity * dt;
+                    objVeloc.Y += _playerGravity * dt;
                     shouldApplyGravity = false;
                 }
                 break;
@@ -112,7 +112,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
         }
 
         if (shouldApplyGravity) {
-            objVeloc.Y = objVeloc.Y + _playerGravity * dt;
+            objVeloc.Y += _playerGravity * dt;
         }
 
         Velocity = objVeloc;
