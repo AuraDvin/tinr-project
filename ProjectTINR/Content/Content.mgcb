@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin audio/sounds/Clunk.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:audio/sounds/Clunk.mp3;audio/sounds/land-on-ground.mp3
+
+#begin audio/sounds/flying-knife.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:audio/sounds/flying-knife.mp3
+
 #begin audio/sounds/jump.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
