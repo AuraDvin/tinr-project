@@ -10,9 +10,12 @@ namespace ProjectTINR.Classes.Sound;
 
 public class PlayerSoundController : SoundController {
     private PlayerState _oldState = PlayerState.None;
+    private bool _oldOnFloor = false;
     private SoundEffect _jumpEffect;
+    private SoundEffect _landingEffect;
     public PlayerSoundController(Game game, GameObject owner) : base(game, owner) {
         _jumpEffect = Game.Content.Load<SoundEffect>("audio/sounds/jump");
+        _landingEffect = Game.Content.Load<SoundEffect>("audio/sounds/land-on-ground");
     }
 
     public override void Update(GameTime gameTime) {
@@ -21,21 +24,8 @@ public class PlayerSoundController : SoundController {
 
         PlayerState currentState = player.State;
 
-        // Only updating on state change
-        if (_oldState == currentState) {
-            return;
-        }
-
-        if (currentState == PlayerState.Jumping) {
-            SoundEffectInstance soundEffectInstance = _jumpEffect.CreateInstance();
-            soundEffectInstance.IsLooped = false; 
-            soundEffectInstance.Volume = GameSettings.SfxVolume;
-            SoundState state = soundEffectInstance.State;
-            if (state != SoundState.Playing) {
-                soundEffectInstance.Play();
-            }
-        }
-        if (_oldState == PlayerState.Falling && player.OnFloor) {
+        if (currentState == PlayerState.Jumping && (player.OnFloor || player.OnWall)) {
+            Console.WriteLine($"Old {_oldState} and new state {currentState} {player.OnWall} {player.OnFloor}");
             SoundEffectInstance soundEffectInstance = _jumpEffect.CreateInstance();
             soundEffectInstance.IsLooped = false; 
             soundEffectInstance.Volume = GameSettings.SfxVolume;
@@ -45,6 +35,17 @@ public class PlayerSoundController : SoundController {
             }
         }
 
+        if (!_oldOnFloor && player.OnFloor) {
+            SoundEffectInstance soundEffectInstance = _landingEffect.CreateInstance();
+            soundEffectInstance.IsLooped = false; 
+            soundEffectInstance.Volume = GameSettings.SfxVolume;
+            SoundState state = soundEffectInstance.State;
+            if (state != SoundState.Playing) {
+                soundEffectInstance.Play();
+            }
+        }
+
+        _oldOnFloor = player.OnFloor;
         _oldState = currentState;
     }
 }
