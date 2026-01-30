@@ -50,7 +50,6 @@ class CustomButton : UIButton {
 }
 
 public class SelectLevelLevel : Level {
-    public LevelType _levelType = LevelType.LevelSelect;
     private float _inputDelay = 0.2f;
     private float _timeSinceLastInput = 0f;
     private UIHorizontalList _levelRow1, _levelRow2;
@@ -62,6 +61,7 @@ public class SelectLevelLevel : Level {
     private KeyboardState _lastKbState;
     LevelObserver _levelObserver;
     public SelectLevelLevel(Game game, int numberOfLevels) : base(game) {
+        _levelType = LevelType.LevelSelect;
         _scene = new Scene();
         _uiScene = new Scene();
         _numberOfLevels = numberOfLevels;
