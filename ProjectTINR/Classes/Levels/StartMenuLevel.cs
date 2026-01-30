@@ -82,7 +82,9 @@ public class StartMenuLevel : Level {
     int indexSelected = 0;
 
     public StartMenuLevel(Game game) : base(game) {
-        _startButton = new(Game, "Start", "");
+        _startButton = new(Game, "Start", "") {
+          Selected = true  
+        };
         _menuList = new(Game);
         _startObserver = new StartObserver(Game);
         _previousKeyboardState = Keyboard.GetState();
@@ -148,18 +150,24 @@ public class StartMenuLevel : Level {
             _menuList.Update(gameTime);
 
             if (currentKeyboardState.IsKeyUp(Keys.Up) && _previousKeyboardState.IsKeyDown(Keys.Up)) {
+                (_menuList.Children[indexSelected] as SimpleUIElement).Selected = false;
                 indexSelected -= 1;
                 if (indexSelected < 0) indexSelected = _menuList.Children.Count - 1;
+                (_menuList.Children[indexSelected] as SimpleUIElement).Selected = true;
             }
 
             if (currentKeyboardState.IsKeyUp(Keys.Down) && _previousKeyboardState.IsKeyDown(Keys.Down)) {
+                (_menuList.Children[indexSelected] as SimpleUIElement).Selected = false;
                 indexSelected += 1;
                 indexSelected %= _menuList.Children.Count;
+                (_menuList.Children[indexSelected] as SimpleUIElement).Selected = true;
             }
 
             if (currentKeyboardState.IsKeyUp(Keys.Escape) && _previousKeyboardState.IsKeyDown(Keys.Escape)) {
+                (_menuList.Children[indexSelected] as SimpleUIElement).Selected = false;
                 _menuList.Hide();
                 _startButton.Visible = true;
+                _startButton.Selected = true;
             }
 
             if (currentKeyboardState.IsKeyUp(Keys.Enter) && _previousKeyboardState.IsKeyDown(Keys.Enter) ||
@@ -172,7 +180,6 @@ public class StartMenuLevel : Level {
             // Check if start button is pressed
             if (currentKeyboardState.IsKeyUp(Keys.Enter) && _previousKeyboardState.IsKeyDown(Keys.Enter)) {
                 ShowMenu();
-                _startButton.Visible = false;
             }
         }
 
@@ -182,7 +189,10 @@ public class StartMenuLevel : Level {
     private void ShowMenu() {
         _menuVisible = true;
         _startButton.Visible = false;
+        _startButton.Selected = false;
+
         _menuList.Show();
+        (_menuList.Children[indexSelected] as SimpleUIElement).Selected = true;
     }
 
     private void HideMenu() {
