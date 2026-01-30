@@ -11,8 +11,8 @@ namespace ProjectTINR.Classes.Sound;
 public class PlayerSoundController : SoundController {
     private PlayerState _oldState = PlayerState.None;
     private bool _oldOnFloor = false;
-    private SoundEffect _jumpEffect;
-    private SoundEffect _landingEffect;
+    private readonly SoundEffect _jumpEffect;
+    private readonly SoundEffect _landingEffect;
     public PlayerSoundController(Game game, GameObject owner) : base(game, owner) {
         _jumpEffect = Game.Content.Load<SoundEffect>("audio/sounds/jump");
         _landingEffect = Game.Content.Load<SoundEffect>("audio/sounds/land-on-ground");
