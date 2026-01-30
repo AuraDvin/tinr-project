@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Input;
 
 using ProjectTINR.Classes.ObjectsComponents;
 
+#nullable enable
+
 namespace ProjectTINR.Classes.UI;
 
 public class UIButton : UiLabel, Subject {
