@@ -13,6 +13,77 @@ A Flying enemy that tries to sweep in and attack the player from close
 
 > Engine and game code written by me with help from professors 
 
+# Prerequisites
+- .net 9.0 sdk [Link](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+- MonoGame [Link](https://docs.monogame.net/articles/getting_started/1_setting_up_your_os_for_development_arch.html?tabs=android)
+- Keyboard with arrow keys, spacebar, F1, ESC, Enter, W, A, S, D 
+
+# Build and debug the project
+```bash
+# Clone the repository
+git clone https://github.com/AuraDvin/ProjectTINR.git
+# Move into the repository
+cd ProjectTINR
+# Build the project
+dotnet build ProjectTINR.sln
+# Move into output directory -> You have to do this so Content can be properly loaded
+cd bin/Debug/net9.0/
+# Run resulting dlll
+dotnet ./ProjectTINR.dll
+```
+# Build and run the project
+```bash
+# Clone the repository
+git clone https://github.com/AuraDvin/ProjectTINR.git
+# Move into the repository
+cd ProjectTINR
+```
+## Publish the project
+I reccomend looking at [this](https://learn.microsoft.com/en-us/dotnet/core/rid-catalog) to make sure you publish it for your system. 
+
+
+If you're on x64 these should work or you can try to replace x64 with arm/arm64
+### Linux
+```bash
+dotnet publish ProjectTINR.sln -r linux-x64 
+```
+```bash
+dotnet publish ProjectTINR.sln -r linux-arm64
+```
+
+### Windows
+```bash
+dotnet publish ProjectTINR.sln -r win-x64
+```
+```bash
+dotnet publish ProjectTINR.sln -r win-arm64
+```
+### MacOS
+Minimum OS version is macOS 10.12 Sierra
+```bash
+dotnet publish ProjectTINR.sln -r osx-x64
+```
+```bash
+dotnet publish ProjectTINR.sln -r osx-arm64
+```
+---
+
+
+This will make the executable of your choice in `bin/Release/net<version>/<system>/publish/`.
+
+example: `bin/Release/net9.0/linux-x64/publish/ProjectTINR`.
+
+
+Then you can run `ProjectTINR`(`.exe` and such) from the command line or double click on it if you're using a file manager.
+
+
+```bash
+# Move into output directory -> You have to do this so Content can be properly loaded
+cd bin/Release/net9.0/linux-x64/publish
+# Run resulting dlll
+dotnet ./ProjectTINR.dll
+```
+
 # About
 The game is written to be as modular as possible with scalability, basic game modules include 
 - Physics engine 
@@ -29,23 +100,8 @@ With a similar idea objects have `IPhysicsObject` interface to tell the `Physics
 
 To match what kind of shapes or sprites an object needs, enums are used. 
 
-# Prerequisites
-- .net 9.0 sdk [Link](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
-- MonoGame [Link](https://docs.monogame.net/articles/getting_started/1_setting_up_your_os_for_development_arch.html?tabs=android)
-# Build and run the project
-```bash
-# Clone the repository
-git clone https://github.com/AuraDvin/ProjectTINR.git
-# Move into the repository
-cd ProjectTINR
-# Build the project
-dotnet build
-# Move into output directory -> You have to do this so Content can be properly loaded
-cd bin/Debug/net9.0/
-# Run resulting dlll
-dotnet ./ProjectTINR.dll
-```
-if you're using Windows you can figure it out yourself :)
+
+
 # Animated Sprites & format
 To draw an animation the info about the sprite that should be drawn is needed, this is done by moving a Rectangle along the texture according to the framerate. This is updated and done in `GameRenderer2D` class. 
 
