@@ -13,9 +13,8 @@ namespace ProjectTINR.Classes.UI;
 
 public class UIButton : UiLabel, Subject {
     protected override string _prefix => "UIButton";
-    public bool Selectable { get => true; }
-    public virtual bool Selected { get; set; } = false;
-
+    public override bool Selectable { get => true; }
+    public override bool Selected { get; set; } = false;
     public UIButton(Game game, string str, string textureName) : base(game, str, textureName) {
     }
     public UIButton(Game game, string str) : base(game, str) {
