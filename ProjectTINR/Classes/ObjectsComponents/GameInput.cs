@@ -19,6 +19,12 @@ public class GameInput(Game game, Level level) : GameObject(game) {
             Game.Components.Remove(controller);
         }
     }
+
+    public void AddControllers() {
+        foreach (var controller in _controllers.Values) {
+            Game.Components.Add(controller);
+        }
+    }
     
     public override void Update(GameTime gameTime) {
         HashSet<string> updatedObjects = [];
