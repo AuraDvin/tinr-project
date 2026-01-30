@@ -26,6 +26,10 @@ public class UIHorizontalList : GameObject, ComplexUIElement {
     public Vector2 Position { get; set; } = Vector2.Zero;
     public Rectangle TextureRect { get; set; } = new Rectangle(0, 0, 32, 32);
 
+    public virtual bool Selectable => false;
+
+    public virtual bool Selected { get; set; }
+
     // private List<UIButton> _buttons = new();
     // public List<UIButton> Buttons { get => _buttons; set => _buttons = value; }
     // private int _selectedIndex = 0;

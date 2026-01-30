@@ -11,6 +11,8 @@ public interface IUiDrawableComponent : IPositionComponent {
     public bool Visible { get; set; }
     public bool Enabled { get; set; }
     public bool HasString { get; }
+    public bool Selectable { get; }
+    public bool Selected { get; set; }
     public bool HasTexture { get; }
     public string String { get; set; }
     public string TextureName { get; set; }

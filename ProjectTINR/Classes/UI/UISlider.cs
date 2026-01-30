@@ -8,8 +8,8 @@ using ProjectTINR.Classes.ObjectsComponents;
 namespace ProjectTINR.Classes.UI;
 
 public class UISlider : UiLabel {
+    public override bool Selectable => true;
     private float _value = 1.0f;
-
     public UISlider(Game game, string str, string textureName) : base(game, str, textureName) { }
 
     public float Value {
