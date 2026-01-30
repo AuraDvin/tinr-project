@@ -92,19 +92,13 @@ public class StartMenuLevel : Level {
 
     public override void Initialize() {
         base.Initialize();
+        _scene = [];
+        _uiScene = [];
 
-        // Initialize scenes
-        _scene = new Scene();
-        _uiScene = new Scene();
-
-        // Setup start button
         _startButton.Position = new Vector2(Game.GraphicsDevice.Viewport.Width / 2 - 50,
                                                 Game.GraphicsDevice.Viewport.Height / 2 - 25);
-        _startButton.Visible = true;
-        _uiScene.Add(_startButton);
-
-        // Setup menu buttons (e.g., New Game, Continue, Settings, Exit)
-        string[] menuLabels = { "New Game", "Continue", "Settings", "Exit" };
+       
+        string[] menuLabels = ["New Game", "Continue", "Settings", "Exit"];
         foreach (string label in menuLabels) {
             UIButton button = new(Game, label, "") {
                 Visible = false
@@ -126,18 +120,12 @@ public class StartMenuLevel : Level {
             }
 
             _menuList.Children.Add(button);
-            // _uiScene.Add(button);
         }
 
-        // Initialize horizontal list for menu
-        Vector2 menuPosition = new Vector2(
-            Game.GraphicsDevice.Viewport.Width / 2,
-            Game.GraphicsDevice.Viewport.Height / 2 + 50);
-        _menuList.Position = menuPosition;
+        _startButton.Visible = true;
         _menuList.Hide();
-
+        _uiScene.Add(_startButton);
         _uiScene.Add(_menuList);
-
         Reset();
     }
 
