@@ -5,11 +5,10 @@ using Microsoft.Xna.Framework;
 namespace ProjectTINR.Classes;
 
 public class Level(Game game) : GameComponent(game) {
-    protected Scene _scene;
-    protected Scene _uiScene;
+    protected Scene _scene = [];
+    protected Scene _uiScene = [];
     protected LevelType _levelType;
-
-    public LevelType Type => _levelType;
+    public virtual LevelType Type => _levelType;
 
     public Scene Scene {
         get => _scene;
