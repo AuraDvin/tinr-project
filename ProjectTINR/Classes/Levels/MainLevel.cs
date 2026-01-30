@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using ProjectTINR.Classes.UI;
 using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.Objects;
-using ProjectTINR.Classes.UI;
 namespace ProjectTINR.Classes.Levels;
 
 
