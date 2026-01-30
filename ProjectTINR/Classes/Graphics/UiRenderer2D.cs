@@ -161,6 +161,12 @@ public class UiRenderer2D(Game game, Level level) : GameRenderer2D(game, level)
 
     public override void Draw(GameTime gameTime)
     {
+        Color defaultColor = Color.White;
+        Color selectedColor = Color.Red;
+        float rotationZero = 0f; 
+        float scaleOne = 1f;
+        int uiLayer = 0;
+
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         foreach (var (obj, texture) in _textures)
         {
@@ -186,26 +192,31 @@ public class UiRenderer2D(Game game, Level level) : GameRenderer2D(game, level)
 
         foreach (var (obj, label) in _labels)
         {
+            bool selected = false;
             Rectangle boundingBox;
-            if (obj is SimpleUIElement)
+            if (obj is SimpleUIElement s)
             {
                 boundingBox = _boundingBoxes[obj as SimpleUIElement];
+                selected = s.Selectable && s.Selected;
             }
-            else
+            else if (obj is ComplexUIElement c)
             {
                 boundingBox = _boundingBoxes[obj as ComplexUIElement];
+                selected = c.Selectable && c.Selected;
+            } else {
+                throw new Exception("Error with bounding boxes (not simple or complex element)");
             }
             Vector2 pos = new Vector2(boundingBox.X, boundingBox.Y);
             _spriteBatch.DrawString(
                 _spriteFont,
                 label,
                 pos + obj.TextPosition,
-                Color.White,
-                0f, /* Rotation */
+                selected ? selectedColor : defaultColor,
+                rotationZero,
                 Vector2.One,
-                1f, /* Scale */
+                scaleOne,
                 SpriteEffects.None,
-                0);
+                uiLayer);
         }
         // Handle UIHorizontalList specially
         // if (obj is UIHorizontalList horizontalList) {
@@ -231,9 +242,6 @@ public class UiRenderer2D(Game game, Level level) : GameRenderer2D(game, level)
         // if (texture != null) {
         //     _spriteBatch.Draw(texture, new Rectangle(){X = 0, Y = 0, Width = texture.Width, Height = texture.Height}, Color.White);
         // }
-
-
-
         _spriteBatch.End();
     }
 }
