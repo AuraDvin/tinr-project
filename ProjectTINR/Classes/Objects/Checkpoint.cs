@@ -7,8 +7,9 @@ namespace ProjectTINR.Classes.Objects;
 public class Checkpoint : PickupObject {
     private bool _isLast = false;
     public override PickupType Type { get => PickupType.CHECKPOINT; set { } }
-    public Checkpoint(Game game, bool isLast) : base(game) {
+    public Checkpoint(Game game, Vector2 position, bool isLast) : base(game) {
         _isLast = isLast;
+        Position = position;
     }
     public override void Collected() {
         // Notify to change spawn location 
