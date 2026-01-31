@@ -53,6 +53,18 @@
 /processorParam:TextureFormat=Color
 /build:images/characters.png
 
+#begin images/enemyprojectile.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/enemyprojectile.png
+
 #begin images/godot_icon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -101,6 +113,18 @@
 /processorParam:TextureFormat=Color
 /build:images/pickups.png
 
+#begin images/playerprojectile.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/playerprojectile.png
+
 #begin images/test.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -121,6 +145,21 @@
 
 #begin levels/level1.json
 /copy:levels/level1.json
+
+#begin levels/level2.json
+/copy:levels/level2.json
+
+#begin levels/level3.json
+/copy:levels/level3.json
+
+#begin levels/level4.json
+/copy:levels/level4.json
+
+#begin levels/level5.json
+/copy:levels/level5.json
+
+#begin levels/level6.json
+/copy:levels/level6.json
 
 #begin Spritesheet_edited.json
 /copy:Spritesheet_edited.json
