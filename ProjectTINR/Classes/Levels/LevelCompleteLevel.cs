@@ -1,8 +1,12 @@
 using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
 using ProjectTINR.Classes.UI;
 using ProjectTINR.Classes;
+
+#nullable enable
 
 namespace ProjectTINR.Classes.Levels;
 
@@ -49,13 +53,6 @@ public class LevelCompleteLevel : Level {
     public LevelCompleteLevel(Game game) : base(game) {
         _scene = new Scene();
         _uiScene = new Scene();
-    }
-
-    public override void Initialize() {
-        base.Initialize();
-        _scene = [];
-        _uiScene = [];
-
         _titleLabel = new(Game, $"Level {GameSettings.LevelNum} Complete!") {
             Position = new Vector2(Game.GraphicsDevice.Viewport.Width / 2 - 200, Game.GraphicsDevice.Viewport.Height / 2 - 120)
         };
@@ -70,8 +67,14 @@ public class LevelCompleteLevel : Level {
             Children = [_nextButton, _backButton],
             Position = new Vector2(Game.GraphicsDevice.Viewport.Width / 2 - 100, Game.GraphicsDevice.Viewport.Height / 2 - 40)
         };
+    }
 
-        (_menuList.Children[0] as SimpleUIElement).Selected = true;
+    public override void Initialize() {
+        base.Initialize();
+        _scene = [];
+        _uiScene = [];
+
+        _nextButton.Selected = true;
 
         _uiScene.Add(_titleLabel);
         _uiScene.Add(_menuList);
@@ -85,22 +88,27 @@ public class LevelCompleteLevel : Level {
         KeyboardState kb = Keyboard.GetState();
 
         if (kb.IsKeyUp(Keys.Up) && _prevKb.IsKeyDown(Keys.Up)) {
-            (_menuList.Children[_selected] as SimpleUIElement).Selected = false;
+            (_menuList.Children[_selected] as SimpleUIElement ?? throw new Exception("unselectable element in list"))
+                .Selected = false;
             _selected -= 1;
             if (_selected < 0) _selected = _menuList.Children.Count - 1;
-            (_menuList.Children[_selected] as SimpleUIElement).Selected = true;
+            (_menuList.Children[_selected] as SimpleUIElement ?? throw new Exception("unselectable element in list"))
+                .Selected = true;
         }
 
         if (kb.IsKeyUp(Keys.Down) && _prevKb.IsKeyDown(Keys.Down)) {
-            (_menuList.Children[_selected] as SimpleUIElement).Selected = false;
+            (_menuList.Children[_selected] as SimpleUIElement ?? throw new Exception("unselectable element in list"))
+                .Selected = false;
             _selected += 1;
             _selected %= _menuList.Children.Count;
-            (_menuList.Children[_selected] as SimpleUIElement).Selected = true;
+            (_menuList.Children[_selected] as SimpleUIElement ?? throw new Exception("unselectable element in list"))
+                .Selected = true;
         }
 
         if (kb.IsKeyUp(Keys.Enter) && _prevKb.IsKeyDown(Keys.Enter) ||
             kb.IsKeyUp(Keys.Space) && _prevKb.IsKeyDown(Keys.Space)) {
-            (_menuList.Children[_selected] as UIButton).OnClick();
+            (_menuList.Children[_selected] as UIButton ?? throw new Exception("not a button button?"))
+                .OnClick();
         }
 
         _prevKb = kb;
