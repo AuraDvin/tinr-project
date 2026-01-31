@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 using Microsoft.Xna.Framework;
 
+using ProjectTINR.Classes.Levels;
 using ProjectTINR.Classes.ObjectsComponents;
 using ProjectTINR.Classes.Physics;
 
@@ -39,7 +40,7 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
 
     public override void Update(GameTime gameTime) {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
+        _lastDamageTimer += dt;
         List<PickupType> timersToRemove = [];
         foreach (var (keys, val) in _pickuptimers) {
             if (val >= PICKUP_TIMEOUT) {
@@ -59,7 +60,7 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
         foreach (var thing in timersToRemove) {
             _pickuptimers.Remove(thing);
         }
-        
+
         if (Position.Y >= 1000) _health = 0;
 
         base.Update(gameTime);
@@ -70,9 +71,12 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
     private Vector2 _velocity = new(0, 0);
     protected int _health = 3;
     public int Health => _health;
-
+    private readonly float _immuneFramesS = 1f;
+    private float _lastDamageTimer = 0f;
     public void TakeDamage() {
+        if (_lastDamageTimer < _immuneFramesS) return;
         _health--;
+        _lastDamageTimer = 0f;
     }
 
     public void HealDamage() {
