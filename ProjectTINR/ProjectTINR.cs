@@ -29,6 +29,9 @@ public class ProjectTinr : Game {
 
     public ProjectTinr() : base() {
         new GraphicsDeviceManager(this);
+        _ = LevelDataManager.Instance;
+        LevelDataManager.Instance.Game = this;
+        LevelDataManager.Instance.ReadFromFile();
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -234,6 +237,7 @@ public class ProjectTinr : Game {
 
     protected override void Dispose(bool disposing) {
         Console.WriteLine("Called dispose");
+        LevelDataManager.Instance.SaveToFile();
         base.Dispose(disposing);
         GameSettings.SaveSettings();
     }
