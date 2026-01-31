@@ -31,10 +31,7 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
     }
 
     public override void Update(GameTime gameTime) {
-        // float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        // _position += Velocity * dt;
-        // Console.WriteLine("Player velocity: " + _velocity.ToString());
-        // Console.WriteLine("Player Position: " + _position.ToString());
+        
         base.Update(gameTime);
     }
     private PlayerDirection _direction = PlayerDirection.Right;
@@ -44,11 +41,11 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
     protected int _health = 3;
     public int Health => _health;
     
-    public void takeDamage() {
+    public void TakeDamage() {
         _health--;
     }
     
-    public void healDamage() {
+    public void HealDamage() {
         _health++;
     }
 
