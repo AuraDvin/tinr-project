@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -27,6 +28,27 @@ public class LevelDataManager {
     }
 
     private Scene _sceneData = null;
+
+    // Tracks collected pickups (including checkpoints) per level so they do not respawn after a reset
+    private readonly Dictionary<int, HashSet<string>> _collectedPickups = new();
+
+    private static string PickupKey(PickupType type, Vector2 pos) => $"{type}:{(int)pos.X}:{(int)pos.Y}";
+
+    public void MarkPickupCollected(int levelNum, PickupType type, Vector2 pos) {
+        if (!_collectedPickups.ContainsKey(levelNum)) {
+            _collectedPickups[levelNum] = new HashSet<string>();
+        }
+        _collectedPickups[levelNum].Add(PickupKey(type, pos));
+    }
+
+    public bool IsPickupCollected(int levelNum, PickupType type, Vector2 pos) {
+        if (!_collectedPickups.ContainsKey(levelNum)) return false;
+        return _collectedPickups[levelNum].Contains(PickupKey(type, pos));
+    }
+
+    public void ClearCollectedPickups(int levelNum) {
+        if (_collectedPickups.ContainsKey(levelNum)) _collectedPickups.Remove(levelNum);
+    }
 
     public void SaveData(Level level) {
         GameObject[] arr = new GameObject[level.Scene.Count];
@@ -64,7 +86,11 @@ public class LevelDataManager {
         _sceneData = null;
     }
 
-    public void ReadData(string jsonPath) {
+    public void ReadData(string jsonPath){
+        ReadData(jsonPath, -1);
+    }
+
+    public void ReadData(string jsonPath, int levelNum) {
         _sceneData = new();
         string jsonString = File.ReadAllText(jsonPath);
         JsonNode levelDataNode = JsonNode.Parse(jsonString);
@@ -128,6 +154,7 @@ public class LevelDataManager {
             _sceneData.Add(new Floor(Game, pos, w, h));
         }
 
+        // Load pickups but skip any previously collected in this level
         foreach (JsonObject pickupj in pickupsArr) {
             PickupObject pickup;
             Vector2 pos = new(
@@ -135,7 +162,28 @@ public class LevelDataManager {
                 (float)pickupj["position"]["y"]
             );
 
-            switch ((string)pickupj["type"]) {
+            string t = (string)pickupj["type"];
+            PickupType ptype;
+            switch (t) {
+                case "big":
+                    ptype = PickupType.BIGGER_PROJECTILE;
+                    break;
+                case "fast":
+                    ptype = PickupType.SHOOT_SPEED;
+                    break;
+                case "heal":
+                    ptype = PickupType.HEAL;
+                    break;
+                default:
+                    throw new Exception("unknown pickup type");
+            }
+
+            if (IsPickupCollected(levelNum, ptype, pos)) {
+                // Skip pickups already collected
+                continue;
+            }
+
+            switch (t) {
                 case "big":
                     pickup = new BiggerProjectilePickup(Game);
                     break;
@@ -151,11 +199,16 @@ public class LevelDataManager {
             pickup.Position = pos;
             _sceneData.Add(pickup);
         }
+
+        // Load checkpoints but skip any previously collected
         for (int i = 0; i < checkpointsArr.Count; i++) {
             Vector2 pos = new(
                 (float)checkpointsArr[i]["position"]["x"],
                 (float)checkpointsArr[i]["position"]["y"]
             );
+            if (IsPickupCollected(levelNum, PickupType.CHECKPOINT, pos)) {
+                continue;
+            }
             _sceneData.Add(new Checkpoint(Game, pos, i == checkpointsArr.Count - 1));
         }
     }
