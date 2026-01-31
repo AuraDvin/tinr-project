@@ -1,0 +1,31 @@
+{
+    "level": 2,
+    "player": {
+        "health": 3,
+        "spawnPosition": {
+            "x": 0,
+            "y": -150
+        }
+    },
+    "enemies": [
+        { "type": "stationary", "position": { "x": 800, "y": -100 }, "facing": "left" },
+        { "type": "stationary", "position": { "x": 1600, "y": -100 }, "facing": "right" },
+        { "type": "flying", "position": { "x": 1200, "y": -220 }, "facing": "left" },
+        { "type": "flying", "position": { "x": 2000, "y": -180 }, "facing": "right" }
+    ],
+    "platforms": [
+        { "rect": { "x": -10, "y": 0, "w": 2500, "h": 20 } },
+        { "rect": { "x": 700, "y": -250, "w": 250, "h": 18 } },
+        { "rect": { "x": 1400, "y": -270, "w": 180, "h": 18 } },
+        { "rect": { "x": 1900, "y": -350, "w": 300, "h": 18 } }
+    ],
+    "checkpoints": [
+        { "position": { "x": 900, "y": -100 } },
+        { "position": { "x": 2000, "y": -450 } }
+    ],
+    "pickups": [
+        { "type": "heal", "position": { "x": 760, "y": -160 } },
+        { "type": "big", "position": { "x": 1360, "y": -180 } },
+        { "type": "fast", "position": { "x": 1960, "y": -140 } }
+    ]
+}
