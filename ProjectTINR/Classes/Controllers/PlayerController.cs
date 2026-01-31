@@ -14,7 +14,8 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
     private Keys _moveRight = Keys.Right;
     private Keys _jump = Keys.Space;
     private Keys _shoot = Keys.X;
-    public float ShootingDelay { get; set; } = 0.4f;
+    private float _ogShootdelay = 1f;
+    public float ShootingDelay { get; set; } = 1f;
     public bool JustJumped => _justJumped;
     public bool IsMovingLeft => _isMovingLeft;
     public bool JustAttacked => _justShot;
@@ -26,8 +27,8 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
         if (Owner == null) {
             Owner = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
         }
-        
-        ShootingDelay *= (Owner as Player).ShootDelayFactor;
+
+        ShootingDelay = _ogShootdelay * (Owner as Player).ShootDelayFactor;
 
         // Player player = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
         _lastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
