@@ -12,7 +12,8 @@ public abstract class ProjectileCollisionShape : CircleCollisionShape, ISceneMan
     private float _sinceBorn = 0f;
     private const float initialSpeed = 60f;
     bool _deleted = false;
-    
+
+    public override Vector2 Offset { get => new(40, 40); set{ }}
     
     public ProjectileCollisionShape(Vector2 startingPosition, int direction, Game game) : base(false, 40f) {
         // Console.WriteLine("making projectile");
