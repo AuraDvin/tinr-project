@@ -14,11 +14,10 @@ public class Checkpoint : PickupObject {
     public override void Collected() {
         // Notify to change spawn location 
         // or if it's last checkpoint 
-        // move to the next level or quit
+        // move to the level-complete screen
         Scene.FindByType<Player>().CollectCheckpoint(this);
         if (_isLast) {
-            // for example
-            (Game as ProjectTinr).SwitchLevel(LevelType.LevelSelect);
+            (Game as ProjectTinr).SwitchLevel(LevelType.LevelComplete);
         }
         base.Collected();
     }
