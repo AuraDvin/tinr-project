@@ -8,6 +8,7 @@ namespace ProjectTINR.Classes.Physics.Shapes;
 
 public class EnemyCollisionShape : RectCollisionShape {
     public EnemyCollisionShape() : base(false) {
+        _rectangle = new (0, 0, 194, 194);
     }
 
     public override void Update(GameTime gameTime) {
