@@ -128,6 +128,10 @@ public class ProjectTinr : Game {
             _level.Reset();
         }
 
+        if (kb.IsKeyUp(Keys.Escape) && _prevKeyboardState.IsKeyDown(Keys.Escape)) {
+            ToPrevLevel();
+        }
+
         // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
         //     kb.IsKeyDown(Keys.Escape))
         //     Exit();
@@ -141,6 +145,12 @@ public class ProjectTinr : Game {
     public void ToPrevLevel() {
         if (_level is MainLevel) {
             _level.Serialize();
+        }
+
+        if (_level is StartMenuLevel start) {
+            if (!start.MenuVisible) {
+                Exit();
+            }
         }
 
         // Remove current top-level components
