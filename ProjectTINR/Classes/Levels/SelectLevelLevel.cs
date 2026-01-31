@@ -111,11 +111,6 @@ public class SelectLevelLevel : Level {
             return;
         }
 
-        if (Pressed(kbState, Keys.Escape)) {
-            _levelObserver.Notify();
-            _timeSinceLastInput = 0f;
-        }
-
         if (Released(kbState, Keys.Enter) || Released(kbState, Keys.Space)){
             ((_levelColumn.Children[_rowSelected] as ComplexUIElement).Children[_levelSelected] as CustomButton).OnClick();
             _timeSinceLastInput = 0f;
