@@ -44,5 +44,5 @@ public class CircleCollisionShape(bool isStatic, float radius) : ICollisionShape
     }
 
     public IStaticPhysicsObject Owner { get; set; }
-    public Vector2 Offset { get; set; } =  Vector2.Zero;
+    public virtual Vector2 Offset { get; set; } =  Vector2.Zero;
 }
