@@ -92,7 +92,6 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
     public override void Draw(GameTime gameTime) {
         GraphicsDevice.Clear(Color.CornflowerBlue);
         Matrix viewMatrix = _camera.GetViewMatrix();
-        // _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap, transformMatrix: viewMatrix);
         _spriteBatch.Begin(transformMatrix: viewMatrix, samplerState: SamplerState.LinearWrap);
         foreach (GameObject obj in _level.Scene) {
             if (!_sprites.ContainsKey(obj.Name)) {
@@ -100,6 +99,13 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
             }
 
             Sprite sprite = _sprites[obj.Name];
+            Vector2 scale = Vector2.One;
+            if (obj is Projectile p) {
+                scale = new(80f/256f);
+                scale *= p.Scale;
+
+            }
+            
             if (obj is IPositionComponent pos) {
                 _spriteBatch.Draw(
                     sprite.Texture,
@@ -108,7 +114,7 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
                     Color.White,
                     /* Rotation */ 0f,
                     /* Origin */ Vector2.Zero,
-                    /* Scale */ Vector2.One,
+                    scale,
                     sprite.SpriteEffects,
                     /* LayerDepth */ 0f
                 );
