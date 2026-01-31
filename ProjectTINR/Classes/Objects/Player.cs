@@ -59,6 +59,8 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
         foreach (var thing in timersToRemove) {
             _pickuptimers.Remove(thing);
         }
+        
+        if (Position.Y >= 1000) _health = 0;
 
         base.Update(gameTime);
     }
