@@ -17,7 +17,12 @@ class NextLevelObserver : Observer {
             if (_game is ProjectTinr p) p.SwitchLevel(LevelType.MainLevel);
         }
         catch (Exception) {
-            if (_game is ProjectTinr p) p.SwitchLevel(LevelType.LevelSelect);
+            LevelType fallback = LevelType.LevelSelect;
+            if (next == 7) {
+                fallback = LevelType.Credits;
+            }
+            if (_game is ProjectTinr p) p.SwitchLevel(fallback);
+            else throw new Exception("could not switch to levelselect/credits");
         }
     }
     public void Notify(string message, object? args) { throw new NotImplementedException(); }
