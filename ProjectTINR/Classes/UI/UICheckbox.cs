@@ -8,8 +8,10 @@ namespace ProjectTINR.Classes.UI;
 
 public class UICheckbox : UIButton {
     public bool Checked { get; set; } = false;
-
-    public UICheckbox(Game game, string str, string textureName) : base(game, str, textureName) {
+    public override string String { get => Checked ? _checkedstr : base.String; set => base.String = value; }
+    string _checkedstr;
+    public UICheckbox(Game game, string str,string checkedstr, string textureName) : base(game, str, textureName) {
+        _checkedstr = checkedstr;
     }
 
     public void Toggle() {
