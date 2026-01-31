@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 
 using Microsoft.Xna.Framework;
@@ -14,8 +15,9 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
         get => _position;
         set => _position = value;
     }
-    public float ShootDelayFactor {get; private set;} = 1f;
-    public float ProjectileSizeFactor {get; private set; }= 1f;
+    readonly float PICKUP_TIMEOUT = 5f;
+    public float ShootDelayFactor { get; private set; } = 1f;
+    public float ProjectileSizeFactor { get; private set; } = 1f;
     public bool OnFloor { get; set; } = false;
     public bool OnWall { get; set; } = false;
     public CollisionShapeType CollisionType { get => CollisionShapeType.PlayerShape; set { } }
@@ -36,7 +38,28 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
     }
 
     public override void Update(GameTime gameTime) {
-        
+        float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        List<PickupType> timersToRemove = [];
+        foreach (var (keys, val) in _pickuptimers) {
+            if (val >= PICKUP_TIMEOUT) {
+                timersToRemove.Add(keys);
+                switch (keys) {
+                    case PickupType.SHOOT_SPEED:
+                        resetProjectileSpeed();
+                        break;
+                    case PickupType.BIGGER_PROJECTILE:
+                        resetProjectileSize();
+                        break;
+                }
+            }
+            _pickuptimers[keys] += dt;
+        }
+
+        foreach (var thing in timersToRemove) {
+            _pickuptimers.Remove(thing);
+        }
+
         base.Update(gameTime);
     }
     private PlayerDirection _direction = PlayerDirection.Right;
@@ -45,21 +68,22 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
     private Vector2 _velocity = new(0, 0);
     protected int _health = 3;
     public int Health => _health;
-    
+
     public void TakeDamage() {
         _health--;
     }
-    
+
     public void HealDamage() {
         _health++;
     }
 
-    public Player(int initHealth, Game game) : this(game){
+    public Player(int initHealth, Game game) : this(game) {
         _health = initHealth;
     }
 
     public void IncreaseProjectileSize() {
         ProjectileSizeFactor = 2f;
+        _pickuptimers.Add(PickupType.BIGGER_PROJECTILE, 0f);
     }
 
     private void resetProjectileSize() {
@@ -72,8 +96,11 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
 
     public void IncreaseProjectileSpeed() {
         ShootDelayFactor = 0.5f;
+        _pickuptimers.Add(PickupType.SHOOT_SPEED, 0f);
     }
     public void CollectCheckpoint(Checkpoint checkpoint) {
         LastCheckpoint = checkpoint.Position;
     }
+
+    private readonly Dictionary<PickupType, float> _pickuptimers = [];
 }
