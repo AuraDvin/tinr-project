@@ -57,10 +57,6 @@ public abstract class ProjectileCollisionShape : CircleCollisionShape, ISceneMan
         set { 
             if (ReferenceEquals(_scene, value)) return; // already set to this scene
             _scene = value;
-            if (_scene != null && !_scene.Contains(Owner)) {
-                _scene.Add(Owner);
-                // Console.WriteLine("Projectile owner added to scene"); 
-            }
         } 
     }
 }

@@ -78,7 +78,7 @@ public static class GameSettings {
             string path = GetSettingsPath();
 
             if (!File.Exists(path)) {
-                return; // Use defaults if no settings file exists
+                return;
             }
 
             string json = File.ReadAllText(path);

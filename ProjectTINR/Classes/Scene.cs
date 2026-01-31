@@ -58,24 +58,13 @@ public class Scene : ArrayList {
             foreach (var r in _pendingRemoves) {
                 base.Remove(r);
                 _typeCache.Clear();
-                // Console.WriteLine("Cleared cache");
-                // var keysToRemove = new List<Type>();
-                // foreach (var kv in _typeCache) {
-                //     if (ReferenceEquals(kv.Value, r)) {
-                //         Console.WriteLine("Removing key from cache");
-                //         keysToRemove.Add(kv.Key);
-                //     }
-                // }
-                // foreach (var k in keysToRemove) _typeCache.Remove(k);
             }
             _pendingRemoves.Clear();
-            // Console.WriteLine("Finished removing from scene :)");
         }
 
         if (_pendingAdds.Count > 0) {
             foreach (var a in _pendingAdds) base.Add(a);
             _pendingAdds.Clear();
-            // Console.WriteLine("Finished adding to scene :)");
         }
 
     }
@@ -90,7 +79,6 @@ public class Scene : ArrayList {
 
     public new void Remove(object value) {
         if (_iterationCount > 0) {
-            // Console.WriteLine($"Added {value} to pending removes in Scene :)");
             _pendingRemoves.Add(value);
             return;
         }

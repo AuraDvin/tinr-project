@@ -23,8 +23,6 @@ public class ProjectTinr : Game {
     private GameSoundController _gameSoundController;
     private Level _level;
     private KeyboardState _prevKeyboardState;
-
-    // Stack of previously pushed levels and their associated components
     private readonly Stack<LevelStackEntry> _levelStack = new();
 
     public ProjectTinr() : base() {
@@ -45,13 +43,18 @@ public class ProjectTinr : Game {
         base.Initialize();
     }
 
+    // Returning to previous won't take you back to credits for example
+    public void SwitchLevelNoPush(LevelType newLevelType) {
+        SwitchLevel(newLevelType);
+        LevelDataManager.Instance.RemoveData();
+        _ = _levelStack.Pop();
+    }
 
     public void SwitchLevel(LevelType newLevelType) {
         if (_level is MainLevel) {
             _level.Serialize();
         }
 
-        // If we currently have a level, push it and its peripherals onto the stack and disable them
         if (_level != null) {
             var entry = new LevelStackEntry {
                 Level = _level,
@@ -65,7 +68,6 @@ public class ProjectTinr : Game {
 
             _levelStack.Push(entry);
 
-            // Disable so they are not updated or drawn while underneath
             entry.Level.Enabled = false;
             if (entry.GameInput != null) { entry.GameInput.Enabled = false; entry.GameInput.RemoveControllers(); }
             if (entry.GameRenderer != null) { entry.GameRenderer.Enabled = false; entry.GameRenderer.Visible = false; }
@@ -82,7 +84,6 @@ public class ProjectTinr : Game {
             }
         }
 
-        // Create a fresh level on top
         _level = LevelFactory.CreateLevel(this, newLevelType);
         _gameInput = new GameInput(this, _level);
         _gameRenderer = new GameRenderer2D(this, _level);
@@ -108,22 +109,16 @@ public class ProjectTinr : Game {
     protected override void Update(GameTime gameTime) {
         var kb = Keyboard.GetState();
 
-        // Toggle into Settings with F1 (edge triggered)
         if (kb.IsKeyDown(Keys.F1) && !_prevKeyboardState.IsKeyDown(Keys.F1)) {
             if (_level.Type == LevelType.Settings) {
-                // if we're in settings, go back to the previous level on the stack
                 ToPrevLevel();
 
             }
             else {
-                // serialize level data / state 
-
-                // switch to settings (push current level)
                 SwitchLevel(LevelType.Settings);
             }
         }
-
-        // Resert level with R 
+    
         if (kb.IsKeyUp(Keys.R) && _prevKeyboardState.IsKeyDown(Keys.R)) {
             _level.Reset();
         }
@@ -132,16 +127,11 @@ public class ProjectTinr : Game {
             ToPrevLevel();
         }
 
-        // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-        //     kb.IsKeyDown(Keys.Escape))
-        //     Exit();
-
         _prevKeyboardState = kb;
 
         base.Update(gameTime);
     }
 
-    // Switch back to the previous level on the stack, restoring its components
     public void ToPrevLevel() {
         if (_level is MainLevel) {
             _level.Serialize();
@@ -153,7 +143,6 @@ public class ProjectTinr : Game {
             }
         }
 
-        // Remove current top-level components
         if (_level != null) {
             Components.Remove(_level);
             foreach (GameObject thing in _level.Scene) {
@@ -171,7 +160,7 @@ public class ProjectTinr : Game {
         }
 
         if (_levelStack.Count == 0) {
-            // Nothing to go back to; create a default start menu
+            // Nothing to go back to - fallback on start menu
             _level = LevelFactory.CreateLevel(this, LevelType.StartMenu);
             _gameInput = new GameInput(this, _level);
             _gameRenderer = new GameRenderer2D(this, _level);
@@ -193,7 +182,6 @@ public class ProjectTinr : Game {
 
         var entry = _levelStack.Pop();
 
-        // Restore components
         _level = entry.Level;
         _gameInput = entry.GameInput;
         _gameRenderer = entry.GameRenderer;
@@ -202,7 +190,6 @@ public class ProjectTinr : Game {
         _uiRenderer2D = entry.UiRenderer;
         _gameSoundController = entry.SoundController;
 
-        // Re-enable and ensure they are present in the Components collection
         _level.Enabled = true;
         if (_gameInput != null) { _gameInput.Enabled = true; _gameInput.AddControllers(); }
         if (_gameRenderer != null) { _gameRenderer.Enabled = true; _gameRenderer.Visible = true; }
@@ -234,7 +221,6 @@ public class ProjectTinr : Game {
         base.Draw(gameTime);
     }
 
-    // Internal container for stacking a level and its related components
     private class LevelStackEntry {
         public Level Level { get; set; }
         public GameInput GameInput { get; set; }
@@ -246,7 +232,6 @@ public class ProjectTinr : Game {
     }
 
     protected override void Dispose(bool disposing) {
-        Console.WriteLine("Called dispose");
         LevelDataManager.Instance.SaveToFile();
         base.Dispose(disposing);
         GameSettings.SaveSettings();

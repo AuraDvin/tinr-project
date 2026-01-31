@@ -43,7 +43,7 @@ public class Level(Game game) : GameComponent(game) {
 
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
-        Console.WriteLine("1");
+        // Console.WriteLine("1"); // Check that this is being called
     }
 
 }

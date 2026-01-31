@@ -14,7 +14,6 @@ public class SoundController : GameComponent {
             throw new Exception("Sound controller owner can't be unset!");
         }
     }
-    // Allow classes to change this function 
     public new virtual void Update(GameTime gameTime) {
         base.Update(gameTime);
     }

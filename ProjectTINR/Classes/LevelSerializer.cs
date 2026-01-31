@@ -14,13 +14,6 @@ public class LevelSerializer {
         foreach (var obj in level.Scene) {
             _levelScenes[level.Type].Add(obj);
         }
-        // var serializer = new PropertyDescriptorCollection(TypeDescriptor.GetProperties(level));
-        // using (var writer = new System.IO.StreamWriter(filePath)) {
-        //     foreach (PropertyDescriptor prop in serializer) {
-        //         var value = prop.GetValue(level);
-        //         writer.WriteLine($"{prop.Name}={value}");
-        //     }
-        // }
     }
 
     // This assumes that the elements in level.Scene are removed as game Components 

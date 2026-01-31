@@ -59,7 +59,6 @@ public class SpriteFactory {
         }
 
         if (gameObject is StationaryEnemy se) {
-            // sprite = new Sprite(game, StationaryEnemyTextureRect, Vector2.Zero, game.Content.Load<Texture2D>(CharactersPath));
             animatedSprite = new AnimatedSprite(game, se.Position, game.Content.Load<Texture2D>(CharactersPath));
             animatedSprite.AddAnimationFromJson("Content/blobi_animations.json");
             animatedSprite.PlayAnimation("idle");

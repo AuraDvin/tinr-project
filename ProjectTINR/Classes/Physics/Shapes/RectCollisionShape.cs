@@ -11,7 +11,6 @@ public class RectCollisionShape(bool isStatic) : ICollisionShape, IMoveComponent
     public virtual bool OnFloor { get; set; } = false;
     public virtual bool OnWall { get; set; } = false;
     protected Rectangle _rectangle = new(0, 0, 128, 128);
-    // protected Vector2 _velocity;
     private readonly bool _isStatic = isStatic;
     public bool ShouldSimulate { get => !_isStatic; }
     public virtual Vector2 Position {
@@ -62,7 +61,6 @@ public class RectCollisionShape(bool isStatic) : ICollisionShape, IMoveComponent
                     Velocity = new(Math.Max(Velocity.X, 0), Velocity.Y);
                     Owner.Position = new Vector2(floorRect.Right - Offset.X - 1, Owner.Position.Y);
                 }
-                // Console.WriteLine($"Snapping Rect to wall x: {Owner.Position.X}, overlaps {new Vector2(overlapX, overlapY)}, floor: {floorRect} obj: {Rectangle} ");
             }
             else {
                 // Player on top of floor
@@ -70,14 +68,12 @@ public class RectCollisionShape(bool isStatic) : ICollisionShape, IMoveComponent
                     Velocity = new(Velocity.X, 0);
                     Owner.Position = new Vector2(Owner.Position.X, floorRect.Top - Rectangle.Height - Offset.Y + 1);
                     OnFloor = true;
-                    // Console.WriteLine($"Snapping player to floor y: {Owner.Position.Y}, overlaps {new Vector2(overlapX, overlapY)}, floor: {floorRect} obj: { Rectangle} ");
                 }
                 // Player under the floor
                 else {
                     Velocity = new(Velocity.X, Math.Max(Velocity.Y, 0));
                     Owner.Position = new Vector2(Owner.Position.X, floorRect.Bottom + Offset.Y - 1);
                 }
-                // Console.WriteLine($"Snapping Rect to floor y: {Owner.Position.Y}, overlaps {new Vector2(overlapX, overlapY)}, floor: {floorRect} obj: {Rectangle} ");
             }
             return false;
         }

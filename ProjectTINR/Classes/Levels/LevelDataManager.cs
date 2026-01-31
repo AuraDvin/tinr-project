@@ -154,7 +154,6 @@ public class LevelDataManager {
             _sceneData.Add(new Floor(Game, pos, w, h));
         }
 
-        // Load pickups but skip any previously collected in this level
         foreach (JsonObject pickupj in pickupsArr) {
             PickupObject pickup;
             Vector2 pos = new(
@@ -200,7 +199,6 @@ public class LevelDataManager {
             _sceneData.Add(pickup);
         }
 
-        // Load checkpoints but skip any previously collected
         for (int i = 0; i < checkpointsArr.Count; i++) {
             Vector2 pos = new(
                 (float)checkpointsArr[i]["position"]["x"],

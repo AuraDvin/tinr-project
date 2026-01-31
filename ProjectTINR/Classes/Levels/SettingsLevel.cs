@@ -15,10 +15,8 @@ public class SettingsLevel : Level {
     private UISlider _masterVolumeSlider;
     private UISlider _musicVolumeSlider;
     private UISlider _sfxVolumeSlider;
-    // private List<IUiDrawableComponent> _controls = new();
     private int _selectedIndex = 0;
     private KeyboardState _prevKb;
-
     private float _inputDelay = 0.2f;
     private float _inputTimer = 0f;
 
@@ -58,27 +56,17 @@ public class SettingsLevel : Level {
 
         // Add to UI scene for rendering
         _uiScene.Add(_uIVerticalList);
-        // _uiScene.Add(_debugCheckbox);
-        // _uiScene.Add(_masterVolumeSlider);
-        // _uiScene.Add(_musicVolumeSlider);
-        // _uiScene.Add(_sfxVolumeSlider);
-
-        // Add to Game.Components so their Update runs when needed (if they need it later)
-        // Game.Components.Add((IGameComponent)_debugCheckbox);
-        // Game.Components.Add((IGameComponent)_masterVolumeSlider);
-        // Game.Components.Add((IGameComponent)_musicVolumeSlider);
-        // Game.Components.Add((IGameComponent)_sfxVolumeSlider);
 
         // Set starting focus
         _selectedIndex = 0;
 
-        System.Console.WriteLine("Settings level initialized.");
+        // System.Console.WriteLine("Settings level initialized.");
     }
 
     public override void Update(GameTime gameTime) {
         _inputTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
         var kb = Keyboard.GetState();
-        Console.WriteLine($"Selected item: {_selectedIndex}");
+        // Console.WriteLine($"Selected item: {_selectedIndex}");
         // Navigate up/down
         if (IsKeyPressed(kb, Keys.Down)) {
             (_uIVerticalList.Children[_selectedIndex] as SimpleUIElement).Selected = false;
@@ -91,7 +79,6 @@ public class SettingsLevel : Level {
 
         (_uIVerticalList.Children[_selectedIndex] as SimpleUIElement).Selected = true;
 
-        // Interact with selected control
         var selected = _uIVerticalList.Children[_selectedIndex];
         if (selected == _debugCheckbox) {
             if (IsKeyPressed(kb, Keys.Space) || IsKeyPressed(kb, Keys.Enter)) {
@@ -120,11 +107,11 @@ public class SettingsLevel : Level {
                 }
             }
             if (keysReleased == 4) {
-                _inputTimer = 0f; // reset timer when all relevant keys are released
+                _inputTimer = 0f;
             }
             
             if (change) {
-                Console.WriteLine($"Change {slider.String}");
+                // Console.WriteLine($"Change {slider.String}");
                 if (slider.String.StartsWith("Master")) {
                     GameSettings.MasterVolume = slider.Value; 
                 } else if (slider.String.StartsWith("Music")) {
@@ -134,36 +121,8 @@ public class SettingsLevel : Level {
                 } else {
                     Console.WriteLine("Something went wrong");
                 }
-                // switch (slider.String.TrimStart('>', ' ')) {
-                //     case "Master Volume":
-                //         GameSettings.MasterVolume = slider.Value;
-                //         Console.WriteLine($"Updated Master volume {slider.Value}");
-                //         break;
-                //     case "Music Volume":
-                //         GameSettings.MusicVolume = slider.Value;
-                //         Console.WriteLine($"Updated Music volume {slider.Value}");
-                //         break;
-                //     case "SFX Volume":
-                //         GameSettings.SfxVolume = slider.Value;
-                //         Console.WriteLine($"Updated SFX volume {slider.Value}");
-                //         break;
-                // }
             }
         }
-
-        // Visual feedback in labels for focused control: prepend '>'
-        // for (int i = 0; i < _controls.Count; i++) {
-        //     if (_controls[i] is UICheckbox uh) {
-        //         uh.String = null; // setter does nothing, keep behavior - we'll modify label when drawing by prefixing
-        //         // Build label with focus prefix
-        //         var prefix = (i == _selectedIndex) ? "> " : "  ";
-        //         uh.String = prefix + (uh.String.TrimStart('>', ' '));
-        //     }
-        //     if (_controls[i] is UISlider us) {
-        //         var prefix = (i == _selectedIndex) ? "> " : "  ";
-        //         us.String = prefix + us.String.TrimStart('>', ' ');
-        //     }
-        // }
 
         _prevKb = kb;
 

@@ -124,6 +124,8 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
         Velocity = objVeloc;
 
         // This should be in PlayerController (?) I get it's a oncollision type event but feels out of place
+        // If I wanted to do this I could've made a pickup with no visibity 
+        // Which would then be like healing but opposite
         if (_tookDmg) {
             if (_lastTookDmg <= 0f) {
                 _lastTookDmg = _immuneFramesMS / 1000f;
@@ -144,12 +146,8 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
         // snaps to floor, returns ShouldSimulate which is always true for player
         // so the type needs to be checked as well
 
-        // TODO
-        // if other is PickupCollisionShape 
-        // give pickup type to player?
-
         if (other is FloorCollisionShape) {
-            base.OnCollision(other);
+            _ = base.OnCollision(other);
             (Owner as Player).OnFloor = OnFloor;
             (Owner as Player).OnWall = OnWall;
             return false;

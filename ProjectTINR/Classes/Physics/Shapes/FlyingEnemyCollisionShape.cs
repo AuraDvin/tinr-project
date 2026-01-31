@@ -14,7 +14,6 @@ public class FlyingEnemyCollisionShape : RectCollisionShape {
     public override void Update(GameTime gameTime) {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         Vector2 v = Velocity;
-        // light air dampingdwas dwdw as sawds
         v *= (float)Math.Pow(0.98, dt * 60f);
         Velocity = v;
         base.Update(gameTime);

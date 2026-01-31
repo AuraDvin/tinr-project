@@ -46,17 +46,14 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
         // Don't allow left/right movement before jump
         if (ks.IsKeyDown(_jump)) {
             _isJumping = true;
-            // Console.WriteLine("Player started jumping.");
         }
+        // Jump on the key release
         else {
-            // Jump on the key release
             if (ks.IsKeyUp(_jump) && _isJumping) {
                 _isJumping = false;
-                // Console.WriteLine("Player released jump.");
                 _justJumped = true;
             }
             else {
-                // Console.WriteLine("Player is not jumping.");
                 _justJumped = false;
             }
             _isMovingRight = ks.IsKeyDown(_moveRight);
@@ -65,17 +62,11 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
 
         Player player = Owner as Player ?? throw new Exception("Player class not found in Scene!");
 
-        // Todo: add throwing knife to scene, and give it inital position facing the right way
         if (ks.IsKeyDown(_shoot)) {
-            // Console.WriteLine("X is down");
             if (_canShoot) {
-                // Console.WriteLine("Player can shoot");
                 _justShot = true;
                 _canShoot = false;
                 _lastShot = 0f;
-                // int dir = player.Direction == PlayerDirection.Right ? 1 : -1;
-
-                // play the shooting one shot animation 
                 
                 Vector2 playerPos = player.Position;
                 PlayerProjectile projectile = new(Game) {
@@ -84,10 +75,6 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
                     Scale = player.ProjectileSizeFactor,
                 };
                 Scene.Add(projectile);
-
-                // PlayerProjectileCollisionShape thing = new(playerPos, dir, Game) {
-                //     Scene = Scene
-                // };
             }
         }
 
@@ -104,22 +91,23 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
         else {
             player.State = PlayerState.Idling;
         }
+        // This must be set after above since either or happens
+        // The second check is to hopefully make the time you have no controller over the player 
+        // as little as possible
 
         if (JustAttacked && _lastShot < 0.5f) {
             player.State = PlayerState.Shooting;
         }
 
-        // TODO: think, can we have wall sliding and possibly falling sfx play if the player state is not proper. 
-        // and on top of that how will we know if the other things are also true at the same time? 
-        // Should the player have multiple states?
         if (JustJumped) {
             player.State = PlayerState.Jumping;
         }
         else {
+            // Just freefalling
             if (!player.OnFloor && !isMoving) {
                 player.State = PlayerState.Falling;
             }
-
+            // does have to handle the movement input
             if (player.OnWall && isMoving) {
                 player.State = PlayerState.Sliding;
             }

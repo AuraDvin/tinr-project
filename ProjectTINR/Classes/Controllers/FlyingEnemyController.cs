@@ -33,7 +33,7 @@ public class FlyingEnemyController(Game game) : GameObject(game), IController, I
         _stateTimer += dt;
 
 
-        Console.WriteLine($"[FlyingEnemyController] State: {_state} Timer: {_stateTimer}");
+        // Console.WriteLine($"[FlyingEnemyController] State: {_state} Timer: {_stateTimer}");
         switch (_state) {
             case State.Patrol:
                 // pick a new patrol target every few seconds
@@ -70,7 +70,6 @@ public class FlyingEnemyController(Game game) : GameObject(game), IController, I
                 break;
             case State.Dive:
                 if (player == null) { _state = State.Retreat; _stateTimer = 0f; break; }
-                // perform a fast dive toward the player's current position
                 var diveDir = player.Position - enemy.Position;
                 enemy.Velocity = Vector2.Normalize(diveDir) * _diveSpeed;
                 if (_stateTimer > 0.5f) {

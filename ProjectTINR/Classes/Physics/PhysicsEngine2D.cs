@@ -24,10 +24,6 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
         foreach (GameObject obj in _level.Scene) {
             if (obj is not IStaticPhysicsObject staticPhysicsObject) continue;
             ICollisionShape shape;
-            // Why don't we add these as Components? They're not animated and simply follow the sprite's position, so 
-            // this wouldn't really make sense to do, and for debug drawing they're going to be a color not a sprite
-            // What if these shapes had to affect the scene? Like removing themselves after being picked up?
-            // check if they have a ISceneManipulator component, then pass a reference to the level?
             if (!_shapes.TryGetValue(obj.Name, out ICollisionShape value)) {
                 shape = CollisionShapeFactory.MakeShape(staticPhysicsObject);
                 if (shape is ISceneManipulator ss) {
@@ -61,10 +57,6 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 }
 
                 Vector2 objVeloc = physicsObject.Velocity;
-                // if (objVeloc.LengthSquared() > 1000000f) {
-                //     objVeloc.Normalize();
-                //     objVeloc *= 1000.0f;
-                // }
                 if (Math.Abs(objVeloc.X) <= 1f) {
                     objVeloc.X = 0f;
                 }
@@ -78,7 +70,6 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 Vector2 finalPosition = oldPosition + deltaPosition;
                 physicsObject.Position = finalPosition;
 
-                // Console.WriteLine($"[PhysicsEngine2D] Object: {obj.Name} Velocity: {physicsObject.Velocity} startPos: {oldPosition} Position delta: {deltaPosition} Final Pos: {finalPosition}");
 
                 _shapes[obj.Name] = shape;
             }
@@ -98,9 +89,9 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
         base.Update(gameTime);
     }
 
-    /// Check collisions with CollisionAlgorithms
-    /// If they're overlapping, move them back to the point of collision (touching)
-    /// If they agree to be simulated, ResolveCollision is called 
+    // Check collisions with CollisionAlgorithms
+    // If they're overlapping, move them back to the point of collision (touching)
+    // If they agree to be simulated, ResolveCollision is called 
     private void CheckCollisions() {
      string[] keys = [.. _shapes.Keys];
         int length = keys.Length;
@@ -112,12 +103,13 @@ public class PhysicsEngine2D(Game game, Level level) : GameObject(game) {
                 if (!isColliding) {
                     continue;
                 }
+
                 // Notify both shapes of the collision and resolve if both agree
                 bool agreeShapeA = shapeA.OnCollision(shapeB);
                 bool agreeShapeB = shapeB.OnCollision(shapeA);
+
                 // Resolve collision if both shapes agree
                 if (agreeShapeA && agreeShapeB) {
-                    // Console.WriteLine("Resolving Collision between " + keys[i] + " and " + keys[j]);
                     CollisionAlgorithms.ResolveCollision(shapeA, shapeB);
                 }
             }

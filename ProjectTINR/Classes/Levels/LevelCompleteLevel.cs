@@ -14,14 +14,14 @@ class NextLevelObserver : Observer {
         try {
             LevelDataManager.Instance.ReadData($"Content/levels/level{next}.json");
             GameSettings.LevelNum = next;
-            if (_game is ProjectTinr p) p.SwitchLevel(LevelType.MainLevel);
+            if (_game is ProjectTinr p) p.SwitchLevelNoPush(LevelType.MainLevel);
         }
         catch (Exception) {
             LevelType fallback = LevelType.LevelSelect;
             if (next == 7) {
                 fallback = LevelType.Credits;
             }
-            if (_game is ProjectTinr p) p.SwitchLevel(fallback);
+            if (_game is ProjectTinr p) p.SwitchLevelNoPush(fallback);
             else throw new Exception("could not switch to levelselect/credits");
         }
     }

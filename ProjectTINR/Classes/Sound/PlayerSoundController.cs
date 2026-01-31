@@ -25,7 +25,6 @@ public class PlayerSoundController : SoundController {
         PlayerState currentState = player.State;
 
         if (currentState == PlayerState.Jumping && (player.OnFloor || player.OnWall)) {
-            Console.WriteLine($"Old {_oldState} and new state {currentState} {player.OnWall} {player.OnFloor}");
             SoundEffectInstance soundEffectInstance = _jumpEffect.CreateInstance();
             soundEffectInstance.IsLooped = false; 
             soundEffectInstance.Volume = GameSettings.SfxVolume;

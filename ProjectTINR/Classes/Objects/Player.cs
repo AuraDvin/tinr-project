@@ -24,7 +24,6 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
     public CollisionShapeType CollisionType { get => CollisionShapeType.PlayerShape; set { } }
     public ControllerType ControllerType => ControllerType.PlayerController;
     public PlayerState State {
-        // We could have a timed status (Like frozen) so we should return that just in case
         set => _playerState = value;
         get { return _playerState; }
     }

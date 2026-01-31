@@ -13,66 +13,6 @@ using System.Reflection.Metadata;
 
 namespace ProjectTINR.Classes.Levels;
 
-class StartObserver : Observer {
-    protected Game _game;
-
-    public StartObserver(Game game) {
-        _game = game;
-    }
-
-    public virtual void Notify() {
-        // Access the Game instance and switch level
-        if (_game is ProjectTinr projectTinr) {
-            projectTinr.SwitchLevel(LevelType.MainLevel);
-            // // Use reflection to call the private SwitchLevel method
-            // var method = typeof(ProjectTinr).GetMethod("SwitchLevel", 
-            //     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            // method?.Invoke(projectTinr, new object[] { LevelType.MainLevel });
-        }
-    }
-
-    public void Notify(string message, object args) {
-        throw new NotImplementedException();
-    }
-}
-
-class SettingsObserver : StartObserver {
-    public SettingsObserver(Game game) : base(game) {
-    }
-    public override void Notify() {
-        // Access the Game instance and open settings menu
-        if (_game is ProjectTinr projectTinr) {
-            projectTinr.SwitchLevel(LevelType.Settings);
-            // // Use reflection to call the private OpenSettingsMenu method
-            // var method = typeof(ProjectTinr).GetMethod("SwitchLevel", 
-            //     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            // method?.Invoke(projectTinr, new object[] { LevelType.Settings } );
-        }
-    }
-}
-
-class ContinueObserver(Game game) : StartObserver(game) {
-    public override void Notify() {
-        // Access the Game instance and continue the game
-        if (_game is ProjectTinr projectTinr) {
-            // Use reflection to call the private ContinueGame method
-            projectTinr.SwitchLevel(LevelType.LevelSelect);
-            // var method = typeof(ProjectTinr).GetMethod("SwitchLevel", 
-            //     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            // method?.Invoke(projectTinr, new object[] { LevelType.LevelSelect });
-        }
-    }
-}
-
-class ExitObserver(Game game) : StartObserver(game) {
-    public override void Notify() {
-        // Access the Game instance and exit the game
-        if (_game is ProjectTinr projectTinr) {
-            projectTinr.Exit();
-        }
-    }
-}
-
 public class StartMenuLevel : Level {
     private UIButton _startButton;
     private UIVerticalList _menuList;
@@ -166,8 +106,8 @@ public class StartMenuLevel : Level {
                 (_menuList.Children[indexSelected] as UIButton).OnClick();
             }
         }
+        // start button
         else {
-            // Check if start button is pressed
             if (currentKeyboardState.IsKeyUp(Keys.Enter) && _previousKeyboardState.IsKeyDown(Keys.Enter)) {
                 ShowMenu();
             }
@@ -194,6 +134,50 @@ public class StartMenuLevel : Level {
     public override void Reset() {
         if (_menuVisible) {
             HideMenu();
+        }
+    }
+}
+
+class StartObserver : Observer {
+    protected Game _game;
+
+    public StartObserver(Game game) {
+        _game = game;
+    }
+
+    public virtual void Notify() {
+        if (_game is ProjectTinr projectTinr) {
+            projectTinr.SwitchLevel(LevelType.MainLevel);
+        }
+    }
+
+    public void Notify(string message, object args) {
+        throw new NotImplementedException();
+    }
+}
+
+class SettingsObserver : StartObserver {
+    public SettingsObserver(Game game) : base(game) {
+    }
+    public override void Notify() {
+        if (_game is ProjectTinr projectTinr) {
+            projectTinr.SwitchLevel(LevelType.Settings);
+        }
+    }
+}
+
+class ContinueObserver(Game game) : StartObserver(game) {
+    public override void Notify() {
+        if (_game is ProjectTinr projectTinr) {
+            projectTinr.SwitchLevel(LevelType.LevelSelect);
+        }
+    }
+}
+
+class ExitObserver(Game game) : StartObserver(game) {
+    public override void Notify() {
+        if (_game is ProjectTinr projectTinr) {
+            projectTinr.Exit();
         }
     }
 }

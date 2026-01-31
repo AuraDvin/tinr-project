@@ -17,7 +17,7 @@ class LevelObserver : Observer {
     }
 
     public void Notify() {
-        Console.WriteLine("A level button was clicked.");
+        // Console.WriteLine("A level button was clicked.");
         _game.SwitchLevel(LevelType.StartMenu);
     }
 
@@ -26,7 +26,7 @@ class LevelObserver : Observer {
     }
 
     public void OnNotify(int levelIndx) {
-        Console.WriteLine($"Level {levelIndx} selected.");
+        // Console.WriteLine($"Level {levelIndx} selected.");
         // Tell game to load the right level layout
         GameSettings.LevelNum = levelIndx;
         LevelDataManager.Instance.ReadData($"Content/levels/level{levelIndx}.json");
@@ -45,7 +45,6 @@ class CustomButton : UIButton {
     }
 
     public override void OnClick() {
-        // base.OnClick();
         _observer.OnNotify(_levelIndex);
     }
 }
@@ -58,18 +57,15 @@ public class SelectLevelLevel : Level {
     private int _levelSelected = 0;
     private int _lastLevelSelected = 0;
     private int _rowSelected = 0;
-    // private int _numberOfLevels = 10;
     private KeyboardState _lastKbState;
     LevelObserver _levelObserver;
     public SelectLevelLevel(Game game, int numberOfLevels) : base(game) {
         _levelType = LevelType.LevelSelect;
         _scene = new Scene();
         _uiScene = new Scene();
-        // _numberOfLevels = numberOfLevels;
 
         _levelObserver = new LevelObserver(game as ProjectTinr);
 
-        // Initialize level rows
         _levelRow1 = new UIHorizontalList(game) {
             Visible = true
         };
@@ -77,7 +73,6 @@ public class SelectLevelLevel : Level {
             Visible = true
         };
 
-        // Add level buttons to rows
         for (int i = 0; i < numberOfLevels; i++) {
             // todo: if level is locked, create a locked button instead
             CustomButton button = new(game, i + 1, _levelObserver) {
@@ -99,8 +94,6 @@ public class SelectLevelLevel : Level {
         };
 
         _uiScene.Add(_levelColumn);
-
-        Console.WriteLine("SelectLevelLevel initialized with ", numberOfLevels, " levels.");
     }
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
