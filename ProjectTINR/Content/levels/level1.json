@@ -11,7 +11,7 @@
         {
             "type": "stationary",
             "position": {
-                "x": 3000,
+                "x": 1200,
                 "y": -200
             },
             "facing": "right"
@@ -31,6 +31,13 @@
         {
             "position": {
                 "x": 872,
+                "y": -100
+            }
+        },
+        
+        {
+            "position": {
+                "x": 2000,
                 "y": -100
             }
         }
