@@ -29,7 +29,9 @@ public class CollisionShapeFactory {
             CollisionShapeType.PlayerProjectile => new PlayerProjectileCollisionShape(
                 (projectile ?? throw new Exception("Projectile has no parent")).Position,
                 projectile.FacingRight ? 1 : -1,
-                projectile.Game) {
+                (projectile as PlayerProjectile).Scale,
+                projectile.Game
+                ) {
                 Owner = projectile
             },
             CollisionShapeType.Pickup => new PickupCollisionShape() { Owner = staticPhysicsObject },
