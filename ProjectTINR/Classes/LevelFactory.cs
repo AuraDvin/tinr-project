@@ -15,7 +15,7 @@ public class LevelFactory {
             LevelType.StartMenu => new StartMenuLevel(game),
             LevelType.LevelSelect => new SelectLevelLevel(game, 6),
             LevelType.LevelComplete => new LevelCompleteLevel(game),
-            // LevelType.Credits => new CreditsLevel(game),
+            LevelType.Credits => new CreditsLevel(game),
             // LevelType.Options => new OptionsLevel(game),
             // LevelType.Gameplay => new GameplayLevel(game),
             // LevelType.PauseMenu => new PauseMenuLevel(game),
