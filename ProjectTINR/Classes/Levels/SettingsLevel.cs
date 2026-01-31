@@ -34,7 +34,7 @@ public class SettingsLevel : Level {
     public override void Initialize() {
         base.Initialize();
 
-        _debugCheckbox = new UICheckbox(Game, "Debug Physics", "") {
+        _debugCheckbox = new UICheckbox(Game, "Debug Physics Off", "Debug Physics On", "") {
             Checked = GameSettings.DebugPhysicsCollisions,
         };
 
@@ -81,11 +81,15 @@ public class SettingsLevel : Level {
         Console.WriteLine($"Selected item: {_selectedIndex}");
         // Navigate up/down
         if (IsKeyPressed(kb, Keys.Down)) {
+            (_uIVerticalList.Children[_selectedIndex] as SimpleUIElement).Selected = false;
             _selectedIndex = (_selectedIndex + 1) % _uIVerticalList.Children.Count;
         }
         if (IsKeyPressed(kb, Keys.Up)) {
+            (_uIVerticalList.Children[_selectedIndex] as SimpleUIElement).Selected = false;
             _selectedIndex = (_selectedIndex - 1 + _uIVerticalList.Children.Count) % _uIVerticalList.Children.Count;
         }
+
+        (_uIVerticalList.Children[_selectedIndex] as SimpleUIElement).Selected = true;
 
         // Interact with selected control
         var selected = _uIVerticalList.Children[_selectedIndex];
