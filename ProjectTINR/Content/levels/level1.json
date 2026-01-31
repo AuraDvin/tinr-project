@@ -27,6 +27,35 @@
             }
         }
     ],
-    "checkpoints": [],
-    "pickups" : []
+    "checkpoints": [
+        {
+            "position": {
+                "x": 872,
+                "y": -100
+            }
+        }
+    ],
+    "pickups": [
+        {
+            "type": "heal",
+            "position": {
+                "x": 772,
+                "y": -120
+            }
+        },
+        {
+            "type": "big",
+            "position": {
+                "x": 672,
+                "y": -120
+            }
+        },
+        {
+            "type": "fast",
+            "position": {
+                "x": 572,
+                "y": -120
+            }
+        }
+    ]
 }
