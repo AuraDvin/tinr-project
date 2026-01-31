@@ -9,6 +9,7 @@ using ProjectTINR.Classes.Graphics;
 using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.Objects;
 using ProjectTINR.Classes.UI;
+using System.Reflection.Metadata;
 
 namespace ProjectTINR.Classes.Levels;
 
@@ -76,6 +77,7 @@ public class StartMenuLevel : Level {
     private UIButton _startButton;
     private UIVerticalList _menuList;
     private bool _menuVisible = false;
+    public bool MenuVisible { get => _menuVisible; }
     private KeyboardState _previousKeyboardState;
     private Observer _startObserver;
 
@@ -83,7 +85,7 @@ public class StartMenuLevel : Level {
 
     public StartMenuLevel(Game game) : base(game) {
         _startButton = new(Game, "Start", "") {
-          Selected = true  
+            Selected = true
         };
         _menuList = new(Game);
         _startObserver = new StartObserver(Game);
@@ -97,7 +99,7 @@ public class StartMenuLevel : Level {
 
         _startButton.Position = new Vector2(Game.GraphicsDevice.Viewport.Width / 2 - 50,
                                                 Game.GraphicsDevice.Viewport.Height / 2 - 25);
-       
+
         string[] menuLabels = ["New Game", "Continue", "Settings", "Exit"];
         foreach (string label in menuLabels) {
             UIButton button = new(Game, label, "") {
