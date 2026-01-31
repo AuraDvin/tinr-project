@@ -13,6 +13,7 @@ namespace ProjectTINR.Classes.Physics.Shapes;
 
 public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
     protected float _playerAccel = 200f;
+    protected float _maxSpeed = 400f;
     protected float _playerJumpForce = 600f;
     protected float _playerGravity = 1000f;
     protected float _playerSlideGravity = 600f;
@@ -76,6 +77,9 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                         throw new Exception("Invalid player direction!");
                 }
                 objVeloc.X += sign * _playerAccel * dt;
+                if (objVeloc.X >= _maxSpeed) {
+                    objVeloc.X = _maxSpeed;
+                }
                 break;
             case PlayerState.Jumping:
                 if (WasOnFloor) {
