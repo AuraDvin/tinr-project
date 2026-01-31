@@ -151,7 +151,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
             return false;
         }
 
-        if (other is EnemyProjectileCollisionShape) {
+        if (other is EnemyProjectileCollisionShape || other is EnemyCollisionShape || other is FlyingEnemyCollisionShape) {
             _tookDmg = true;
             return false;
         }
