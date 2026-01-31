@@ -10,7 +10,7 @@ using ProjectTINR.Classes.UI;
 namespace ProjectTINR.Classes.Levels;
 
 class LevelObserver : Observer {
-    ProjectTinr _game;
+    readonly ProjectTinr _game;
 
     public LevelObserver(ProjectTinr game) {
         _game = game;
@@ -28,8 +28,9 @@ class LevelObserver : Observer {
     public void OnNotify(int levelIndx) {
         Console.WriteLine($"Level {levelIndx} selected.");
         // Tell game to load the right level layout
-
-        // _game.SwitchLevel(LevelType.MainLevel);
+        GameSettings.LevelNum = levelIndx;
+        LevelDataManager.Instance.ReadData($"Content/levels/level{levelIndx}.json");
+        _game.SwitchLevel(LevelType.MainLevel);
     }
 }
 
@@ -57,14 +58,14 @@ public class SelectLevelLevel : Level {
     private int _levelSelected = 0;
     private int _lastLevelSelected = 0;
     private int _rowSelected = 0;
-    private int _numberOfLevels = 10;
+    // private int _numberOfLevels = 10;
     private KeyboardState _lastKbState;
     LevelObserver _levelObserver;
     public SelectLevelLevel(Game game, int numberOfLevels) : base(game) {
         _levelType = LevelType.LevelSelect;
         _scene = new Scene();
         _uiScene = new Scene();
-        _numberOfLevels = numberOfLevels;
+        // _numberOfLevels = numberOfLevels;
 
         _levelObserver = new LevelObserver(game as ProjectTinr);
 
