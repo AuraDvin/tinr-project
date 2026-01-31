@@ -41,4 +41,9 @@ public class Level(Game game) : GameComponent(game) {
     public virtual void Deserialize() {
     }
 
+    public override void Update(GameTime gameTime) {
+        base.Update(gameTime);
+        Console.WriteLine("1");
+    }
+
 }

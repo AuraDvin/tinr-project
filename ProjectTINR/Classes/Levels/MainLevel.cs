@@ -21,47 +21,21 @@ public class MainLevel : Level {
     public override void Initialize() {
         Player player;
         int loadAttempts = 0;
+        int levelNum = GameSettings.LevelNum;
+        string levelPath = $"Content/levels/level{levelNum}.json";
+
+
         while (!LevelDataManager.Instance.LoadData(this)) {
 
-            // Floor floor = new(Game, new(-100, 400), 400, 50);
-            // Floor floor2 = new(Game, new(500, 200), 400, 50);
-            // Floor floor3 = new(Game, new(-500, 200), 400, 50);
-            // Floor floor4 = new(Game, new(0, 0), 400, 50);
-
-            // player = new(Game) {
-            //     Position = _playerSpawnPosition
-            // };
-            // StationaryEnemy se = new(Game) {
-            //     Position = _enemySpawnPosition,
-            //     Scene = Scene
-            // };
-            // FlyingEnemy fe = new(Game) {
-            //     Position = _flyingEnemySpawnPosition,
-            //     Scene = Scene
-            // };
-
-            // CameraObject camera = new(Game) {
-            //     Position = new Vector2(0, 0),
-            //     Zoom = 1.0f
-            // };
-
-            // _scene.Add(floor2);
-            // _scene.Add(floor);
-            // _scene.Add(floor3);
-            // _scene.Add(floor4);
-            // _scene.Add(player);
-            // _scene.Add(se);
-            // _scene.Add(fe);
-            // _scene.Add(camera);
-
-            // foreach (IGameComponent obj in _scene) {
-            //     Game.Components.Add(obj);
-            // }
-            int levelNum = GameSettings.LevelNum;
-            string levelPath = $"Content/levels/level{levelNum}.json";
-
             Console.WriteLine($"trying to load level {levelPath}");
-            LevelDataManager.Instance.ReadData(levelPath);
+
+            if (_isResetting) {
+                LevelDataManager.Instance.ReadData(levelPath, levelNum);
+            }
+            else {
+                LevelDataManager.Instance.ReadData(levelPath);
+            }
+
             loadAttempts++;
             if (loadAttempts >= 10) {
                 throw new Exception("Failed to load level data!");
@@ -69,16 +43,13 @@ public class MainLevel : Level {
         }
 
         player = Scene.FindByType<Player>() ?? throw new Exception("player is gone in level reserilization");
-        UIHealthElement he = new(Game, "", "") {
-            Player = player
-        };
 
         _camera = Scene.FindByType<CameraObject>();
         if (_camera == null) {
             _camera = new CameraObject(Game);
             Scene.Add(_camera);
         }
-        
+
         foreach (GameObject obj in _scene) {
             if (obj is ISceneManipulator sceneManipulator) {
                 sceneManipulator.Scene = _scene;
@@ -92,17 +63,49 @@ public class MainLevel : Level {
         }
 
 
+        UIHealthElement he = new(Game, "", "") {
+            Player = player
+        };
+
+        if (_uiScene.FindByType<UIHealthElement>() != null) {
+            _uiScene.RemoveByType<UIHealthElement>();
+        }
         _uiScene.Add(he);
 
         Console.WriteLine("Main Level initialized.");
     }
+    private Vector2? _pendingRespawn = null;
+    private bool _isResetting = false;
+
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
-        foreach(GameObject obj in _scene) {
+        foreach (GameObject obj in _scene) {
             obj.Update(gameTime);
         }
-        foreach(GameObject obj in _uiScene) {
+        foreach (GameObject obj in _uiScene) {
             obj.Update(gameTime);
+        }
+        Player player = Scene.FindByType<Player>();
+        //        if (player.Health <= 0) {
+
+        // }
+        // Check for player death and trigger reset that will respawn at last checkpoint
+        if (!_isResetting) {
+            if (player != null && player.Health <= 0) {
+                Console.WriteLine("Player died - respawning at last checkpoint or level start.");
+                if (player.LastCheckpoint != Vector2.Zero) {
+                    _pendingRespawn = player.LastCheckpoint;
+                }
+                else {
+                    _pendingRespawn = null; // no checkpoint collected, use level start
+                }
+                _isResetting = true;
+                Reset();
+                _isResetting = false;
+            }
+        }
+        else {
+            Console.WriteLine($"player health {player.Health}");
         }
     }
 
@@ -111,6 +114,15 @@ public class MainLevel : Level {
         Console.WriteLine("Main Level reset.");
         LevelDataManager.Instance.RemoveData();
         Initialize();
+
+        // Apply pending respawn position if set
+        if (_pendingRespawn.HasValue) {
+            Player player = Scene.FindByType<Player>();
+            if (player != null) {
+                player.Position = _pendingRespawn.Value;
+            }
+            _pendingRespawn = null;
+        }
     }
 
 
