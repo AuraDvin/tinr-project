@@ -20,6 +20,11 @@ public class CollisionAlgorithms {
             case EnemyCollisionShape when shapeB is EnemyProjectileCollisionShape:
             case ProjectileCollisionShape when shapeB is ProjectileCollisionShape:
                 return false;
+            case PlayerCollisionShape when shapeB is EnemyCollisionShape:
+            case EnemyCollisionShape when shapeB is PlayerCollisionShape:
+            case FlyingEnemyCollisionShape when shapeB is PlayerCollisionShape:
+            case PlayerCollisionShape when shapeB is FlyingEnemyCollisionShape:
+                return CheckCollision(shapeA as RectCollisionShape, shapeB as RectCollisionShape);
             case CircleCollisionShape ca when shapeB is CircleCollisionShape cb:
                 return CheckCollision(ca, cb);
             case RectCollisionShape ra when shapeB is RectCollisionShape rb:
@@ -124,7 +129,7 @@ public class CollisionAlgorithms {
         Rectangle b = rectB.Rectangle;
 
         if (!a.Intersects(b)) return false;
-        return true; 
+        return true;
 
         // // Compute penetration along each axis
         // int overlapX = Math.Min(a.Right, b.Right) - Math.Max(a.Left, b.Left);
