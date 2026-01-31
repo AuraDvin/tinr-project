@@ -12,6 +12,7 @@ public static class GameSettings {
     public static bool GamePaused { get; set; } = false;
     public static bool DebugPhysicsCollisions { get; set; } = false;
     private static float _masterVolume = 1.0f;
+    public static int LevelNum = 1;
     public static float MasterVolume {
         get => _masterVolume;
         set {
