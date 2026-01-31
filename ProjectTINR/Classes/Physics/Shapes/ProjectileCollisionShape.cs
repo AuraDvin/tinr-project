@@ -20,6 +20,9 @@ public abstract class ProjectileCollisionShape : CircleCollisionShape, ISceneMan
         // give projectile an initial horizontal speed
         if (Owner != null) {
             Velocity = new Vector2(initialSpeed * direction, 0);
+            if (Owner is PlayerProjectile p) {
+                _radius *= p.Scale;
+            }
         }
     }
 

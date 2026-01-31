@@ -26,6 +26,9 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
         if (Owner == null) {
             Owner = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
         }
+        
+        ShootingDelay *= (Owner as Player).ShootDelayFactor;
+
         // Player player = Scene.FindByType<Player>() ?? throw new Exception("Player class not found in Scene!");
         _lastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (_lastShot >= ShootingDelay) {
@@ -77,6 +80,7 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
                 PlayerProjectile projectile = new(Game) {
                     Position = playerPos,
                     FacingRight = player.Direction == PlayerDirection.Right,
+                    Scale = player.ProjectileSizeFactor,
                 };
                 Scene.Add(projectile);
 
