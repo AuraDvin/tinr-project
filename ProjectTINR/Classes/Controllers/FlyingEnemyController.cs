@@ -81,7 +81,7 @@ public class FlyingEnemyController(Game game) : GameObject(game), IController, I
                 }
                 break;
             case State.Retreat:
-                if (_stateTimer > 1.2f) {
+                if (_stateTimer > 3f) {
                     _state = State.Patrol;
                     _stateTimer = 0f;
                     _patrolTarget = Vector2.Zero;
