@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 using Microsoft.Xna.Framework;
 
 using ProjectTINR.Classes.ObjectsComponents;
@@ -7,10 +9,13 @@ namespace ProjectTINR.Classes.Objects;
 
 public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGameComponent, IControlled, ISoundPlayer {
     protected override string _prefix => "Player";
+    public Vector2 LastCheckpoint = new();
     public Vector2 Position {
         get => _position;
         set => _position = value;
     }
+    public float ShootDelayFactor {get; private set;} = 1f;
+    public float ProjectileSizeFactor {get; private set; }= 1f;
     public bool OnFloor { get; set; } = false;
     public bool OnWall { get; set; } = false;
     public CollisionShapeType CollisionType { get => CollisionShapeType.PlayerShape; set { } }
@@ -51,5 +56,24 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
 
     public Player(int initHealth, Game game) : this(game){
         _health = initHealth;
+    }
+
+    public void IncreaseProjectileSize() {
+        ProjectileSizeFactor = 2f;
+    }
+
+    private void resetProjectileSize() {
+        ProjectileSizeFactor = 1f;
+    }
+
+    private void resetProjectileSpeed() {
+        ShootDelayFactor = 1f;
+    }
+
+    public void IncreaseProjectileSpeed() {
+        ShootDelayFactor = 0.5f;
+    }
+    public void CollectCheckpoint(Checkpoint checkpoint) {
+        LastCheckpoint = checkpoint.Position;
     }
 }
