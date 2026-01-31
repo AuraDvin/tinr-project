@@ -148,7 +148,7 @@ public class LevelDataManager {
                 default:
                     throw new Exception("unknown pickup type");
             }
-
+            pickup.Position = pos;
             _sceneData.Add(pickup);
         }
         for (int i = 0; i < checkpointsArr.Count; i++) {
