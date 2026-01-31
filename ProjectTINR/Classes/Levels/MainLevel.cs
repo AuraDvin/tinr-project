@@ -96,16 +96,13 @@ public class MainLevel : Level {
                 if (player.LastCheckpoint != Vector2.Zero) {
                     _pendingRespawn = player.LastCheckpoint;
                 }
-                else {
-                    _pendingRespawn = null; // no checkpoint collected, use level start
-                }
+                // else {
+                //     _pendingRespawn = null; // no checkpoint collected, use level start
+                // }
                 _isResetting = true;
                 Reset();
                 _isResetting = false;
             }
-        }
-        else {
-            Console.WriteLine($"player health {player.Health}");
         }
     }
 
@@ -120,6 +117,7 @@ public class MainLevel : Level {
             Player player = Scene.FindByType<Player>();
             if (player != null) {
                 player.Position = _pendingRespawn.Value;
+                player.LastCheckpoint = _pendingRespawn.Value;
             }
             _pendingRespawn = null;
         }
