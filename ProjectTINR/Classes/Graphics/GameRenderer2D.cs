@@ -52,6 +52,7 @@ public class GameRenderer2D(Game game, Level level) : DrawableGameComponent(game
                     player.State switch {
                         PlayerState.Idling => "idle",
                         PlayerState.None => "idle",
+                        PlayerState.Shooting => "attack",
                         PlayerState.Sliding => "idle",
                         PlayerState.Falling => "idle",
                         PlayerState.Moving => "walk",

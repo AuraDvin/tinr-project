@@ -21,6 +21,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
     private int _wallJumpCount = 0;
     private readonly int _maxWallJumps = 1;
     protected readonly float _jumpTimerBeforeApplyingGravity = 0.005f;
+    protected bool _collectedPickup = false;
     protected float _msSinceLastJump;
     protected bool _tookDmg = false;
     protected float _lastTookDmg = 0f;
@@ -48,6 +49,8 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
             case PlayerState.Idling:
                 objVeloc = Vector2.Lerp(objVeloc, new(0, objVeloc.Y), _playerFriction * dt);
                 break;
+            case PlayerState.Shooting:
+                break;
             case PlayerState.Sliding:
                 if (shouldApplyGravity) {
                     objVeloc.Y += _playerSlideGravity * dt;
@@ -73,7 +76,6 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
                         throw new Exception("Invalid player direction!");
                 }
                 objVeloc.X += sign * _playerAccel * dt;
-                // Console.WriteLine($"[PlayerCollisionShape] Player state: {player.State} {player.Direction} x: {objVeloc.X} y: {objVeloc.Y}");
                 break;
             case PlayerState.Jumping:
                 if (WasOnFloor) {
@@ -130,9 +132,17 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
         }
     }
 
+    public override void BeginFrame() {
+        base.BeginFrame();
+        _collectedPickup = false;
+    }
     public override bool OnCollision(ICollisionShape other) {
         // snaps to floor, returns ShouldSimulate which is always true for player
         // so the type needs to be checked as well
+
+        // TODO
+        // if other is PickupCollisionShape 
+        // give pickup type to player?
 
         if (other is FloorCollisionShape) {
             base.OnCollision(other);

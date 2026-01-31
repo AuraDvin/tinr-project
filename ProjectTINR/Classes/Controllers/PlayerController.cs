@@ -17,6 +17,7 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
     public float ShootingDelay { get; set; } = 0.4f;
     public bool JustJumped => _justJumped;
     public bool IsMovingLeft => _isMovingLeft;
+    public bool JustAttacked => _justShot;
     public bool IsMovingRight => _isMovingRight;
     public override void Initialize() {
     }
@@ -29,6 +30,7 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
         _lastShot += (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (_lastShot >= ShootingDelay) {
             _canShoot = true;
+            _justShot = false;
         }
         else {
             if (_justShot) {
@@ -68,12 +70,16 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
                 _canShoot = false;
                 _lastShot = 0f;
                 // int dir = player.Direction == PlayerDirection.Right ? 1 : -1;
+
+                // play the shooting one shot animation 
+                
                 Vector2 playerPos = player.Position;
                 PlayerProjectile projectile = new(Game) {
                     Position = playerPos,
                     FacingRight = player.Direction == PlayerDirection.Right,
                 };
                 Scene.Add(projectile);
+
                 // PlayerProjectileCollisionShape thing = new(playerPos, dir, Game) {
                 //     Scene = Scene
                 // };
@@ -94,6 +100,10 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
             player.State = PlayerState.Idling;
         }
 
+        if (JustAttacked) {
+            player.State = PlayerState.Shooting;
+        }
+
         // TODO: think, can we have wall sliding and possibly falling sfx play if the player state is not proper. 
         // and on top of that how will we know if the other things are also true at the same time? 
         // Should the player have multiple states?
@@ -109,6 +119,8 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
                 player.State = PlayerState.Sliding;
             }
         }
+
+       
     }
 
     private float _lastShot = 0f;
