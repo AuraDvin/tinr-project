@@ -2,6 +2,7 @@ using System;
 
 using Microsoft.Xna.Framework;
 
+using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes.Physics.Shapes;
@@ -24,6 +25,9 @@ public class EnemyCollisionShape : RectCollisionShape {
         // Console.WriteLine("Enemy colided with something");
         if (other is FloorCollisionShape floor) {
             return base.OnCollision(other);
+        }
+        if (other is PlayerProjectileCollisionShape) {
+            (Owner as Enemy).Health--; 
         }
         return false;
     }

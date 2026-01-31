@@ -2,6 +2,7 @@ using System;
 
 using Microsoft.Xna.Framework;
 
+using ProjectTINR.Classes.NPCs;
 using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes.Physics.Shapes;
@@ -20,6 +21,7 @@ public class FlyingEnemyCollisionShape : RectCollisionShape {
     }
 
     public override bool OnCollision(ICollisionShape other) {
+        
         if (other is FloorCollisionShape floor) {
             int myRightSide = (int)(Position.X + _rectangle.Width);
             int myBottomSide = (int)(Position.Y + _rectangle.Height);
@@ -41,6 +43,10 @@ public class FlyingEnemyCollisionShape : RectCollisionShape {
             }
             // Floor is static so collision won't be resolved by the physics engine anyway 
             return false;
+        }
+
+        if (other is PlayerProjectileCollisionShape) {
+            (Owner as Enemy).Health--;
         }
         return false;
     }
