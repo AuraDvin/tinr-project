@@ -7,6 +7,7 @@ using ProjectTINR.Classes.Physics.Shapes;
 namespace ProjectTINR.Classes.Objects;
 
 public abstract class Projectile : GameObject, IPhysicsObject {
+    public virtual float Scale { get; set; } = 1f;
     public Projectile(Game game) : base(game) {
         if (!FacingRight) {
             Velocity = new Vector2(-Velocity.X, 0);
