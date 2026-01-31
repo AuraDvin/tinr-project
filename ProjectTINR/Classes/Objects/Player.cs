@@ -43,7 +43,16 @@ public class Player(Game game) : GameObject(game), IPhysicsObject, IDrawableGame
     private Vector2 _velocity = new(0, 0);
     protected int _health = 3;
     public int Health => _health;
+    
     public void takeDamage() {
         _health--;
+    }
+    
+    public void healDamage() {
+        _health++;
+    }
+
+    public Player(int initHealth, Game game) : this(game){
+        _health = initHealth;
     }
 }
