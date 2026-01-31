@@ -1,0 +1,32 @@
+{
+    "level": 1,
+    "player": {
+        "health": 3,
+        "spawnPosition": {
+            "x": 0,
+            "y": -200
+        }
+    },
+    "enemies": [
+        {
+            "type": "stationary",
+            "position": {
+                "x": 3000,
+                "y": -200
+            },
+            "facing": "right"
+        }
+    ],
+    "platforms": [
+        {
+            "rect": {
+                "x": -10,
+                "y": 0,
+                "w": 5000,
+                "h": 20
+            }
+        }
+    ],
+    "checkpoints": [],
+    "pickups" : []
+}
