@@ -11,4 +11,5 @@ public enum CollisionShapeType {
     EnemyProjectile,
     EnemyCollisionShape,
     FlyingEnemyCollisionShape,
+    Pickup,
 }

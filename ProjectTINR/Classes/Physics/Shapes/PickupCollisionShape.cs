@@ -1,15 +1,17 @@
+using System;
+using System.Reflection.Metadata.Ecma335;
+
+using ProjectTINR.Classes.Objects;
 using ProjectTINR.Classes.ObjectsComponents;
 
 namespace ProjectTINR.Classes.Physics.Shapes;
 
 public class PickupCollisionShape : CircleCollisionShape {
-    public PickupCollisionShape() : base(false, 10.0f) {
+    public PickupCollisionShape() : base(true, 2f) {
     }
-    public new bool OnCollision(ICollisionShape other) {
-        // Tell Scene to remove this node 
-        // Tell gameplay to use effect of pickup or change health
+    public override bool OnCollision(ICollisionShape other) {
         if (other is PlayerCollisionShape) {
-            // Pickup collected by player
+            (Owner as PickupObject).Collected();
         }
         return false;
     }
