@@ -105,7 +105,7 @@ public class PlayerController(Game game) : GameObject(game), IController, IScene
             player.State = PlayerState.Idling;
         }
 
-        if (JustAttacked) {
+        if (JustAttacked && _lastShot < 0.5f) {
             player.State = PlayerState.Shooting;
         }
 
