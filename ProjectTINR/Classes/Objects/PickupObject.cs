@@ -1,7 +1,8 @@
 using System;
 
 using Microsoft.Xna.Framework;
-
+using ProjectTINR.Classes;
+using ProjectTINR.Classes.Levels;
 using ProjectTINR.Classes.ObjectsComponents;
 using ProjectTINR.Classes.Physics;
 using ProjectTINR.Classes.Physics.Shapes;
@@ -24,6 +25,11 @@ public class PickupObject : GameObject, ISceneManipulator, IDrawableGameComponen
     public virtual void Collected() {
         // Notify player of collected effect
         if (Scene != null) {
+            // Mark this pickup as collected so it does not respawn when the level is reset
+            try {
+                LevelDataManager.Instance.MarkPickupCollected(GameSettings.LevelNum, Type, Position);
+            }
+            catch (Exception) { }
             Scene.Remove(this);
         }
         else {
