@@ -14,6 +14,7 @@ public class LevelFactory {
             LevelType.Settings => new SettingsLevel(game),
             LevelType.StartMenu => new StartMenuLevel(game),
             LevelType.LevelSelect => new SelectLevelLevel(game, 6),
+            LevelType.LevelComplete => new LevelCompleteLevel(game),
             // LevelType.Credits => new CreditsLevel(game),
             // LevelType.Options => new OptionsLevel(game),
             // LevelType.Gameplay => new GameplayLevel(game),
