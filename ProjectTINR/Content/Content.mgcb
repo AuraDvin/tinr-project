@@ -104,6 +104,12 @@
 #begin Ithaca-LVB75.ttf
 /copy:Ithaca-LVB75.ttf
 
+#begin levels/level0.json
+/copy:levels/level0.json
+
+#begin levels/level1.json
+/copy:levels/level1.json
+
 #begin Spritesheet_edited.json
 /copy:Spritesheet_edited.json
 
