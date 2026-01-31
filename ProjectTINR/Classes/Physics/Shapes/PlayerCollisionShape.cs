@@ -121,7 +121,7 @@ public class PlayerCollisionShape : RectCollisionShape, ISceneManipulator {
         if (_tookDmg) {
             if (_lastTookDmg <= 0f) {
                 _lastTookDmg = _immuneFramesMS / 1000f;
-                (Owner as Player).takeDamage();
+                (Owner as Player).TakeDamage();
                 _tookDmg = false;
             }
             else {
