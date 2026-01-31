@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
 
 using Microsoft.Xna.Framework;
@@ -76,6 +78,11 @@ public class LevelDataManager {
             throw new Exception("Json is missing a required field");
         }
 
+        JsonArray enemiesArr = levelDataObj["enemies"].AsArray();
+        JsonArray platformsArr = levelDataObj["platforms"].AsArray();
+        JsonArray checkpointsArr = levelDataObj["checkpoints"].AsArray();
+        JsonArray pickupsArr = levelDataObj["pickups"].AsArray();
+
         JsonObject playerObj = levelDataObj["player"].AsObject();
         _sceneData.Add(
             new Player((int)playerObj["health"], Game) {
@@ -85,8 +92,8 @@ public class LevelDataManager {
             ),
             });
 
-        JsonArray enemiesJson = levelDataObj["enemies"].AsArray();
-        foreach (var enemyj in enemiesJson) {
+
+        foreach (var enemyj in enemiesArr) {
             JsonObject a = enemyj.AsObject();
             Vector2 positon = new(
                 (float)a["position"].AsObject()["x"],
@@ -109,8 +116,7 @@ public class LevelDataManager {
             }
         }
 
-        JsonArray platformsArr = levelDataObj["platforms"].AsArray();
-        foreach(var platformj in platformsArr) {
+        foreach (var platformj in platformsArr) {
             JsonObject a = platformj.AsObject();
             Vector2 pos = new(
                 (float)a["rect"].AsObject()["x"],
@@ -122,6 +128,36 @@ public class LevelDataManager {
             _sceneData.Add(new Floor(Game, pos, w, h));
         }
 
+        foreach (JsonObject pickupj in pickupsArr) {
+            PickupObject pickup;
+            Vector2 pos = new(
+                (float)pickupj["position"]["x"],
+                (float)pickupj["position"]["y"]
+            );
+
+            switch ((string)pickupj["type"]) {
+                case "big":
+                    pickup = new BiggerProjectilePickup(Game);
+                    break;
+                case "fast":
+                    pickup = new ShootFasterPickup(Game);
+                    break;
+                case "heal":
+                    pickup = new HealPickup(Game);
+                    break;
+                default:
+                    throw new Exception("unknown pickup type");
+            }
+
+            _sceneData.Add(pickup);
+        }
+        for (int i = 0; i < checkpointsArr.Count; i++) {
+            Vector2 pos = new(
+                (float)checkpointsArr[i]["position"]["x"],
+                (float)checkpointsArr[i]["position"]["y"]
+            );
+            _sceneData.Add(new Checkpoint(Game, pos, i == checkpointsArr.Count - 1));
+        }
     }
     private static string s_fileName = "data";
     private static string GetLevelDataFilePath() {
